@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class ServerResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->whenHas('id'),
+            'name' => $this->whenHas('name'),
+            'instance_id' => $this->instance_id,
+            'image_id' => $this->whenHas('image_id'),
+            'instance_type' => $this->whenHas('instance_type'),
+            'status' => $this->whenHas('status'),
+            'private_ip_address' => $this->whenHas('private_ip_address'),
+            'public_ip_address' => $this->whenHas('public_ip_address'),
+            'vpc_id' => $this->whenHas('vpc_id'),
+            'ssh_key' => new SshKeyResource($this->whenLoaded('sshKey')),
+            'security_group' => new SecurityGroupResource($this->whenLoaded('securityGroup')),
+            'created_at' => $this->whenHas('created_at'),
+        ];
+    }
+}
