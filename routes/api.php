@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\SecurityGroupController;
 use App\Http\Controllers\Api\V1\ServerController;
 use App\Http\Controllers\Api\V1\SshKeyController;
 use Illuminate\Http\Request;
@@ -11,4 +12,5 @@ Route::middleware('auth:sanctum')
 ->group(function () {
     Route::apiResource('ssh-keys', SshKeyController::class);
     Route::apiResource('servers', ServerController::class);
+    Route::apiResource('security-groups', SecurityGroupController::class)->except(['update']);
 });

@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('security_groups', function (Blueprint $table) {
             $table->id();
+            $table->string('group_id')->nullable();
             $table->string('name')->unique();
             $table->string('description')->nullable();
             $table->string('vpc_id')->nullable();
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('security_groupd');
+        Schema::dropIfExists('security_groups');
     }
 };
