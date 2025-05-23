@@ -33,7 +33,7 @@ class SecurityGroupController extends Controller
         $name = $request->validated('name');
         $description = $request->validated('description');
 
-        \DB::transaction(function () use ($name, $description) {
+        return \DB::transaction(function () use ($name, $description) {
             $securityGroup = SecurityGroupService::createSecurityGroup($name, $description);
 
             $securityGroup = SecurityGroup::create([
