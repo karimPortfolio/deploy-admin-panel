@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\InstanceType;
+use App\Enums\OsFamily;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class ServerRequest extends FormRequest
 {
@@ -23,15 +26,10 @@ class ServerRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'instance_id' => 'required|string|max:255',
-            'image_id' => 'required|string|max:255',
-            'instance_type' => 'required|string|max:255',
-            'status' => 'required|string|max:255',
-            'private_ip_address' => 'nullable|ip',
-            'public_ip_address' => 'nullable|ip',
-            'vpc_id' => 'nullable|string|max:255',
-            'ssh_key_id' => 'nullable|exists:ssh_keys,id',
-            'security_group_id' => 'nullable|exists:security_groups,id',
+            'os_family' => ['required', 'string', new Enum(OsFamily::class)],
+            'instance_type' => ['required', 'string', new Enum(InstanceType::class)],
+            'vpc_id' => 'required|string|max:255',
+            'security_group_id' => 'required|exists:security_groups,id',
         ];
     }
 }

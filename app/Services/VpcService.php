@@ -145,4 +145,49 @@ class VpcService
             throw new \RuntimeException('Failed to get default VPC: ' . $e->getMessage());
         }
     }
+
+
+    /**
+     * Get or create a subnet by VPC ID.
+     *
+     * @param string $vpcId
+     * @return array
+     */
+    public static function getOrCreateSubnetByVpcId(string $vpcId): array
+    {
+        $ec2Client = app(\Aws\Ec2\Ec2Client::class);
+
+        try {
+            $existing = $ec2Client->describeSubnets([
+                'Filters' => [
+                    [
+                        'Name' => 'vpc-id',
+                        'Values' => [$vpcId],
+                    ],
+                ],
+            ]);
+
+            $subnets = $existing->get('Subnets');
+
+            if (!empty($subnets)) {
+                return $subnets[0];
+            }
+
+            $result = $ec2Client->createSubnet([
+                'VpcId' => $vpcId,
+                'CidrBlock' => '10.0.1.0/24',
+            ]);
+
+            $ec2Client->modifySubnetAttribute([
+                'SubnetId' => $result->get('Subnet')['SubnetId'],
+                'MapPublicIpOnLaunch' => [
+                    'Value' => true,
+                ],
+            ]);
+
+            return $result->get('Subnet');
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Failed to initialize EC2 client: ' . $e->getMessage());
+        }
+    }
 }

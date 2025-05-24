@@ -18,11 +18,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('instance_type');
             $table->string('status')->nullable();
-            $table->string('private_ip_address');
-            $table->string('public_ip_address');
+            $table->string('private_ip_address')->nullable();
+            $table->string('public_ip_address')->nullable();
             $table->foreignId('ssh_key_id')->nullable()->constrained();
             $table->foreignId('security_group_id')->nullable()->constrained('security_groups');
             $table->string('vpc_id')->nullable();
+            $table->string('subnet_id')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
