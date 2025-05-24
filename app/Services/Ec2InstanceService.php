@@ -7,13 +7,6 @@ use Aws\Ec2\Ec2Client;
 class Ec2InstanceService
 {
 
-    public static Ec2Client $ec2Client;
-
-    public function __construct()
-    {
-        $this->ec2Client = app(Ec2Client::class);
-    }
-
     /**
      * Create an EC2 instance.
      *
@@ -42,7 +35,6 @@ class Ec2InstanceService
                 'MaxCount' => 1,
                 'SecurityGroupIds' => array($params['group_id']),
                 'SubnetId' => $subnet['SubnetId'],
-                // 'KeyName' => $params['key_name'],
                 'TagSpecifications' => [
                     [
                         'ResourceType' => 'instance',
@@ -143,16 +135,16 @@ class Ec2InstanceService
     /**
      * Describe EC2 instances.
      *
-     * @param array $instanceIds
+     * @param string $instanceId
      * @return \Aws\Result
      */
-    public static function describeInstanceByInstanceId($instanceIds = [])
+    public static function describeInstanceByInstanceId(string $instanceId)
     {
         $ec2Client = app(Ec2Client::class);
 
         try {
             $ec2Instances = $ec2Client->describeInstances([
-                'InstanceIds' => $instanceIds,
+                'InstanceIds' => [$instanceId],
             ]);
 
             return $ec2Instances->get('Reservations')
