@@ -1,0 +1,28 @@
+// @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wdth,wght@0,75..100,300..800;1,75..100,300..800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0");
+@import "@adsglory/ui/style.css";
+
+// $fa-font-path: "@fortawesome/fontawesome-free/webfonts";
+
+// @import "@fortawesome/fontawesome-free/scss/fontawesome";
+// @import "@fortawesome/fontawesome-free/scss/regular";
+// @import "@fortawesome/fontawesome-free/scss/solid";
+// @import "@fortawesome/fontawesome-free/scss/brands";
+// @import "@fortawesome/fontawesome-free/scss/v4-shims";
+// @import "bootstrap-icons/font/bootstrap-icons.min.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// html {
+//   font-size: 14px;
+// }
+
+.v-popper__popper .v-popper__inner {
+  box-shadow: 0 6px 30px #0000001a;
+}
+
+.menu-shadow {
+  box-shadow: 0 6px 30px #0000001a !important;
+}

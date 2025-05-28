@@ -1,0 +1,43 @@
+// app global css in SCSS form
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body, html {
+  font-size: 16px;
+}
+
+.q-card:not(.q-card--flat) {
+  box-shadow: 0 0 80px 0 rgba(0, 0, 0, 0.03);
+}
+
+.q-field--outlined .q-field__control:before {
+  border-width: 1px !important;
+}
+
+.q-field--outlined .q-field__control:after {
+  border-width: 1.5px !important;
+}
+
+.q-card {
+  border-radius: 14px !important;
+  -webkit-border-radius: 14px !important;
+  -moz-border-radius: 14px !important;
+  -ms-border-radius: 14px !important;
+  -o-border-radius: 14px !important;
+
+  &.q-card--dark {
+    background-color: theme("colors.slate.800");
+  }
+}
+
+.menu-shadow {
+  box-shadow: 0 6px 30px #0000001a !important;
+}
+
+// body.desktop .q-focusable:focus > .q-focus-helper, body.desktop .q-manual-focusable--focused > .q-focus-helper, body.desktop .q-hoverable:hover > .q-focus-helper 
+// {
+//     background: currentColor;
+//     opacity: 0.15;
+//     display: none !important;
+// }
