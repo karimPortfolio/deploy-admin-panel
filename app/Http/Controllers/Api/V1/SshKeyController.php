@@ -7,17 +7,21 @@ use App\Http\Requests\SshKeyRequest;
 use App\Http\Resources\SshKeyResource;
 use App\Models\SshKey;
 use App\Services\SshKeyService;
+use GuzzleHttp\Psr7\Query;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class SshKeyController extends Controller
 {
 
     public function index()
     {
-        $sshKeys = SshKey::query()
-          ->withCount('servers')
-          ->orderBy('updated_at', 'desc')
-          ->get();
+        $sshKeys = QueryBuilder::for(SshKey::class)
+            ->allowedFilters(['name'])
+            ->allowedSorts(['name', 'created_at'])
+            ->withCount('servers')
+            ->orderBy('updated_at', 'desc')
+            ->get();
 
         return SshKeyResource::collection($sshKeys);
     }
@@ -34,7 +38,7 @@ class SshKeyController extends Controller
             'public_key' => $keys['public_key'],
             'private_key' => $keys['private_key'],
         ]);
-        
+
         return new SshKeyResource($newSshKey);
     }
 

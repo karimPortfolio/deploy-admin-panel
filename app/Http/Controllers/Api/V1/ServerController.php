@@ -12,18 +12,40 @@ use App\Models\SecurityGroup;
 use App\Models\Server;
 use App\Services\Ec2InstanceService;
 use Illuminate\Http\Request;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class ServerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $servers = Server::query()
+        $servers = QueryBuilder::for(Server::class)
+        ->allowedFilters([
+            AllowedFilter::exact('status'),
+            AllowedFilter::exact('security_group_id'),
+            AllowedFilter::exact('ssh_key_id'),
+            AllowedFilter::scope('os_family'),
+            AllowedFilter::scope('instance_type'),
+            AllowedFilter::scope('vpc_id'),
+        ])
+        ->allowedSorts(['name', 'instance_id', 'status', 'created_at', 'updated_at'])
         ->with([
             'sshKey:id,name',
             'securityGroup:id,name',
         ])
+        ->when($request->input('search'), function ($query) use ($request) {
+            $query->where('name', 'like', '%' . $request->input('search') . '%')
+                ->orWhere('instance_id', 'like', '%' . $request->input('search') . '%');
+                $query->orWhere('status', 'like', '%' . $request->input('search') . '%');
+                $query->orWhere('os_family', 'like', '%' . $request->input('search') . '%');
+                $query->orWhere('instance_type', 'like', '%' . $request->input('search') . '%');
+                $query->orWhereHas('securityGroup', function ($q) use ($request) {
+                    $q->where('group_id', 'like', '%' . $request->input('search') . '%');
+                    $q->orWhere('name', 'like', '%' . $request->input('search') . '%');
+                });
+        })
         ->orderBy('updated_at')
-        ->get();
+        ->paginate($request->input('per_page', 10));
 
         return ServerResource::collection($servers);
     }
