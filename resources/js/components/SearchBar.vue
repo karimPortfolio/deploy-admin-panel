@@ -10,7 +10,7 @@
         hide-bottom-space
       >
         <template v-slot:prepend>
-          <q-icon name="search" size="xs" color="dark" />
+          <q-icon name="search" size="xs" :color="$q.dark.isActive ? 'white' : 'dark'" />
         </template>
       </q-input>
     </div>

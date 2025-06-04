@@ -33,7 +33,7 @@
     <custom-select
         v-else-if="filter.type === 'relation'"
         :model-value="modelValue"
-        :label="filter.label"
+        :label="filter.label || filter.name"
         :resource="filter.resource"
         :option-label="filter.optionLabel || 'name'"
         :option-value="filter.optionValue || 'id'"

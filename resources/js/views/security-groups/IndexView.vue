@@ -18,7 +18,7 @@
                 />
 
                 <!-- ======== FILTERS BAR ========-->
-                <dynamic-filter
+                <filter-panel
                     :filters="filters"
                     @update="onFiltersUpdate"
                 />
@@ -53,7 +53,7 @@
 import PageHeader from "@/components/PageHeader.vue";
 import { onMounted, ref } from "vue";
 import { useResourceIndex } from "@/composables/useResourceIndex";
-import DynamicFilter from "../../components/DynamicFilter.vue";
+import FilterPanel from "../../components/FilterPanel.vue";
 import SearchBar from "../../components/SearchBar.vue";
 import ActionsColumn from "./table-columns/ActionsColumn.vue";
 
@@ -108,7 +108,6 @@ const filters = [
         name: "vpc_id",
         label: "VPC ID",
         type: "relation",
-        relation: "vpcs",
         resource: "vpcs",
         optionLabel: "vpc_id",
         optionValue: "vpc_id",
@@ -147,5 +146,5 @@ const handleDeleted = () => {
     fetch();
 }
 
-onMounted(() => fetch());
+// onMounted(() => fetch());
 </script>
