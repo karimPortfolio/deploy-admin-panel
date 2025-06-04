@@ -16,16 +16,20 @@
             class="bg-white dark:bg-slate-800 shadow-md dark:shadow-slate-600 flex flex-col"
         >
             <div class="p-3 pt-5 ps-4 pb-2">
-                <div class="flex flex-nowrap items-center gap-3 text-center md:text-start">
-                    <q-avatar size="lg">
-                        <img
-                            src="https://cdn.quasar.dev/logo-v2/svg/logo.svg"
-                        />
-                    </q-avatar>
-                    <span class="gt-lg inline text-2xl text-bold">
-                        {{ appName }}
-                    </span>
-                </div>
+                <a href="/">
+                    <div
+                        class="flex flex-nowrap items-center gap-3 text-center md:text-start"
+                    >
+                        <q-avatar size="lg">
+                            <img
+                                src="https://cdn.quasar.dev/logo-v2/svg/logo.svg"
+                            />
+                        </q-avatar>
+                        <span class="gt-lg inline text-2xl text-bold">
+                            {{ appName }}
+                        </span>
+                    </div>
+                </a>
             </div>
 
             <q-list padding class="px-2 mt-4">

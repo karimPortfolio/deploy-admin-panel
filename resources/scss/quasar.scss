@@ -35,6 +35,11 @@ body, html {
   box-shadow: 0 6px 30px #0000001a !important;
 }
 
+// change quasar button default capital text style
+.q-btn {
+  text-transform: none !important;
+}
+
 // body.desktop .q-focusable:focus > .q-focus-helper, body.desktop .q-manual-focusable--focused > .q-focus-helper, body.desktop .q-hoverable:hover > .q-focus-helper 
 // {
 //     background: currentColor;

@@ -4,7 +4,7 @@
         v-ripple
         :exact="item.exact ? true : false"
         :to="item.route"
-        active-class="bg-primary-50 text-primary !dark:text-primary"
+        active-class="bg-primary-50 text-primary !dark:text-primary border-l-primary"
         class="rounded-md hover:bg-primary-50 hover:text-primary p-0"
     >
         <div class="w-full p-3 flex">

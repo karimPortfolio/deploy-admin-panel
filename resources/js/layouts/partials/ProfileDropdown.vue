@@ -49,68 +49,22 @@
                             </div>
                             <!-- ==== AVATAR === -->
                             <!-- ==== INFO === -->
-                            <div class="overflow-hidden" >
-                                <div class="flex items-center gap-3">
-                                    <div class="text-sm font-medium">
-                                        {{ user?.name }}
-                                    </div>
-                                    <div v-if="user?.role" >
-                                        <q-badge
-                                            :color="user?.role.color"
-                                            :label="user?.role.label"
-                                            class="text-2xs"
-                                        />
-                                    </div>
+                            <div class="overflow-hidden">
+                                <div class="text-sm font-medium">
+                                    {{ user?.name }}
                                 </div>
-                                <div class="text-xs dark:text-gray-400 text-grey-8">
-                                    {{ user?.email }}                        
+                                <div
+                                    class="text-xs dark:text-gray-400 text-grey-8"
+                                >
+                                    {{ user?.email }}
                                 </div>
                             </div>
                             <!-- ==== INFO === -->
                         </div>
-                        <!-- ========== USER INFO =========== -->
 
-                        <q-separator inset />
+                        <q-separator class="mx-1" />
 
-                        <q-list style="min-width: 150px" dense class="q-pa-xs mt-1">
-                            <q-item
-                                target="_blank"
-                                v-close-popup
-                                class="py-2 hover:cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-gray-600"
-                            >
-                                <q-item-section avatar class="min-w-fit pe-2">
-                                    <q-icon name="sym_r_person" size="sm" />
-                                </q-item-section>
-
-                                <q-item-section>View Profile</q-item-section>
-                            </q-item>
-                            <q-item
-                                clickable
-                                v-close-popup
-                                class="py-2 mb-2 hover:cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-gray-600"
-                            >
-                                <q-item-section avatar class="min-w-fit pe-2">
-                                    <q-icon name="sym_r_settings" size="sm" />
-                                </q-item-section>
-
-                                <q-item-section> Settings </q-item-section>
-                            </q-item>
-
-                            <q-separator />
-
-                            <q-item
-                                clickable
-                                @click="handleLogOut"
-                                v-close-popup
-                                class="py-2 mt-2 hover:cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-gray-600"
-                            >
-                                <q-item-section avatar class="min-w-fit pe-2">
-                                    <q-icon name="sym_r_logout" size="sm" />
-                                </q-item-section>
-
-                                <q-item-section> Sign out </q-item-section>
-                            </q-item>
-                        </q-list>
+                        <profile-dropdown-list @logout="handleLogOut" />
                     </q-menu>
                 </q-btn>
             </q-card-section>
@@ -118,12 +72,13 @@
     </div>
 </template>
 <script setup>
+import ProfileDropdownList from "../../components/ProfileDropdownList.vue";
 import { useAuthStore } from "../../stores/auth";
 
 const props = defineProps({
     user: {
         type: Object,
-    }
+    },
 });
 
 const authStore = useAuthStore();

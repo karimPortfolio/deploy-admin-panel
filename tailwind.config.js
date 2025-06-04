@@ -17,7 +17,7 @@ export default {
     extend: {
       colors: {
         primary: {
-          50:  'rgba(25, 118, 210, 0.08)',
+          50:  '#1976d214',
           100: '#BBDEFB',
           200: '#90CAF9',
           300: '#64B5F6',

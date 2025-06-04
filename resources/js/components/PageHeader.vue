@@ -2,21 +2,24 @@
     <div class="flex justify-between items-center">
         <div>
             <div
-                class="flex gap-2 items-center text-primary-800 dark:text-primary-300 mb-1"
+                class="flex gap-2 items-center text-primary mb-1"
             >
                 <q-icon :name="icon" size="md" />
-                <div class="text-2xl font-medium">{{ title }}</div>
-            </div>
-            <div class="text-xs text-gray-600 dark:text-gray-400">
-                {{ caption }}
+                <div>
+                    <div class="text-xl font-medium">{{ title }}</div>
+                    <div class="text-xs text-gray-600 dark:text-gray-400">
+                        {{ subtitle }}
+                    </div>
+                </div>
             </div>
         </div>
         <div>
             <q-btn
                 :icon="actionIcon"
-                :label="actionLabel"
+                :label="$q.screen.gt.sm ? actionLabel : 'Add'"
                 @click="action"
-                class="dark:bg-primary-300 bg-primary-800 dark:text-slate-800 text-white"
+                color="primary"
+                class="dark:text-slate-800 text-white"
             />
         </div>
     </div>
@@ -29,7 +32,7 @@ defineProps({
     icon: {
         type: String,
     },
-    caption: {
+    subtitle: {
         type: String,
     },
     actionIcon: {
