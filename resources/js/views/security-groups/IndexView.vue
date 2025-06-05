@@ -1,11 +1,34 @@
 <template>
     <q-page class="q-pa-md">
+        <!-- ======== INCLUDES ======= -->
+        <create-view
+            v-model:open="openCreationModal"
+            @created="handleCreated"
+        />
+
+        <show-details-view
+            v-model:open="openShowDetailsModal"
+            :id="itemToShow?.id"
+        />
+
+        <confirmation-modal
+            v-model:open="openDeleteConfirmationModal"
+            title="Delete Security Group"
+            :message="`Are you sure you want to delete this security group: ${itemToDelete?.group_id} ?`"
+            icon="warning"
+            color="negative"
+            @confirm="handleDelete"
+            @cancel="openDeleteConfirmationModal = false"
+        />
+
+        <!-- ======= MAIN CONTENT ======== -->
         <page-header
             title="Security Groups"
             subtitle="Manage your security groups"
             icon="security"
             actionLabel="Create Security Group"
             actionIcon="sym_r_add"
+            :action="() => (openCreationModal = true)"
         />
 
         <div class="mt-4 bg-white dark:bg-slate-800 p-3 rounded-md">
@@ -18,10 +41,7 @@
                 />
 
                 <!-- ======== FILTERS BAR ========-->
-                <filter-panel
-                    :filters="filters"
-                    @update="onFiltersUpdate"
-                />
+                <filter-panel :filters="filters" @update="onFiltersUpdate" />
             </div>
 
             <!-- ======== TABLE ========= -->
@@ -42,7 +62,11 @@
                 </template>
                 <template v-slot:body-cell-actions="props">
                     <q-td :props="props">
-                        <actions-column :row="props.row" />
+                        <actions-column
+                            :row="props.row"
+                            @delete="handleDeleteConfirmation"
+                            @show-details="handleShowDetails"
+                        />
                     </q-td>
                 </template>
             </q-table>
@@ -53,9 +77,13 @@
 import PageHeader from "@/components/PageHeader.vue";
 import { onMounted, ref } from "vue";
 import { useResourceIndex } from "@/composables/useResourceIndex";
+import { useResourceDestroy } from "@/composables/useResourceDestroy";
 import FilterPanel from "../../components/FilterPanel.vue";
 import SearchBar from "../../components/SearchBar.vue";
 import ActionsColumn from "./table-columns/ActionsColumn.vue";
+import CreateView from "./CreateView.vue";
+import ConfirmationModal from "../../components/modals/ConfirmationModal.vue";
+import ShowDetailsView from "./ShowDetailsView.vue";
 
 const columns = [
     {
@@ -80,13 +108,6 @@ const columns = [
         sortable: true,
     },
     {
-        name: "description",
-        label: "Description",
-        field: "description",
-        align: "left",
-        sortable: true,
-    },
-    {
         name: "vpc_id",
         label: "VPC ID",
         field: "vpc_id",
@@ -95,9 +116,16 @@ const columns = [
     },
     {
         name: "servers_count",
-        label: "Servers Count",
+        label: "Assigned Servers",
         field: "servers_count",
         align: "center",
+        sortable: true,
+    },
+    {
+        name: "created_at",
+        label: "Creation Date",
+        field: "created_at",
+        align: "left",
         sortable: true,
     },
     { label: "Actions", name: "actions", field: "actions", align: "center" },
@@ -112,9 +140,19 @@ const filters = [
         optionLabel: "vpc_id",
         optionValue: "vpc_id",
     },
+    {
+        name: "created_at",
+        label: "Creation Date",
+        type: "date",
+    },
 ];
 
 const search = ref("");
+const openCreationModal = ref(false);
+const openDeleteConfirmationModal = ref(false);
+const openShowDetailsModal = ref(false);
+const itemToDelete = ref(null);
+const itemToShow = ref(null);
 
 const {
     data: securityGroupsData,
@@ -123,6 +161,9 @@ const {
     options,
     onRequest,
 } = useResourceIndex("security-groups");
+
+const { destroy, destroyed, destroying } =
+    useResourceDestroy("security-groups");
 
 const searchChange = () => {
     onRequest({
@@ -134,17 +175,36 @@ function onFiltersUpdate({ search, filters }) {
     fetch({ filter: search, filters });
 }
 
-const handleUpdated = ()  => {
-    fetch();
-}
+const handleShowDetails = (row) => {
+    itemToShow.value = row;
+
+    openShowDetailsModal.value = true;
+};
+
+// DELETE HANDLERS
+const handleDeleteConfirmation = (row) => {
+    openDeleteConfirmationModal.value = true;
+
+    itemToDelete.value = row;
+};
+
+const handleDelete = async () => {
+    await destroy(itemToDelete.value.id);
+
+    if (destroyed.value) {
+        handleDeleted();
+    }
+};
 
 const handleCreated = () => {
+    openCreationModal.value = false;
+
     fetch();
-}
+};
 
 const handleDeleted = () => {
-    fetch();
-}
+    openDeleteConfirmationModal.value = false;
 
-// onMounted(() => fetch());
+    fetch();
+};
 </script>

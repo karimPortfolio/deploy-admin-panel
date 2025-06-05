@@ -28,22 +28,7 @@
                     </q-item-section>
                 </q-item>
 
-                <!-- ============================ -->
-                <!-- ============ EDIT ========== -->
-                <!-- ============================ -->
-                <q-item
-                    @click="handleEdit(row)"
-                    clickable
-                    v-close-popup
-                    class="text-gray-600 dark:text-gray-200 rounded-md"
-                >
-                    <q-item-section>
-                        <q-item-label class="flex-nowrap">
-                            <q-icon name="sym_r_edit" size="xs" class="me-1" />
-                            Edit
-                        </q-item-label>
-                    </q-item-section>
-                </q-item>
+              
 
                 <q-separator class="q-my-xs" />
 
@@ -79,13 +64,13 @@ const props = defineProps({
     },
 });
 
-const handleEdit = (row) => {
-    // Logic to edit the security group
-    console.log("Edit Security Group:", row);
-};
+const emit = defineEmits(["delete"]);
 
 const handleDelete = (row) => {
-    // Logic to delete the security group
-    console.log("Delete Security Group:", row);
+    emit("delete", row);
+};
+
+const handleShow = (row) => {
+    emit("show-details", row);
 };
 </script>

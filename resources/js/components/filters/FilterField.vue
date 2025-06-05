@@ -19,16 +19,41 @@
         @update:model-value="emitUpdate"
     />
 
-    <q-date
+    <q-input
         v-else-if="filter.type === 'date'"
         dense
         outlined
-        mask="YYYY-MM-DD"
-        :label="filter.label"
         :model-value="modelValue"
+        :label="filter.label"
+        mask="####-##-##"
         @update:model-value="emitUpdate"
         clearable
-    />
+    >
+        <template v-slot:append>
+            <q-icon name="event" class="cursor-pointer">
+                <q-popup-proxy
+                    cover
+                    transition-show="scale"
+                    transition-hide="scale"
+                >
+                    <q-date
+                        :model-value="modelValue"
+                        mask="YYYY-MM-DD"
+                        @update:model-value="emitUpdate"
+                    >
+                        <div class="row items-center justify-end q-pa-sm">
+                            <q-btn
+                                v-close-popup
+                                label="Close"
+                                color="primary"
+                                flat
+                            />
+                        </div>
+                    </q-date>
+                </q-popup-proxy>
+            </q-icon>
+        </template>
+    </q-input>
 
     <custom-select
         v-else-if="filter.type === 'relation'"

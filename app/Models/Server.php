@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ServerStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +11,12 @@ class Server extends Model
     use HasFactory;
     
     protected $guarded = [];
+
+    protected $casts = [
+        'os_family' => OsFamily::class,
+        'instance_type' => InstanceType::class,
+        'status' => ServerStatus::class,
+    ];
 
     public function sshKey()
     {

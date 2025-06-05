@@ -99,7 +99,6 @@ export function useFilterHandler(filters, form, onSyncing) {
     return {
         clearFilters,
         initializeFromQuery,
-        buildQuery,
         sync,
         search,
     };

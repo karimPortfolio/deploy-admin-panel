@@ -21,6 +21,7 @@ class SecurityGroupController extends Controller
         $securityGroups = QueryBuilder::for(SecurityGroup::class)
             ->allowedFilters([
                 AllowedFilter::exact('vpc_id'),
+                AllowedFilter::custom('created_at', new \App\Filters\DateFilter()),
             ])
             ->allowedSorts(['id', 'name', 'description', 'vpc_id', 'group_id', 'created_at', 'updated_at'])
             ->withCount('servers')
@@ -67,7 +68,7 @@ class SecurityGroupController extends Controller
      */
     public function show(SecurityGroup $securityGroup)
     {
-        $securityGroup->load('servers');
+        $securityGroup->load('servers:id,name,instance_id,status');
         
         return new SecurityGroupResource($securityGroup);
     }

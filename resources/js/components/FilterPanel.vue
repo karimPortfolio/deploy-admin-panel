@@ -28,13 +28,14 @@
                 anchor="bottom left"
                 self="top left"
                 :offset="[-15, 5]"
-                class="shadow-lg"
+                class="shadow-lg border dark:border-none rounded-lg"
             >
                 <q-card
-                    class="q-pa-md"
+                    class="q-pa-md dark:bg-slate-700"
                     style="min-width: 300px; max-width: 350px"
                 >
                     <div class="flex flex-col gap-3">
+                        <div class="font-medium" >Filter by</div>
                         <FilterField
                             v-for="filter in filtersList"
                             :key="filter.name"
@@ -131,7 +132,7 @@ const filtersList = computed(() => props.filters || []);
 
 const form = reactive({});
 
-const { search, sync, clearFilters, initializeFromQuery, buildQuery } = useFilterHandler(
+const { search, sync, clearFilters, initializeFromQuery } = useFilterHandler(
     filtersList,
     form,
     (query) => {

@@ -19,7 +19,7 @@
                 :label="$q.screen.gt.sm ? actionLabel : 'Add'"
                 @click="action"
                 color="primary"
-                class="dark:text-slate-800 text-white"
+                class="text-white"
             />
         </div>
     </div>
