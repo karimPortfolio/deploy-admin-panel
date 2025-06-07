@@ -17,6 +17,10 @@
             <!-- <q-card-actions align="right">
                 <q-btn unelevated color="primary" @click="handleClose" label="Close"  />
             </q-card-actions> -->
+
+            <q-inner-loading :showing="loading">
+                <q-spinner-tail color="primary" size="40px" />
+            </q-inner-loading>
         </q-card>
     </q-dialog>
 </template>
@@ -30,6 +34,10 @@ defineProps({
     icon: {
         type: String,
         default: null,
+    },
+    loading: {
+        type: Boolean,
+        default: false,
     },
 });
 

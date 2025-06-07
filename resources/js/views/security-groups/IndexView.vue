@@ -53,11 +53,21 @@
                 @request="onRequest"
                 flat
                 ref="tableRef"
-                :rows-per-page-options="[10, 20, 30, 40, 50, 100]"
+                :rows-per-page-options="[5, 10, 20, 30, 40, 50, 100]"
             >
                 <template v-slot:body-cell-servers_count="props">
                     <q-td :props="props">
                         {{ props.row.servers_count }}
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-group_id="props">
+                    <q-td :props="props" :title="props.row.group_id" >
+                        {{ truncate(props.row.group_id, 30) }}
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-vpc_id="props">
+                    <q-td :props="props" :title="props.row.vpc_id" >
+                        {{ truncate(props.row.vpc_id, 30) }}
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">
@@ -78,6 +88,7 @@ import PageHeader from "@/components/PageHeader.vue";
 import { onMounted, ref } from "vue";
 import { useResourceIndex } from "@/composables/useResourceIndex";
 import { useResourceDestroy } from "@/composables/useResourceDestroy";
+import { useTextTruncate } from "@/composables/useTextTruncate";
 import FilterPanel from "../../components/FilterPanel.vue";
 import SearchBar from "../../components/SearchBar.vue";
 import ActionsColumn from "./table-columns/ActionsColumn.vue";
@@ -88,7 +99,7 @@ import ShowDetailsView from "./ShowDetailsView.vue";
 const columns = [
     {
         name: "id",
-        label: "id",
+        label: "ID",
         field: "id",
         align: "left",
         sortable: true,
@@ -164,6 +175,8 @@ const {
 
 const { destroy, destroyed, destroying } =
     useResourceDestroy("security-groups");
+
+const { truncate } = useTextTruncate();
 
 const searchChange = () => {
     onRequest({

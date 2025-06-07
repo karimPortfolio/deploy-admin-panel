@@ -18,13 +18,17 @@ class SshKeyResource extends JsonResource
             'id' => $this->whenHas('id'),
             'name' => $this->whenHas('name'),
             'public_key' => $this->whenHas('public_key', $this->getPublicKey()),
-            'created_at' => $this->whenHas('created_at'),       
+            'servers_count' => $this->whenCounted('servers_count'),
+            'servers' => ServerResource::collection($this->whenLoaded('servers')),
+            'created_at' => $this->whenHas('created_at', function () {
+                return $this->created_at->diffForHumans();
+            }),       
         ];
     }
 
     private function getPublicKey()
     {
         // return only the first 10 characters of the public key to the client
-        return substr($this->public_key, 0, 25);
+        return substr($this->public_key, 0, 40);
     }
 }

@@ -102,7 +102,7 @@
     </q-layout>
 </template>
 <script setup>
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { api } from "@/boot/api";
 import { useQuasar } from "quasar";
 import { useAuthStore } from "@/stores/auth";
@@ -121,6 +121,11 @@ const route = useRoute();
 const $q = useQuasar();
 
 const authStore = useAuthStore();
+
+const handleDarkMode = () => {
+    const userPereference = localStorage.getItem("dark");
+    $q.dark.set(JSON.parse(userPereference) || 'auto');
+}
 
 const handleAuth = async () => {
     try {
@@ -166,4 +171,9 @@ watch(
         }
     }
 );
+
+onMounted(() => {
+    handleDarkMode();
+});
+
 </script>

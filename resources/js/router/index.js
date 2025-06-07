@@ -14,10 +14,28 @@ const router = createRouter({
             },
             children: [
                 {
+                    path: "",
+                    name: "dashboard",
+                    component: () =>
+                        import("../views/dashboard/IndexView.vue"),
+                },
+                {
+                    path: "servers",
+                    name: "servers",
+                    component: () =>
+                        import("../views/servers/IndexView.vue"),
+                },
+                {
                     path: "security-groups",
                     name: "security-groups",
                     component: () =>
                         import("../views/security-groups/IndexView.vue"),
+                },
+                {
+                    path: "ssh-keys",
+                    name: "ssh-keys",
+                    component: () =>
+                        import("../views/ssh-keys/IndexView.vue"),
                 },
             ],
         },

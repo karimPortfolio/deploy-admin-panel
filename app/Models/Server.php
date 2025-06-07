@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\InstanceType;
+use App\Enums\OsFamily;
 use App\Enums\ServerStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

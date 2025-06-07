@@ -1,31 +1,30 @@
 <template>
-    <show-modal title="Security Group Details" :loading="loading"> >
+    <show-modal title="SSH Key Details" :loading="loading" >
         <template #content>
             <q-card class="shadow-none bg-transparent">
                 <q-card-section class="p-0 flex justify-center items-center">
                     <div
                         class="bg-primary-50 flex justify-center items-center w-fit p-3 rounded-full"
                     >
-                        <q-icon name="sym_r_security" size="xl" color="primary" />
+                        <q-icon name="sym_r_key" size="xl" color="primary" />
                     </div>
                 </q-card-section>
                 <q-card-section class="q-pa-md">
                     <div class="text-h6 text-center mb-4">
-                        {{ securityGroup?.group_id }}
+                        {{ sshKey?.name }}
                     </div>
-                    <!-- ======= NAME ======= -->
+                    <!-- ======= PUBLIC KEY ======= -->
                     <div class="grid grid-cols-2 justify-between mt-5">
-                        <div class="text-subtitle2">Name</div>
-                        <div class="text-gray-700 dark:text-gray-400 text-end">
-                            {{ securityGroup?.name }}
-                        </div>
-                    </div>
-                    <!-- ======= VPC ID ======= -->
-                    <q-separator class="mt-2" />
-                    <div class="grid grid-cols-2 justify-between mt-3">
-                        <div class="text-subtitle2">VPC ID</div>
-                        <div class="text-gray-700 dark:text-gray-400 text-end">
-                            {{ securityGroup?.vpc_id || "N/A" }}
+                        <div class="text-subtitle2">Public Key</div>
+                        <div
+                            class="text-gray-700 dark:text-gray-400 text-end"
+                            style="
+                                font-family: monospace, sans-serif;
+                                word-break: break-all;
+                                white-space: normal;
+                            "
+                        >
+                            {{ sshKey?.public_key }}*****
                         </div>
                     </div>
                     <!-- ======= CREATION DATE ======= -->
@@ -33,20 +32,12 @@
                     <div class="grid grid-cols-2 justify-between mt-3">
                         <div class="text-subtitle2">Creation Date</div>
                         <div class="text-gray-700 dark:text-gray-400 text-end">
-                            {{ securityGroup?.created_at }}
+                            {{ sshKey?.created_at }}
                         </div>
                     </div>
-                    <!-- ======= DESCRIPTION ======= -->
-                    <q-separator class="mt-2" />
-                    <div class="grid grid-cols-2 justify-between mt-3">
-                        <div class="text-subtitle2">Description</div>
-                        <div class="text-gray-700 dark:text-gray-400 text-end">
-                            {{ securityGroup?.description || "N/A" }}
-                        </div>
-                    </div>
-                    
+
                     <!-- ======= ASSIGNED SERVERS ======= -->
-                    <template v-if="servers && servers.length" >
+                    <template v-if="servers && servers.length">
                         <q-separator class="mt-2" />
                         <div class="mt-5">Assigned Servers</div>
                         <div
@@ -102,17 +93,13 @@ const props = defineProps({
     },
 });
 
-const {
-    data: securityGroup,
-    fetch,
-    loading,
-} = useResourceShow("security-groups");
+const { data: sshKey, fetch, loading } = useResourceShow("ssh-keys");
 
 const { truncate } = useTextTruncate();
 
 const servers = computed(() => {
-    if (!securityGroup.value.servers) return [];
-    return securityGroup.value.servers.map((server) => ({
+    if (!sshKey.value.servers) return [];
+    return sshKey.value.servers.map((server) => ({
         id: server.id,
         instance_id: truncate(server.instance_id, 25),
         status: {

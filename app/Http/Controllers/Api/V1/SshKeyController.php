@@ -14,14 +14,22 @@ use Spatie\QueryBuilder\QueryBuilder;
 class SshKeyController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $sshKeys = QueryBuilder::for(SshKey::class)
-            ->allowedFilters(['name'])
-            ->allowedSorts(['name', 'created_at'])
+            ->allowedFilters([
+                'name',
+                'created_at',
+            ])
+            ->allowedSorts(['name', 'created_at', 'id'])
             ->withCount('servers')
+            ->when($request->input('search'), function ($query) use ($request) {
+                $search = $request->input('search');
+                $query->where('name', 'like', "%{$search}%")
+                      ->orWhere('public_key', 'like', "%{$search}%");
+            })
             ->orderBy('updated_at', 'desc')
-            ->get();
+            ->paginate($request->input('per_page', 10));
 
         return SshKeyResource::collection($sshKeys);
     }
@@ -44,6 +52,8 @@ class SshKeyController extends Controller
 
     public function show(SshKey $sshKey)
     {
+        $sshKey->load('servers:id,instance_id,status,ssh_key_id');
+
         return new SshKeyResource($sshKey);
     }
 

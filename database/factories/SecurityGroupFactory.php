@@ -17,10 +17,10 @@ class SecurityGroupFactory extends Factory
     public function definition(): array
     {
         return [
-            'group_id' => $this->faker->uuid(),
+            'group_id' => 'sg-'.$this->faker->uuid(),
             'name' => $this->faker->unique()->word(),
             'description' => $this->faker->sentence(),
-            'vpc_id' => $this->faker->uuid(),
+            'vpc_id' => 'vpc-'.$this->faker->uuid(),
         ];
     }
 }

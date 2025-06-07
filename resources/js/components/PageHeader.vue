@@ -13,13 +13,14 @@
                 </div>
             </div>
         </div>
-        <div>
+        <div v-if="action" >
             <q-btn
                 :icon="actionIcon"
                 :label="$q.screen.gt.sm ? actionLabel : 'Add'"
                 @click="action"
                 color="primary"
                 class="text-white"
+                unelevated
             />
         </div>
     </div>
@@ -43,6 +44,7 @@ defineProps({
     },
     action: {
         type: Function,
+        required: true,
     },
 });
 </script>

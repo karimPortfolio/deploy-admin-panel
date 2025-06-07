@@ -67,16 +67,26 @@ const handleDrawerToggling = () => {
 const $q = useQuasar();
 
 const drawerItems = [
-    // {
-    //     label: "Dashboard",
-    //     icon: "sym_r_dashboard",
-    //     route: { name: "dashboard" },
-    //     exact: true,
-    // },
+    {
+        label: "Dashboard",
+        icon: "sym_r_dashboard",
+        route: { name: "dashboard" },
+        exact: true,
+    },
+    {
+        label: "Servers",
+        icon: "sym_r_host",
+        route: { name: "servers" },
+    },
     {
         label: "Security Groups",
         icon: "sym_r_security",
         route: { name: "security-groups" },
+    },
+    {
+        label: "SSH Keys",
+        icon: "sym_r_key",
+        route: { name: "ssh-keys" },
     },
 ];
 
@@ -85,9 +95,15 @@ const authStore = useAuthStore();
 const user = ref(null);
 const appName = ref("");
 
+const handleDarkMode = () => {
+    const userPereference = localStorage.getItem("dark");
+    $q.dark.set(JSON.parse(userPereference) || 'auto');
+}
+
 onMounted(() => {
     user.value = authStore.user.data;
     appName.value = import.meta.env.VITE_APP_NAME; //load from env
+    handleDarkMode();
 });
 </script>
 <style scoped>

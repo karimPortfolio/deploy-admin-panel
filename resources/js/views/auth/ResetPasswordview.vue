@@ -145,6 +145,11 @@ const handleResetPassword = async () => {
     }
 };
 
+const handleDarkMode = () => {
+    const userPereference = localStorage.getItem("dark");
+    $q.dark.set(JSON.parse(userPereference) || 'auto');
+}
+
 watch(
     () => authStore.errorMessages,
     (newErrorMessages) => {
@@ -157,5 +162,6 @@ watch(
 onMounted(() => {
     credentials.value.email = route.query.email;
     credentials.value.token = route.query.token;
+    handleDarkMode();
 });
 </script>

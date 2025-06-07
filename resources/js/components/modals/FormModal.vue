@@ -12,7 +12,7 @@
                 <q-btn icon="close" flat round dense v-close-popup />
             </q-card-section>
             <q-card-section>
-                <slot name="form"></slot>
+                <slot name="form" :class="{ invisible: modalLoading }" ></slot>
             </q-card-section>
             <q-card-actions align="right" class="mt-4">
                 <q-btn flat @click="handleClose" label="Cancel" />
@@ -20,35 +20,46 @@
                 <q-btn
                     unelevated
                     label="Save"
-                    form="security-group-form"
+                    :form="form"
                     type="submit"
                     icon="sym_r_save"
                     color="primary"
                     :loading="loading"
                 />
             </q-card-actions>
+
+            <q-inner-loading :showing="modalLoading">
+                <q-spinner-tail color="primary" size="40px" />
+            </q-inner-loading>
         </q-card>
     </q-dialog>
 </template>
 <script setup>
-
 defineProps({
     title: {
         type: String,
-        required: true
+        required: true,
     },
     loading: {
         type: Boolean,
-        default: false
+        default: false,
     },
-    icon:{
+    form: {
+        type: String,
+        required: true,
+    },
+    icon: {
         type: String,
     },
     actionIcon: {
         type: String,
-        default: "sym_r_add"
-    }
-})
+        default: "sym_r_add",
+    },
+    modalLoading: {
+        type: Boolean,
+        default: false,
+    },
+});
 
 const emit = defineEmits(["close"]);
 const open = defineModel("open");
@@ -56,5 +67,4 @@ const open = defineModel("open");
 const handleClose = () => {
     emit("close");
 };
-
 </script>

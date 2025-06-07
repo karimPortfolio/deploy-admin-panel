@@ -68,7 +68,9 @@ class SecurityGroupController extends Controller
      */
     public function show(SecurityGroup $securityGroup)
     {
-        $securityGroup->load('servers:id,name,instance_id,status');
+        $securityGroup->load([
+            'servers:id,name,instance_id,status,security_group_id',
+        ]);
         
         return new SecurityGroupResource($securityGroup);
     }

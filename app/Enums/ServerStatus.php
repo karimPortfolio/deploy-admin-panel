@@ -22,10 +22,10 @@ enum ServerStatus: string
     public function color(): string
     {
         return match($this) {
-            self::RUNNING   => 'success',
-            self::STOPPED   => 'warning',
-            self::TERMINATED => 'danger',
-            self::PENDING   => 'info',
+            self::RUNNING   => 'positive',
+            self::STOPPED   => 'positive',
+            self::TERMINATED => 'warning',
+            self::PENDING   => 'primary',
         };
     }
 
@@ -34,7 +34,7 @@ enum ServerStatus: string
         return [
             'value' => $this->value,
             'label' => $this->label(),
-            'icon' => $this->color(),
+            'color' => $this->color(),
         ];
     }
     

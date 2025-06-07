@@ -57,7 +57,7 @@
     </q-layout>
 </template>
 <script setup>
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useQuasar } from "quasar";
 import { useAuthStore } from "@/stores/auth";
 import SettingsDropdown from "./partials/SettingsDropdown.vue";
@@ -91,6 +91,10 @@ const handleForgetPassword = async () => {
         loading.value = false;
     }
 };
+const handleDarkMode = () => {
+    const userPereference = localStorage.getItem("dark");
+    $q.dark.set(JSON.parse(userPereference) || 'auto');
+}
 
 watch(
     () => authStore.errorMessages,
@@ -100,4 +104,6 @@ watch(
         }
     }
 );
+
+onMounted(() => handleDarkMode());
 </script>
