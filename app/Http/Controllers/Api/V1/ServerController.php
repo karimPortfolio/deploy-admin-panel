@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\InstanceType;
 use App\Enums\OsFamily;
+use App\Enums\ServerStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ServerRequest;
 use App\Http\Resources\ServerResource;
@@ -20,32 +21,48 @@ class ServerController extends Controller
     public function index(Request $request)
     {
         $servers = QueryBuilder::for(Server::class)
-        ->allowedFilters([
-            AllowedFilter::exact('status'),
-            AllowedFilter::exact('security_group_id'),
-            AllowedFilter::exact('ssh_key_id'),
-            AllowedFilter::scope('os_family'),
-            AllowedFilter::scope('instance_type'),
-            AllowedFilter::scope('vpc_id'),
-        ])
-        ->allowedSorts(['name', 'instance_id', 'status', 'created_at', 'updated_at'])
-        ->with([
-            'sshKey:id,name',
-            'securityGroup:id,name',
-        ])
-        ->when($request->input('search'), function ($query) use ($request) {
-            $query->where('name', 'like', '%' . $request->input('search') . '%')
-                ->orWhere('instance_id', 'like', '%' . $request->input('search') . '%');
+            ->allowedFilters([
+                AllowedFilter::exact('status'),
+                AllowedFilter::exact('security_group_id'),
+                AllowedFilter::exact('ssh_key_id'),
+                AllowedFilter::exact('instance_type'),
+                AllowedFilter::exact('os_family'),
+                AllowedFilter::exact('vpc_id'),
+                AllowedFilter::custom('created_at', new \App\Filters\DateFilter()),
+            ])
+            ->allowedSorts(['id', 'name', 'instance_id', 'public_ip_address', 'status', 'created_at'])
+            ->with([
+                'sshKey:id,name',
+                'securityGroup:id,name,group_id',
+                'createdBy:id,name',
+            ])
+            ->when($request->input('search'), function ($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->input('search') . '%')
+                    ->orWhere('instance_id', 'like', '%' . $request->input('search') . '%');
                 $query->orWhere('status', 'like', '%' . $request->input('search') . '%');
-                $query->orWhere('os_family', 'like', '%' . $request->input('search') . '%');
                 $query->orWhere('instance_type', 'like', '%' . $request->input('search') . '%');
+                $query->orWhere('vpc_id', 'like', '%' . $request->input('search') . '%');
+                $query->orWhereHas('sshKey', function ($q) use ($request) {
+                    $q->where('name', 'like', '%' . $request->input('search') . '%');
+                });
+                $query->orWhere('public_ip_address', 'like', '%' . $request->input('search') . '%');
                 $query->orWhereHas('securityGroup', function ($q) use ($request) {
                     $q->where('group_id', 'like', '%' . $request->input('search') . '%');
                     $q->orWhere('name', 'like', '%' . $request->input('search') . '%');
                 });
-        })
-        ->orderBy('updated_at')
-        ->paginate($request->input('per_page', 10));
+            })
+            ->orderBy('updated_at', 'desc')
+            ->paginate(function ($total) use ($request) {
+                $perPage = $request->integer('per_page', -1);
+
+                if ($perPage === 0) {
+                    $perPage = $total;
+                } elseif ($perPage === -1) {
+                    $perPage = 5;
+                }
+
+                return $perPage;
+            });
 
         return ServerResource::collection($servers);
     }
@@ -68,11 +85,13 @@ class ServerController extends Controller
             'name' => $params['name'],
             'instance_type' => $params['instance_type']->value,
             'security_group_id' => $securityGroup->id,
+            'os_family' => $params['os_family']->value,
+            'status' => ServerStatus::PENDING
         ]);
 
         //running the EC2 creation job in queue
         CreateEc2InstanceJob::dispatch($server, $params);
-        
+
         return (new ServerResource($server))
             ->additional([
                 'message' => 'Server creation in progress. You can check the status later.',
@@ -86,9 +105,15 @@ class ServerController extends Controller
         $server->load([
             'sshKey:id,name',
             'securityGroup:id,name',
+            'createdBy:id,name',
         ]);
 
-        return new ServerResource($server);
+        $statistics = Ec2InstanceService::getInstanceUtilization($server->instance_id);
+
+        return (new ServerResource($server))
+            ->additional([
+                'statistics' => $statistics,
+            ]);
     }
 
     public function startServer(Server $server)
@@ -133,5 +158,41 @@ class ServerController extends Controller
         $server->delete();
 
         return response()->noContent();
+    }
+
+
+    public function getInstanceTypes()
+    {
+        $instanceTypes = InstanceType::cases();
+
+        $instanceTypes = array_map(function ($type) {
+            return $type->toArray();
+        }, $instanceTypes);
+
+        return response()->json([
+            'data' => $instanceTypes,
+        ]);
+    }
+
+
+    public function getOsFamilies()
+    {
+        $osFamilies = OsFamily::cases();
+
+        $osFamilies = array_map(fn($family) => $family->toArray(), $osFamilies);
+
+        return response()->json([
+            'data' => $osFamilies,
+        ]);
+    }
+
+    public function getServerStatuses()
+    {
+        $statuses = ServerStatus::cases();
+        $statuses = array_map(fn($status) => $status->toArray(), $statuses);
+
+        return response()->json([
+            'data' => $statuses,
+        ]);
     }
 }

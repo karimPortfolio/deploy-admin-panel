@@ -32,4 +32,14 @@ class ServerRequest extends FormRequest
             'security_group_id' => 'required|exists:security_groups,id',
         ];
     }
+
+    public function prepareForValidation()
+    {
+        $this->merge([
+            'os_family' => $this->input('os_family.value'),
+            'instance_type' => $this->input('instance_type.value'),
+            'vpc_id' => $this->input('vpc_id.vpc_id'),
+            'security_group_id' => $this->input('security_group_id.id'),
+        ]);
+    }
 }

@@ -20,13 +20,15 @@ class ServerResource extends JsonResource
             'instance_id' => $this->instance_id,
             'image_id' => $this->whenHas('image_id'),
             'instance_type' => $this->whenHas('instance_type', fn($value) => $value?->toArray()),
+            'os_family' => $this->whenHas('os_family', fn($value) => $value?->toArray()),
             'status' => $this->whenHas('status', fn($value) => $value?->toArray()),
             'public_ip_address' => $this->whenHas('public_ip_address'),
             'vpc_id' => $this->whenHas('vpc_id'),
             'subnet_id' => $this->whenHas('subnet_id'),
             'ssh_key' => new SshKeyResource($this->whenLoaded('sshKey')),
             'security_group' => new SecurityGroupResource($this->whenLoaded('securityGroup')),
-            'created_at' => $this->whenHas('created_at'),
+            'created_by' => new UserResource($this->whenLoaded('createdBy')),
+            'created_at' => $this->whenHas('created_at', fn($value) => $value?->diffForHumans()),
         ];
     }
 }

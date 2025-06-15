@@ -59,7 +59,6 @@
                 v-model:pagination="options.pagination"
                 @request="onRequest"
                 flat
-                ref="tableRef"
                 :rows-per-page-options="[5, 10, 20, 30, 40, 50, 100]"
             >
                 <template v-slot:body-cell-public_key="props">
@@ -162,13 +161,19 @@ const handleEdit = (row) => {
 const handleCreated = () => {
     openCreateModal.value = false;
 
-    fetch();
+    fetch({
+        filter: search.value,
+        filters: options.filters,
+    });
 }
 
 const handleUpdated = () => {
     openEditModal.value = false;
     
-    fetch();
+    fetch({
+        filter: search.value,
+        filters: options.filters,
+    });
 }
 
 // DELETE HANDLERS
@@ -190,6 +195,9 @@ const handleDelete = async () => {
 const handleDeleted = () => {
     openDeleteConfirmationModal.value = false;
 
-    fetch();
+    fetch({
+        filter: search.value,
+        filters: options.filters,
+    });
 };
 </script>

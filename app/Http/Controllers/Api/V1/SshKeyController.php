@@ -23,13 +23,26 @@ class SshKeyController extends Controller
             ])
             ->allowedSorts(['name', 'created_at', 'id'])
             ->withCount('servers')
+            ->with([
+                'createdBy:id,name',
+            ])
             ->when($request->input('search'), function ($query) use ($request) {
                 $search = $request->input('search');
                 $query->where('name', 'like', "%{$search}%")
-                      ->orWhere('public_key', 'like', "%{$search}%");
+                    ->orWhere('public_key', 'like', "%{$search}%");
             })
             ->orderBy('updated_at', 'desc')
-            ->paginate($request->input('per_page', 10));
+            ->paginate(function ($total) use ($request) {
+                $perPage = $request->integer('per_page', -1);
+
+                if ($perPage === 0) {
+                    $perPage = $total;
+                } elseif ($perPage === -1) {
+                    $perPage = 10;
+                }
+
+                return $perPage;
+            });
 
         return SshKeyResource::collection($sshKeys);
     }
@@ -52,7 +65,7 @@ class SshKeyController extends Controller
 
     public function show(SshKey $sshKey)
     {
-        $sshKey->load('servers:id,instance_id,status,ssh_key_id');
+        $sshKey->load(['servers:id,instance_id,status,ssh_key_id', 'createdBy:id,name']);
 
         return new SshKeyResource($sshKey);
     }

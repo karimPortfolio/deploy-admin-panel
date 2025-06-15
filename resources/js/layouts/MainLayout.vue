@@ -97,7 +97,8 @@ const appName = ref("");
 
 const handleDarkMode = () => {
     const userPereference = localStorage.getItem("dark");
-    $q.dark.set(JSON.parse(userPereference) || 'auto');
+    const darkMode = JSON.parse(userPereference) || 'auto';
+    $q.dark.set(darkMode);
 }
 
 onMounted(() => {

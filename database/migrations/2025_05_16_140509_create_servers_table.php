@@ -24,7 +24,8 @@ return new class extends Migration
             $table->foreignId('security_group_id')->nullable()->constrained('security_groups');
             $table->string('vpc_id')->nullable();
             $table->string('subnet_id')->nullable();
-            $table->softDeletes();
+            $table->string('os_family');
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }

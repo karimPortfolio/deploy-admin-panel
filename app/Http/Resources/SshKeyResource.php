@@ -20,6 +20,7 @@ class SshKeyResource extends JsonResource
             'public_key' => $this->whenHas('public_key', $this->getPublicKey()),
             'servers_count' => $this->whenCounted('servers_count'),
             'servers' => ServerResource::collection($this->whenLoaded('servers')),
+            'created_by' => new UserResource($this->whenLoaded('createdBy')),
             'created_at' => $this->whenHas('created_at', function () {
                 return $this->created_at->diffForHumans();
             }),       

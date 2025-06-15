@@ -52,7 +52,6 @@
                 v-model:pagination="options.pagination"
                 @request="onRequest"
                 flat
-                ref="tableRef"
                 :rows-per-page-options="[5, 10, 20, 30, 40, 50, 100]"
             >
                 <template v-slot:body-cell-servers_count="props">
@@ -212,12 +211,18 @@ const handleDelete = async () => {
 const handleCreated = () => {
     openCreationModal.value = false;
 
-    fetch();
+    fetch({
+        filter: search.value,
+        filters: options.filters,
+    });
 };
 
 const handleDeleted = () => {
     openDeleteConfirmationModal.value = false;
 
-    fetch();
+    fetch({
+        filter: search.value,
+        filters: options.filters,
+    });
 };
 </script>

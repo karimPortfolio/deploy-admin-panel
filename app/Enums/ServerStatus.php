@@ -23,7 +23,7 @@ enum ServerStatus: string
     {
         return match($this) {
             self::RUNNING   => 'positive',
-            self::STOPPED   => 'positive',
+            self::STOPPED   => 'negative',
             self::TERMINATED => 'warning',
             self::PENDING   => 'primary',
         };

@@ -1,13 +1,15 @@
 <template>
-    <q-select
+    <custom-select
         v-if="filter.type === 'enum'"
         dense
         outlined
         emit-value
         map-options
         :label="filter.label"
-        :options="filter.options"
+        :resource="filter.resource"
         :model-value="modelValue"
+        :option-label="filter.optionLabel || 'name'"
+        :option-value="filter.optionValue || 'id'"
         clearable
         @update:model-value="emitUpdate"
     />

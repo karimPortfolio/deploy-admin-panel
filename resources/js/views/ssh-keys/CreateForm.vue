@@ -2,7 +2,7 @@
     <template>
         <form-modal
             v-model:open="open"
-            title="Create Security Group"
+            title="Create SSH Key"
             form="ssh-key-form"
             @close="handleClose"
             :loading="creating"

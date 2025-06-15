@@ -27,11 +27,9 @@ class CreateEc2InstanceJob implements ShouldQueue
      */
     public function handle(): void
     {
-        \Log::info('EC2 Job started with params');
-
         try {
             $newEc2Instance = Ec2InstanceService::createInstance($this->params);
-            $ec2Instance = Ec2InstanceService::describeInstanceByInstanceId([$newEc2Instance['InstanceId']]);
+            $ec2Instance = Ec2InstanceService::describeInstanceByInstanceId($newEc2Instance['InstanceId']);
 
             $this->server->update([
                 'instance_id' => $newEc2Instance['InstanceId'],
@@ -44,7 +42,8 @@ class CreateEc2InstanceJob implements ShouldQueue
             ]);
         }
         catch (\Exception $e) {
-            $this->server->update(['status' => 'failed']);
+            $this->server->forceDelete();
+            info("reached here");
             \Log::error('EC2 creation failed', ['error' => $e->getMessage()]);
         }
     }

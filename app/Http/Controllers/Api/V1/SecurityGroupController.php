@@ -25,6 +25,9 @@ class SecurityGroupController extends Controller
             ])
             ->allowedSorts(['id', 'name', 'description', 'vpc_id', 'group_id', 'created_at', 'updated_at'])
             ->withCount('servers')
+            ->with([
+                'createdBy:id,name',
+            ])
             ->when($request->input('search'), function ($query) use ($request) {
                 $search = $request->input('search');
                 $query->where(function ($q) use ($search) {
@@ -34,7 +37,17 @@ class SecurityGroupController extends Controller
                 });
             })
             ->orderBy('updated_at', 'desc')
-            ->paginate($request->input('per_page', 10));
+            ->paginate(function ($total) use ($request) {
+                $perPage = $request->integer('per_page', -1);
+
+                if ($perPage === 0) {
+                    $perPage = $total;
+                } elseif ($perPage === -1) {
+                    $perPage = 10;
+                }
+
+                return $perPage;
+            });
 
         return SecurityGroupResource::collection($securityGroups);
     }
@@ -60,7 +73,7 @@ class SecurityGroupController extends Controller
 
             return new SecurityGroupResource($securityGroup);
         });
-        
+
     }
 
     /**
@@ -70,8 +83,9 @@ class SecurityGroupController extends Controller
     {
         $securityGroup->load([
             'servers:id,name,instance_id,status,security_group_id',
+            'createdBy:id,name',
         ]);
-        
+
         return new SecurityGroupResource($securityGroup);
     }
 

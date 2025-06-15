@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Aws\CloudWatch\CloudWatchClient;
 use Aws\Ec2\Ec2Client;
 use Aws\Ssm\SsmClient;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -28,6 +29,17 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(SsmClient::class, function ($app) {
             return new SsmClient([
+                'region' => config('aws.region'),
+                'version' => 'latest',
+                'credentials' => [
+                    'key' => config('aws.key'),
+                    'secret' => config('aws.secret'),
+                ],
+            ]);
+        });
+
+        $this->app->singleton(CloudWatchClient::class, function ($app) {
+            return new CloudWatchClient([
                 'region' => config('aws.region'),
                 'version' => 'latest',
                 'credentials' => [

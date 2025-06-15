@@ -25,7 +25,7 @@ class ServerFactory extends Factory
             'image_id' => $this->faker->uuid(),
             'name' => $this->faker->word(),
             'instance_type' => InstanceType::T2Micro->value,
-            'status' => ServerStatus::RUNNING->value,
+            'status' => ServerStatus::STOPPED->value,
             'private_ip_address' => $this->faker->ipv4(),
             'public_ip_address' => $this->faker->ipv4(),
             'ssh_key_id' => SshKey::factory()->create()->id,

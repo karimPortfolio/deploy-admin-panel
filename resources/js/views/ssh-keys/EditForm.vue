@@ -2,7 +2,7 @@
     <template>
         <form-modal
             v-model:open="open"
-            title="Edit Security Group"
+            title="Edit SSH Key"
             form="ssh-key-form"
             @close="handleClose"
             :loading="updating"

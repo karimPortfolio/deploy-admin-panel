@@ -22,6 +22,7 @@ class SecurityGroupResource extends JsonResource
             'vpc_id' => $this->whenHas('vpc_id'),
             'servers_count' => $this->whenCounted('servers'),
             'servers' => ServerResource::collection($this->whenLoaded('servers')),
+            'created_by' => new UserResource($this->whenLoaded('createdBy')),
             'created_at' => $this->whenHas('created_at', function () {
                 return $this->created_at->diffForHumans();
             }),

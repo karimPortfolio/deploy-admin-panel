@@ -28,7 +28,7 @@
                     :loading="loading"
                     :disable="loading"
                     unelevated
-                    label="Delete" 
+                    :label="actionLabel" 
                     :color="color" 
                     class="w-1/2"
                     @click="onConfirm"
@@ -64,6 +64,10 @@ const props = defineProps({
     color: {
         type: String,
         default: 'negative'
+    },
+    actionLabel: {
+        type: String,
+        default: 'Delete'
     }
 });
 

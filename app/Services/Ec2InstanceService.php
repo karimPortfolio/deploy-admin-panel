@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use Aws\Ec2\Ec2Client;
+use Aws\CloudWatch\CloudWatchClient;
+use Carbon\Carbon;
 
 class Ec2InstanceService
 {
@@ -152,6 +154,64 @@ class Ec2InstanceService
                 : [];
         } catch (\Aws\Exception\AwsException $e) {
             throw new \RuntimeException('Failed to describe EC2 instances: ' . $e->getMessage());
+        }
+    }
+
+
+    /**
+     * Get the utilization metrics for an EC2 instance.
+     *
+     * @param string $instanceId
+     * @return array
+     */
+    public static function getInstanceUtilization(string $instanceId)
+    {
+        $cpuUtilization = static::getMetricStatisticsByMetricName('CPUUtilization', $instanceId);
+        $diskReadOps = static::getMetricStatisticsByMetricName('DiskReadOps', $instanceId);
+        $diskWriteOps = static::getMetricStatisticsByMetricName('DiskWriteOps', $instanceId);
+
+        return [
+            'cpu_utilization' => $cpuUtilization,
+            'disk_read_ops' => $diskReadOps,
+            'disk_write_ops' => $diskWriteOps,
+        ];
+    }
+
+    /**
+     * Get metric statistics for a specific metric name.
+     *
+     * @param string $metricName
+     * @param string $instanceId
+     * @return array
+     */
+    private static function getMetricStatisticsByMetricName(string $metricName, string $instanceId)
+    {
+        $cloudWatchClient = app(CloudWatchClient::class);
+
+        try {
+            $metrics = $cloudWatchClient->getMetricStatistics([
+                'Namespace' => 'AWS/EC2',
+                'MetricName' => $metricName,
+                'Dimensions' => [
+                    [
+                        'Name' => 'InstanceId',
+                        'Value' => $instanceId,
+                    ],
+                ],
+                'StartTime' => Carbon::now()->subHours(2)->toIso8601String(),
+                'EndTime' => Carbon::now()->toIso8601String(),
+                'Period' => 600,
+                'Statistics' => ['Average'],
+                'Unit' => 'Percent',
+            ]);
+
+            if (!$metrics->hasKey('Datapoints')) {
+                return [];
+            }
+            
+            return $metrics->get('Datapoints') ?? [];
+        } catch (\Aws\Exception\AwsException $e) {
+            throw new \RuntimeException('Failed to get metric statistics: ' . $e->getMessage());
         }
     }
 }

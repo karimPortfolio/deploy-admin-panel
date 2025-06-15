@@ -30,4 +30,9 @@ class Server extends Model
         return $this->belongsTo(SecurityGroup::class);
     }
 
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
 }

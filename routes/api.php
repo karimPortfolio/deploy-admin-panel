@@ -18,6 +18,9 @@ Route::middleware('auth:sanctum')
     Route::apiResource('ssh-keys', SshKeyController::class);
     Route::put('servers/{server}/start', [ServerController::class, 'startServer'])->name('servers.start');
     Route::put('servers/{server}/stop', [ServerController::class, 'stopServer'])->name('servers.stop');
+    Route::get('servers/instance-types', [ServerController::class, 'getInstanceTypes'])->name('servers.instance-types');
+    Route::get('servers/os-families', [ServerController::class, 'getOsFamilies'])->name('servers.os-families');
+    Route::get('servers/statuses', [ServerController::class, 'getServerStatuses'])->name('servers.statuses');
     Route::apiResource('servers', ServerController::class);
     Route::apiResource('security-groups', SecurityGroupController::class)->except(['update']);
     Route::get('vpcs', VpcController::class)->name('vpcs');
