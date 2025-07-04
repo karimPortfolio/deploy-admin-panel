@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory, RouterView } from "vue-router";
 import { AuthMiddleware } from "@/middlewares/AuthMiddleware";
 import { RedirectAuthMiddleware } from "@/middlewares/RedirectAuthMiddleware";
 
@@ -6,7 +6,7 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
-            path: "/",
+            path: "",
             name: "index",
             component: () => import("../views/indexView.vue"),
             meta: {
@@ -16,14 +16,25 @@ const router = createRouter({
                 {
                     path: "",
                     name: "dashboard",
-                    component: () =>
-                        import("../views/dashboard/IndexView.vue"),
+                    component: () => import("../views/dashboard/IndexView.vue"),
                 },
                 {
                     path: "servers",
-                    name: "servers",
-                    component: () =>
-                        import("../views/servers/IndexView.vue"),
+                    component: RouterView,
+                    children: [
+                        {
+                            path: "",
+                            name: "servers.index",
+                            component: () =>
+                                import("../views/servers/IndexView.vue"),
+                        },
+                        {
+                            path: ":id",
+                            name: "servers.show",
+                            component: () =>
+                                import("../views/servers/ShowDetailsView.vue"),
+                        },
+                    ],
                 },
                 {
                     path: "security-groups",
@@ -34,8 +45,7 @@ const router = createRouter({
                 {
                     path: "ssh-keys",
                     name: "ssh-keys",
-                    component: () =>
-                        import("../views/ssh-keys/IndexView.vue"),
+                    component: () => import("../views/ssh-keys/IndexView.vue"),
                 },
             ],
         },

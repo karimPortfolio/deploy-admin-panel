@@ -86,7 +86,8 @@ class ServerController extends Controller
             'instance_type' => $params['instance_type']->value,
             'security_group_id' => $securityGroup->id,
             'os_family' => $params['os_family']->value,
-            'status' => ServerStatus::PENDING
+            'status' => ServerStatus::PENDING,
+            'created_by' => auth()->id()
         ]);
 
         //running the EC2 creation job in queue
@@ -104,7 +105,7 @@ class ServerController extends Controller
     {
         $server->load([
             'sshKey:id,name',
-            'securityGroup:id,name',
+            'securityGroup:id,name,group_id',
             'createdBy:id,name',
         ]);
 

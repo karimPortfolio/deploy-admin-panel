@@ -6,10 +6,10 @@
             @created="handleCreated"
         />
 
-        <show-details-view
+        <!-- <show-details-view
             v-model:open="openShowServerModal"
             :id="itemToShow?.id"
-        />
+        /> -->
 
         <confirmation-modal
             v-model:open="openDeleteConfirmationModal"
@@ -121,7 +121,6 @@
                         <actions-column
                             :row="props.row"
                             @status-change="statusChangeConfirmation"
-                            @show-details="handleShowDetails"
                             @delete="handleDeleteConfirmation"
                         />
                     </q-td>
@@ -266,11 +265,9 @@ const { update: stopServer, updating: stopping } = useResourceUpdate(
 const { truncate } = useTextTruncate();
 
 const openCreateServerModal = ref(false);
-const openShowServerModal = ref(false);
 const openDeleteConfirmationModal = ref(false);
 const openStatusChangeConfirmationModal = ref(false);
 const itemToDelete = ref(null);
-const itemToShow = ref(null);
 const itemToChangeStatus = ref(null);
 const newServerStatus = ref(false);
 
@@ -332,12 +329,6 @@ const handleStatusChange = async () => {
         filter: search.value,
         filters: options.filters,
     });
-};
-
-const handleShowDetails = (row) => {
-    itemToShow.value = row;
-
-    openShowServerModal.value = true;
 };
 
 const handleDelete = async () => {

@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import { Dialog, Notify, Quasar } from "quasar";
-
+import VueApexCharts from "vue3-apexcharts";
 
 // Import icon libraries
 import "@quasar/extras/roboto-font/roboto-font.css";
@@ -29,6 +29,8 @@ app.use(Quasar, {
     },
   },
 });
+
+app.use(VueApexCharts);
 
 app.config.errorHandler = (err, vm, info) => {
   console.error("Vue error:", err);

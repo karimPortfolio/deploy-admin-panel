@@ -44,7 +44,6 @@ defineProps({
     },
     action: {
         type: Function,
-        required: true,
     },
 });
 </script>

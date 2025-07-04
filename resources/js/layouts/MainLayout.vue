@@ -76,7 +76,7 @@ const drawerItems = [
     {
         label: "Servers",
         icon: "sym_r_host",
-        route: { name: "servers" },
+        route: { name: "servers.index" },
     },
     {
         label: "Security Groups",

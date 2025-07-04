@@ -11,7 +11,7 @@
                 <!-- ============= VIEW ========= -->
                 <!-- ============================ -->
                 <q-item
-                    @click="handleShow(row)"
+                    :to="{ name: 'servers.show', params: { id: row.id } }"
                     clickable
                     v-close-popup
                     class="text-gray-600 dark:text-gray-200 rounded-md"
@@ -118,7 +118,4 @@ const statusChange = (row, status) => {
     emit("status-change", row, status);
 }
 
-const handleShow = (row) => {
-    emit("show-details", row);
-};
 </script>

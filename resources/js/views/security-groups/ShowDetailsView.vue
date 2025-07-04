@@ -50,12 +50,12 @@
                         <q-separator class="mt-2" />
                         <div class="mt-5">Assigned Servers</div>
                         <div
-                            class="grid grid-cols-2 justify-between items-center"
+                            class="grid grid-cols-2 gap-x-3 justify-between items-center"
                         >
                             <q-card
                                 v-for="server in servers"
                                 :key="server.id"
-                                class="flex flex-nowrap gap-2 items-center p-3 border w-fit mt-3"
+                                class="w-full flex flex-nowrap gap-2 items-center p-3 border mt-3"
                             >
                                 <q-card-section class="p-0">
                                     <div
