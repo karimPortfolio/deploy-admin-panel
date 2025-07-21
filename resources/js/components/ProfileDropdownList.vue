@@ -1,10 +1,11 @@
 <template>
     <q-list style="min-width: 150px" dense class="q-pa-xs mt-1">
         <q-item
-            target="_blank"
+            :to="{ name: 'profile' }"
             v-close-popup
             clickable
-            class="py-2 hover:cursor-pointer rounded-md "
+            class="py-2 hover:cursor-pointer rounded-md"
+            active-class=""
         >
             <q-item-section avatar class="min-w-fit pe-2">
                 <q-icon name="sym_r_person" size="xs" />
@@ -17,6 +18,7 @@
             clickable
             v-close-popup
             class="py-2 mb-2 hover:cursor-pointer rounded-md "
+            active-class=""
         >
             <q-item-section avatar class="min-w-fit pe-2">
                 <q-icon name="sym_r_settings" size="xs" />

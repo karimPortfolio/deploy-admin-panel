@@ -19,6 +19,9 @@ class UserResource extends JsonResource
             'name' => $this->whenHas('name'),
             'email' => $this->whenHas('email'),
             'active' => $this->whenHas('grant_access'),
+            'photo' => $this->whenLoaded("media", function ($media) {
+                return count($media) > 0 ? $media[0]->getFullUrl() : "/src/img/avatar.png";
+            }),
         ];
     }
 }

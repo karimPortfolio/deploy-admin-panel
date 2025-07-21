@@ -7,8 +7,8 @@
                 <q-avatar size="lg">
                     <q-img
                         :src="
-                            user?.avatar ??
-                            'https://cdn.quasar.dev/img/boy-avatar.png'
+                            user?.photo ??
+                            '/src/img/avatar.png'
                         "
                     />
                 </q-avatar>
@@ -41,8 +41,8 @@
                                 <q-avatar size="lg">
                                     <q-img
                                         :src="
-                                            user?.avatar ??
-                                            'https://cdn.quasar.dev/img/boy-avatar.png'
+                                            user?.photo ??
+                                            '/src/img/avatar.png'
                                         "
                                     />
                                 </q-avatar>

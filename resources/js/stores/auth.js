@@ -24,7 +24,7 @@ export const useAuthStore = defineStore("auth", () => {
 
         try {
             loadingPromise.value = await api.get("me");
-            user.value = loadingPromise.value.data;
+            user.value = loadingPromise.value.data.data;
             authenticated.value = true;
         } catch (err) {
             console.log(err);

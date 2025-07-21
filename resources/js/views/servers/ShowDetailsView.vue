@@ -105,7 +105,11 @@ const { data: server, fetch, loading } = useResourceShow("servers");
 
 const route = useRoute();
 
-const { truncate } = useTextTruncate();
+const dates = computed(() => {
+    return server.value?.statistics?.map((statistic) => {
+        return statistic.Timestamp;
+    });
+})
 
 const options = computed(() => ({
     chart: {
@@ -128,5 +132,6 @@ onMounted(() => {
     if (serverId) {
         fetch(serverId);
     }
+
 });
 </script>

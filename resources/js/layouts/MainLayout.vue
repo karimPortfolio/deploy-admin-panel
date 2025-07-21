@@ -97,12 +97,12 @@ const appName = ref("");
 
 const handleDarkMode = () => {
     const userPereference = localStorage.getItem("dark");
-    const darkMode = JSON.parse(userPereference) || 'auto';
+    const darkMode = JSON.parse(userPereference) || 'auto';
     $q.dark.set(darkMode);
 }
 
 onMounted(() => {
-    user.value = authStore.user.data;
+    user.value = authStore.user;
     appName.value = import.meta.env.VITE_APP_NAME; //load from env
     handleDarkMode();
 });

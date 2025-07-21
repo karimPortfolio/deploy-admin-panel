@@ -27,6 +27,7 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'max:255',
                 Rule::unique('users')->ignore($user->id),
             ],
+            'photo' => ['nullable', 'image', 'max:2048', 'mimes:jpg,jpeg,png'],
         ])->validateWithBag('updateProfileInformation');
 
         if ($input['email'] !== $user->email &&
@@ -37,6 +38,17 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
                 'name' => $input['name'],
                 'email' => $input['email'],
             ])->save();
+        }
+
+        if (request()->hasFile("photo"))
+        {
+            $photo = request()->file("photo");
+
+            $user->clearMediaCollection("profile-picture");
+            
+            $user->addMedia($photo)
+            ->withResponsiveImages()
+            ->toMediaCollection("profile-picture");
         }
     }
 

@@ -4,15 +4,18 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Notifications\Auth\ResetPasswordNotification;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class User extends Authenticatable
+class User extends Authenticatable implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, InteractsWithMedia;
 
     /**
      * The attributes that are mass assignable.
@@ -46,6 +49,18 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('user-photo')->singleFile();
+    }
+    public function profilePhotoUrl(): Attribute
+    {
+        dd($this->getFirstMediaUrl('user-photo'));
+        return Attribute::get(function () {
+            return $this->getFirstMediaUrl('user-photo') ?: '/src/img/avatar.png';
+        });
     }
 
     public function sendPasswordResetNotification($token)

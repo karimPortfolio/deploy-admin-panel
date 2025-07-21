@@ -47,6 +47,11 @@ const router = createRouter({
                     name: "ssh-keys",
                     component: () => import("../views/ssh-keys/IndexView.vue"),
                 },
+                {
+                    path: "profile",
+                    name: "profile",
+                    component: () => import("../views/profile/IndexView.vue"),
+                }
             ],
         },
         {
