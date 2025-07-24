@@ -58,6 +58,7 @@ class SshKeyController extends Controller
             'name' => $request->validated('name'),
             'public_key' => $keys['public_key'],
             'private_key' => $keys['private_key'],
+            'created_by' => auth()->id()
         ]);
 
         return new SshKeyResource($newSshKey);

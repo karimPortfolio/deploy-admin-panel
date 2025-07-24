@@ -69,6 +69,7 @@ class SecurityGroupController extends Controller
                 'name' => $name,
                 'description' => $description,
                 'vpc_id' => $securityGroup['vpc_id'],
+                'created_by' => auth()->id()
             ]);
 
             return new SecurityGroupResource($securityGroup);
