@@ -20,6 +20,7 @@ class SshKeyFactory extends Factory
             'name' => $this->faker->word(),
             'public_key' => $this->faker->text(100),
             'private_key' => $this->faker->text(100),
+            'created_by' => \App\Models\User::find(1)->first()
         ];
     }
 }

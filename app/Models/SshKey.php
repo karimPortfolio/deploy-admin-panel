@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\AuthenticatedUserScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,6 +11,11 @@ class SshKey extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new AuthenticatedUserScope);
+    }
 
     public function servers()
     {

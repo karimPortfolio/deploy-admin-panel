@@ -21,7 +21,7 @@ class ServerFactory extends Factory
     public function definition(): array
     {
         return [
-            'instance_id' => 'i-'.$this->faker->uuid(),
+            'instance_id' => 'i-' . $this->faker->uuid(),
             'image_id' => $this->faker->uuid(),
             'name' => $this->faker->word(),
             'instance_type' => InstanceType::T2Micro->value,
@@ -31,6 +31,7 @@ class ServerFactory extends Factory
             'ssh_key_id' => SshKey::factory()->create()->id,
             'security_group_id' => SecurityGroup::factory()->create()->id,
             'vpc_id' => 'vpc-' . $this->faker->uuid(),
+            'created_by' => \App\Models\User::find(1)->first()
         ];
     }
 }

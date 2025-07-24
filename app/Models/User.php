@@ -55,13 +55,21 @@ class User extends Authenticatable implements HasMedia
     {
         $this->addMediaCollection('user-photo')->singleFile();
     }
-    public function profilePhotoUrl(): Attribute
-    {
-        dd($this->getFirstMediaUrl('user-photo'));
-        return Attribute::get(function () {
-            return $this->getFirstMediaUrl('user-photo') ?: '/src/img/avatar.png';
-        });
-    }
+    
+    // public function profilePhotoUrl(): Attribute
+    // {
+    //     return Attribute::get(function () {
+    //         $this->loadMissing("media");
+    //         $media = $this->getFirstMedia("profile-picture");
+
+    //         if ($media && count($media))
+    //         {
+    //             return $media[0]->getFullUrl();
+    //         }
+
+    //         return "/src/img/avatar.png";
+    //     });
+    // }
 
     public function sendPasswordResetNotification($token)
     {

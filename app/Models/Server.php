@@ -5,13 +5,14 @@ namespace App\Models;
 use App\Enums\InstanceType;
 use App\Enums\OsFamily;
 use App\Enums\ServerStatus;
+use App\Scopes\AuthenticatedUserScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Server extends Model
 {
     use HasFactory;
-    
+
     protected $guarded = [];
 
     protected $casts = [
@@ -19,6 +20,11 @@ class Server extends Model
         'instance_type' => InstanceType::class,
         'status' => ServerStatus::class,
     ];
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new AuthenticatedUserScope);
+    }
 
     public function sshKey()
     {

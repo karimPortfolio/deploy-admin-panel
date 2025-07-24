@@ -21,6 +21,7 @@ class SecurityGroupFactory extends Factory
             'name' => $this->faker->unique()->word(),
             'description' => $this->faker->sentence(),
             'vpc_id' => 'vpc-'.$this->faker->uuid(),
+            'created_by' => \App\Models\User::find(1)->first()
         ];
     }
 }

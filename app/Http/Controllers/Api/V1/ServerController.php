@@ -24,7 +24,7 @@ class ServerController extends Controller
         $servers = QueryBuilder::for(Server::class)
             ->allowedFilters([
                 AllowedFilter::exact('status'),
-                AllowedFilter::exact('security_group_id'),
+                AllowedFilter::exact('security_group_id', 'securityGroup.group_id'),
                 AllowedFilter::exact('ssh_key_id'),
                 AllowedFilter::exact('instance_type'),
                 AllowedFilter::exact('os_family'),

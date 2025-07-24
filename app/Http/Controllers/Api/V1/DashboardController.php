@@ -1,0 +1,118 @@
+<?php
+
+namespace App\Http\Controllers\Api\V1;
+
+use App\Http\Controllers\Controller;
+use App\Models\SecurityGroup;
+use App\Models\Server;
+use App\Models\SshKey;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+
+
+class 
+DashboardController extends Controller
+{
+    public function getTotalServersCount()
+    {
+        $serversCount = Server::query()->count();
+
+        return response()->json([
+            'data' => [
+                'total' => $serversCount
+            ]
+        ]);
+    }
+
+    public function getTotalSecurityGroupsCount()
+    {
+        $securityGroupsCount = SecurityGroup::query()->count();
+
+        return response()->json([
+            'data' => [
+                'total' => $securityGroupsCount
+            ]
+        ]);
+    }
+
+    public function getTotalSshKeysCount()
+    {
+        $sshKeysCount = SshKey::query()->count();
+
+        return response()->json([
+            'data' => [
+                'total' => $sshKeysCount
+            ]
+        ]);
+    }
+
+    public function getMonthlyServersTotal(Request $request)
+    {
+        $year = $request->input('filter.year') ?? date('Y');
+        $servers = Server::query()
+            ->select(\DB::raw("MONTH(created_at) as month"), \DB::raw("COUNT(*) as count"))
+            ->whereYear('created_at', $year)
+            ->groupBy('month')
+            ->get()
+            ->keyBy('month');
+
+        $data = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $data[] = [
+                'month' => Carbon::createFromFormat('m', $i)->format('M'),
+                'total' => $servers->get($i)->count ?? 0,
+            ];
+        }
+
+        return response()->json([
+            'data' => $data
+        ]);
+    }
+
+
+    public function getMonthlySecurityGroupsTotal(Request $request)
+    {
+        $year = $request->input('filter.year') ?? date('Y');
+        $securityGroups = SecurityGroup::query()
+            ->select(\DB::raw("MONTH(created_at) as month"), \DB::raw("COUNT(*) as count"))
+            ->whereYear("created_at", $year)
+            ->groupBy('month')
+            ->get()
+            ->keyBy('month');
+
+        $data = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $data[] = [
+                'month' => Carbon::createFromFormat('m', $i)->format('M'),
+                'total' => $securityGroups->get($i)->count ?? 0,
+            ];
+        }
+
+        return response()->json([
+            'data' => $data
+        ]);
+    }
+
+
+    public function getTotalServersBySecurityGroups()
+    {
+        $servers = Server::query()
+            ->select('security_group_id', \DB::raw('COUNT(*) as total'))
+            ->with('securityGroup')
+            ->groupBy('security_group_id')
+            ->get()
+            ->map(function ($server) {
+                return [
+                    'securityGroup' => $server->securityGroup->group_id,
+                    'total' => $server->total,
+                ];
+            });
+
+
+        return response()->json([
+            'data' => $servers
+        ]);
+    }
+}

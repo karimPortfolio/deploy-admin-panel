@@ -15,8 +15,8 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             // SshKeySeeder::class,
-            // SecurityGroupSeeder::class,
-            ServerSeeder::class,
+            SecurityGroupSeeder::class,
+            // ServerSeeder::class,
         ]);
     }
 }
