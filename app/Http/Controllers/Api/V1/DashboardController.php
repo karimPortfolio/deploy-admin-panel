@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\ServerStatus;
 use App\Http\Controllers\Controller;
 use App\Models\SecurityGroup;
 use App\Models\Server;
@@ -10,8 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 
-class 
-DashboardController extends Controller
+class DashboardController extends Controller
 {
     public function getTotalServersCount()
     {
@@ -106,6 +106,27 @@ DashboardController extends Controller
             ->map(function ($server) {
                 return [
                     'securityGroup' => $server->securityGroup->group_id,
+                    'total' => $server->total,
+                ];
+            });
+
+
+        return response()->json([
+            'data' => $servers
+        ]);
+    }
+
+
+    public function getTotalServersByStatus()
+    {
+        $servers = Server::query()
+            ->select('status', \DB::raw('COUNT(*) as total'))
+            ->groupBy('status')
+            ->get()
+            ->map(function ($server) {
+                return [
+                    'status' => $server->status->label(),
+                    'color' => $server->status->hexColor(),
                     'total' => $server->total,
                 ];
             });

@@ -24,6 +24,7 @@ Route::middleware('auth:sanctum')
         Route::get('/dashboard/monthly-servers-total', [DashboardController::class, 'getMonthlyServersTotal'])->name('dashboard.monthly-servers-total');
         Route::get('/dashboard/monthly-security-groups-total', [DashboardController::class, 'getMonthlySecurityGroupsTotal'])->name('dashboard.monthly-security-groups-total');
         Route::get('/dashboard/servers-by-security-groups', [DashboardController::class, 'getTotalServersBySecurityGroups'])->name('dashboard.servers-by-security-groups');
+        Route::get('/dashboard/servers-by-status', [DashboardController::class, 'getTotalServersByStatus'])->name('dashboard.servers-by-status');
         
         // =============== SSH KEYS ROUTES
         Route::apiResource('ssh-keys', SshKeyController::class);

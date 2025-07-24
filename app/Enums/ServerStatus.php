@@ -29,6 +29,16 @@ enum ServerStatus: string
         };
     }
 
+    public function hexColor(): string
+    {
+        return match($this) {
+            self::RUNNING   => '#21BA45',
+            self::STOPPED   => '#C10015',
+            self::TERMINATED => '#F2C037',
+            self::PENDING   => '#1976d2',
+        };
+    }
+
     public function toArray(): array
     {
         return [
