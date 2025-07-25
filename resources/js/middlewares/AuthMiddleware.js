@@ -11,7 +11,7 @@ export async function AuthMiddleware({ to, next }) {
 
     const loginUrl = import.meta.env.VITE_LOGIN_URL;
 
-    window.location.href = loginUrl + "?redirect_to=" + redirectTo;
+    window.location.href = loginUrl + "?redirect_to=" + encodeURIComponent(redirectTo);
 
     return next(false);
   }

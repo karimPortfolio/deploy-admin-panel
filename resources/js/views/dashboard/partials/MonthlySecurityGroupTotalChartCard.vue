@@ -25,6 +25,9 @@
                 :series="series"
             />
         </q-card-section>
+        <q-inner-loading :showing="loading">
+            <q-spinner-tail color="primary" size="40px" />
+        </q-inner-loading>
     </q-card>
 </template>
 <script setup>

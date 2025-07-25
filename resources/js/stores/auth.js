@@ -57,12 +57,21 @@ export const useAuthStore = defineStore("auth", () => {
 
     const login = async (credentials, redirectTo) => {
         if (loginPromise.value) return loginPromise.value;
+
         try {
             loginPromise.value = new Promise((resolve, reject) => {
                 api.post("login", credentials)
                     .then((response) => {
                         authenticated.value = true;
-                        if (redirectTo) window.location.href = redirectTo;
+                        if (
+                            redirectTo &&
+                            redirectTo.startsWith(window.location.origin)
+                        ) {
+                            window.location.href = redirectTo;
+                            resolve(response);
+                            return;
+                        }
+
                         window.location.href = "/";
                         resolve(response);
                     })
@@ -156,6 +165,6 @@ export const useAuthStore = defineStore("auth", () => {
         logout,
         login,
         forgotPassword,
-        resetPassword
+        resetPassword,
     };
 });

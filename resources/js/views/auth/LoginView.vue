@@ -129,7 +129,7 @@ const handleDarkMode = () => {
 
 const handleAuth = async () => {
     try {
-        const response = await api.get(import.meta.env.VITE_SANCTUM_URL);
+        await api.get(import.meta.env.VITE_SANCTUM_URL);
     } catch (err) {
         $q.notify({
             message: "Error",
@@ -145,7 +145,7 @@ const handleLogin = async () => {
     loading.value = true;
     try {
         await handleAuth();
-        const redirectTo = route.query.redirect_to;
+        const redirectTo = decodeURIComponent(route.query.redirect_to);
         await authStore.login(credentials.value, redirectTo);
     } catch (err) {
         if (err.response?.status === 422) {
