@@ -7,7 +7,7 @@ export async function RedirectAuthMiddleware({ to, next }) {
   await authStore.fetchProfile();
 
   if (authStore.authenticated) {
-    return next({ name: "home" });
+    return next({ name: "dashboard" });
   }
 
   return next();

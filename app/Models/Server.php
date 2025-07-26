@@ -23,7 +23,9 @@ class Server extends Model
 
     protected static function booted()
     {
-        static::addGlobalScope(new AuthenticatedUserScope);
+        if (!app()->runningInConsole()) {
+            static::addGlobalScope(new AuthenticatedUserScope);
+        }
     }
 
     public function sshKey()

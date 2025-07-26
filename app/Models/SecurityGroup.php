@@ -9,12 +9,14 @@ use Illuminate\Database\Eloquent\Model;
 class SecurityGroup extends Model
 {
     use HasFactory;
-    
+
     protected $guarded = [];
 
     protected static function booted()
     {
-        static::addGlobalScope(new AuthenticatedUserScope);
+        if (!app()->runningInConsole()) {
+            static::addGlobalScope(new AuthenticatedUserScope);
+        }
     }
 
     public function servers()

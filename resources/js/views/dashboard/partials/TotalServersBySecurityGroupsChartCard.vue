@@ -17,7 +17,7 @@
                 />
             </div> -->
         </q-card-section>
-        <q-card-section v-if="loading || series.length" class="p-0">
+        <q-card-section v-if="loading || series.length" class="p-0 pb-4">
             <apexchart
                 type="donut"
                 height="250"

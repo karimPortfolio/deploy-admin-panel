@@ -7,16 +7,16 @@
     /> -->
 
     <div>
-      <div class="grid grid-cols-3 gap-4" >
+      <div class="grid lg:grid-cols-3 gap-4" >
         <servers-total-card />
         <security-group-total-card />
         <ssh-keys-total-card />
       </div>
-      <div class="grid grid-cols-2 gap-4 mt-4" >
+      <div class="grid lg:grid-cols-2 gap-4 mt-4" >
         <monthly-servers-total-chart-card />
         <monthly-security-group-total-chart-card />
       </div>
-      <div class="grid grid-cols-2 gap-4 mt-4" >
+      <div class="grid lg:grid-cols-2 gap-4 mt-4" >
         <total-servers-by-status-chart-card />
         <total-servers-by-security-groups-chart-card />
       </div>

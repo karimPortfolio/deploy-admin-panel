@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\V1\AmiController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DashboardController;
+use App\Http\Controllers\Api\V1\NotificationsController;
 use App\Http\Controllers\Api\V1\SecurityGroupController;
 use App\Http\Controllers\Api\V1\ServerController;
 use App\Http\Controllers\Api\V1\SshKeyController;
@@ -42,6 +43,12 @@ Route::middleware('auth:sanctum')
         
         // =============== VPCS ROUTES
         Route::get('vpcs', VpcController::class)->name('vpcs');
+
+        // =============== NOTIFCATIONS
+        Route::get('notifications', [NotificationsController::class, 'index'])->name('notifications.index');
+        Route::put('notifications/{id}/mark-as-read', [NotificationsController::class, 'markAsRead'])->name('notifications.mark-as-read');
+        Route::put('notifications/mark-all-as-read', [NotificationsController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
+        Route::delete('notifications/{id}', [NotificationsController::class, 'destroy'])->name('notifications.destroy');
     });
 
 Route::post('v1/reset-password', [NewPasswordController::class, 'store'])
