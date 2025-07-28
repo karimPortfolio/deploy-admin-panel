@@ -71,3 +71,28 @@ Each week, users receive a professional report highlighting:
    ```bash
    git clone https://github.com/KarimPortfolio/cloud-resource-manager.git
    cd cloud-resource-manager
+
+2. Install backend dependencies:
+   composer install
+   cp .env.example .env
+   php artisan key:generate
+
+3. Configure .env (DB, S3, mail settings)
+4. Install frontend dependencies:
+   cd frontend
+   npm install
+
+5. Run the project:
+   php artisan serve
+   npm run dev
+
+## 🧪 Testing
+This project includes feature tests to ensure critical functionality is working as expected.
+To run the test suite:
+   php artisan test
+
+## 🤝 Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you'd like to change or improve.
+
+## ✨ Credits
+Made with ❤️ by Mohamed Karim Balla
