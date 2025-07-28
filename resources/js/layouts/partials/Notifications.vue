@@ -11,7 +11,7 @@
         <keep-alive>
             <q-menu
                 :offset="[0, 6]"
-                class="w-96 max-h-[500px] rounded-lg shadow-lg border"
+                class="w-96 max-h-[500px] rounded-lg shadow-lg border dark:border-gray-700"
                 transition-show="jump-down"
                 transition-hide="jump-up"
             >
@@ -22,7 +22,7 @@
                         <h3 class="text-lg font-medium">Notifications</h3>
                         <q-badge
                             v-if="unreadNotificationsCount > 0"
-                            class="bg-blue-100 rounded-full py-1 text-blue-800 maw-h-0"
+                            class="bg-blue-100 rounded-full py-1 text-blue-500 maw-h-0"
                             :label="unreadNotificationsCount"
                         />
                     </div>
@@ -61,7 +61,7 @@
                                 <q-item-section class="w-full">
                                     <div class="flex flex-nowrap w-full gap-3">
                                         <q-avatar>
-                                            <div class="bg-gray-50 p-3">
+                                            <div class="bg-gray-50 text-dark p-3">
                                                 <q-icon
                                                     name="sym_r_settings"
                                                     size="27px"

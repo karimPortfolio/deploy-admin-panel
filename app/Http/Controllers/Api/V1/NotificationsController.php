@@ -10,8 +10,10 @@ class NotificationsController extends Controller
 {
     public function index(Request $request)
     {
-        $notifications = auth()->user()->notifications()->get();
-        
+        $notifications = auth()->user()
+            ->notifications()
+            ->paginate($request->input('per_page') ?: 10);
+
         $this->markNotificationsAsReceived();
 
         return NotificationResource::collection($notifications);
@@ -20,9 +22,9 @@ class NotificationsController extends Controller
     public function unreceivedNotifications()
     {
         $notifications = auth()->user()
-        ->notifications()
-        ->whereNull('received_at')
-        ->count();
+            ->notifications()
+            ->whereNull('received_at')
+            ->count();
 
         return response()->json([
             'data' => [
