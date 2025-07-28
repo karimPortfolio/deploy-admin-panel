@@ -11,8 +11,24 @@ class NotificationsController extends Controller
     public function index(Request $request)
     {
         $notifications = auth()->user()->notifications()->get();
+        
+        $this->markNotificationsAsReceived();
 
         return NotificationResource::collection($notifications);
+    }
+
+    public function unreceivedNotifications()
+    {
+        $notifications = auth()->user()
+        ->notifications()
+        ->whereNull('received_at')
+        ->count();
+
+        return response()->json([
+            'data' => [
+                'unreceived_notifications_count' => $notifications
+            ]
+        ]);
     }
 
     public function markAsRead(string $id)
@@ -44,5 +60,15 @@ class NotificationsController extends Controller
         $notification->delete();
 
         return response()->noContent();
+    }
+
+    protected function markNotificationsAsReceived()
+    {
+        auth()->user()
+            ->notifications()
+            ->whereNull('received_at')
+            ->update([
+                'received_at' => now()
+            ]);
     }
 }

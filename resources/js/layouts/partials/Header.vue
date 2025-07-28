@@ -34,14 +34,7 @@
 
             <!-- ============== NOTIFICATIONS =============== -->
             <div class="mr-2">
-                <q-btn dense size="sm" padding="sm" flat>
-                    <span class="relative">
-                        <q-icon name="sym_r_notifications" />
-                        <span
-                            class="absolute top-0 right-0 w-2 h-2 dark:bg-primary-300 bg-primary ring-2 ring-white dark:ring-slate-800 rounded-full"
-                        ></span>
-                    </span>
-                </q-btn>
+                <notifications />
             </div>
             <!-- ============== NOTIFICATIONS =============== -->
 
@@ -60,6 +53,7 @@
 </template>
 <script setup>
 import { useQuasar } from "quasar";
+import Notifications from "./Notifications.vue";
 
 const $q = useQuasar();
 

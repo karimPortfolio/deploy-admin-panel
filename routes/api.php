@@ -46,6 +46,7 @@ Route::middleware('auth:sanctum')
 
         // =============== NOTIFCATIONS
         Route::get('notifications', [NotificationsController::class, 'index'])->name('notifications.index');
+        Route::get('notifications/unreceived-notifications', [NotificationsController::class, 'unreceivedNotifications'])->name('notifications.unreceived-notifications');
         Route::put('notifications/{id}/mark-as-read', [NotificationsController::class, 'markAsRead'])->name('notifications.mark-as-read');
         Route::put('notifications/mark-all-as-read', [NotificationsController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
         Route::delete('notifications/{id}', [NotificationsController::class, 'destroy'])->name('notifications.destroy');
