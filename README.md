@@ -89,7 +89,10 @@ Each week, users receive a professional report highlighting:
 ## 🧪 Testing
 This project includes feature tests to ensure critical functionality is working as expected.
 To run the test suite:
+   ```bash
    php artisan test
+   ```
+
 
 ## 🤝 Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you'd like to change or improve.
