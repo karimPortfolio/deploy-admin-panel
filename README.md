@@ -1,6 +1,6 @@
 # 🖥️ Cloud Resource Manager
 
-A modern, developer-focused dashboard for managing servers, security groups, and SSH keys. The platform helps you stay on top of your cloud resources with a weekly audit, intuitive UI, and automated alerts — all with support for dark/light mode and secure authentication.
+A modern, admin-focused dashboard for managing servers, security groups, and SSH keys. The platform helps you stay on top of your cloud resources with a weekly audit, intuitive UI, and automated alerts — all with support for dark/light mode and secure authentication.
 
 ## 🚀 Features
 
