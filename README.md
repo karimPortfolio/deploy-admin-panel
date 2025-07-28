@@ -1,61 +1,73 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🖥️ Cloud Resource Manager
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern, developer-focused dashboard for managing servers, security groups, and SSH keys. The platform helps you stay on top of your cloud resources with a weekly audit, intuitive UI, and automated alerts — all with support for dark/light mode and secure authentication.
 
-## About Laravel
+## 🚀 Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- ✅ **Manage Servers**
+  - Create, view, edit, and delete server resources
+  - Filter and search functionality
+  - Assign security groups and ssh keys to servers
+  - Assign VPC, OS family and instance type to servers.
+- ✅ **Security Groups**
+  - Create, view, edit, and delete security group resources
+  - Filter and search functionality
+  - Identify unused groups with automated auditing
+- ✅ **SSH Key Management**
+  - Add and remove SSH keys
+  - Filter and search functionality
+  - Identify unused keys
+- 📊 **Dashboard & Weekly Audit**
+  - Visualize resource usage at a glance
+  - Automated email & in-app notifications for unused resources
+- 🔐 **Authentication & Security**
+  - Login, Forget Password, and Reset Password
+  - Authenticated user scoping for data access
+- 👤 **User Profile**
+  - Edit personal details and profile photo
+- 🌙 **Dark / Light Mode**
+  - Toggle seamlessly between light and dark themes
+- 🔔 **Email & In-App Notifications**
+  - Stay informed with system alerts and updates
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🧱 Tech Stack
 
-## Learning Laravel
+- **Frontend**: Vue.js, Quasar Framework, TailwindCSS, ApexCharts
+- **Backend**: Laravel, Laravel Sanctum (API authentication) / Fortify, MySQL, AWS SDK PHP
+- **Notifications**: Laravel Notifications (Mail & Database)
+- **Cloud Storage**: AWS S3 for profile image uploads
+- **Job Scheduling**: Laravel Scheduler for weekly audits
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 📷 Screenshots
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## 📩 Weekly Audit Report
 
-### Premium Partners
+Each week, users receive a professional report highlighting:
+- Number of unused **Security Groups**
+- Number of unused **SSH Keys**
+- Direct links to dashboard
+- Example subject: `Weekly Unused Resources Report`
+- Sample action: _"Visit your dashboard"_
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## 🛡️ Security & Permissions
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+- All user data is scoped to the authenticated user
+- Console commands and background jobs are authenticated properly
+- Password reset flow is tokenized and secure
 
-## Code of Conduct
+---
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## 🔧 Setup Instructions
 
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/KarimPortfolio/cloud-resource-manager.git
+   cd cloud-resource-manager

@@ -12,11 +12,15 @@
                 flat
                 size="sm"
                 padding="sm"
-                icon="menu"
+                icon="sym_r_menu"
                 @click="handleDrawerToggling"
-            />
+            >
+                <q-tooltip anchor="center end" self="center middle" :offset="[55, 10]">
+                    {{ drawer ? 'Close' : 'Open' }} the sidebar
+                </q-tooltip>
+            </q-btn>
             <!-- ============== SEARCH BAR =============== -->
-            <div class="ms-5 w-1/3 py-3">
+            <!-- <div class="ms-5 w-1/3 py-3">
                 <q-input
                     dense
                     placeholder="Search..."
@@ -27,7 +31,7 @@
                         <q-icon name="sym_r_search" size="xs" />
                     </template>
                 </q-input>
-            </div>
+            </div> -->
             <!-- ============== SEARCH BAR =============== -->
 
             <q-space />
@@ -73,5 +77,4 @@ const handleDarkToggling = () => {
 const handleDrawerToggling = () => {
     emits("toggleDrawer");
 };
-
 </script>
