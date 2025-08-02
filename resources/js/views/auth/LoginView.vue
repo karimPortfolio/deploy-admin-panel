@@ -24,7 +24,7 @@
                                 </p>
                             </q-card-section>
 
-                            <q-card-section class="w-full px-8 pt-4 pb-8">
+                            <q-card-section class="w-full px-8 pt-4 pb-6">
                                 <q-form
                                     @submit="(e) => e.preventDefault()"
                                     class="q-gutter-y-sm"
@@ -93,6 +93,9 @@
                                         </template>
                                     </q-btn>
                                 </q-form>
+                                <div class="mt-6 text-center text-gray-600 dark:text-gray-500 text-sm" >
+                                    Don't have an account? <a href="/auth/register" class="text-primary hover:underline" >Sign up</a>
+                                </div>
                             </q-card-section>
                         </q-card>
                     </div>
@@ -123,8 +126,14 @@ const $q = useQuasar();
 const authStore = useAuthStore();
 
 const handleDarkMode = () => {
-    const userPereference = localStorage.getItem("dark");
-    $q.dark.set(JSON.parse(userPereference) || 'auto');
+    const theme = localStorage.getItem("dark");
+    if (theme === "auto") {
+        $q.dark.set(theme);
+        return;
+    }
+    
+    const darkMode = JSON.parse(theme) ?? "auto";
+    $q.dark.set(darkMode);
 }
 
 const handleAuth = async () => {

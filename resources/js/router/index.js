@@ -55,6 +55,14 @@ const router = createRouter({
             ],
         },
         {
+            path: "/auth/register",
+            name: "auth.register",
+            meta: {
+                middleware: [RedirectAuthMiddleware],
+            },
+            component: () => import("@/views/auth/RegisterView.vue"),
+        },
+        {
             path: "/auth/login",
             name: "auth.login",
             meta: {

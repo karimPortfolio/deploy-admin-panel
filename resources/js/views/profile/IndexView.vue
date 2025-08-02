@@ -72,8 +72,7 @@ const uploadedPhotoUrl = ref(null);
 
 onChange((files) => {
     if (!files || files.length === 0) return;
-
-    console.log(files[0]);
+console.log('hello working');
     userDetails.value.photo = files[0];
     uploadedPhotoUrl.value = URL.createObjectURL(userDetails.value.photo);
 });
@@ -105,6 +104,10 @@ const handleSaved = () => {
 };
 
 onMounted(() => {
-    userDetails.value = { ...user };
+    userDetails.value = { 
+        name: user.name,
+        email: user.email,
+        company_name: user.company_name,
+     };
 });
 </script>

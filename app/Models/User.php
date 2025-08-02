@@ -51,6 +51,11 @@ class User extends Authenticatable implements HasMedia
         ];
     }
 
+    public function preferences()
+    {
+        return $this->hasMany(\App\Models\UserPreference::class);
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('user-photo')->singleFile();

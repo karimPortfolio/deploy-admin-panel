@@ -11,7 +11,8 @@ class AuthController extends Controller
     public function me(Request $request)
     {
         $user = auth()->user();
-
+        
+        $user->load('preferences');
         $user->loadMedia("profile-picture");
         $user->getFirstMedia("profile-picture");
         

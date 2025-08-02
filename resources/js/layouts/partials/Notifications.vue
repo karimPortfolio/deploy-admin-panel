@@ -144,9 +144,10 @@
                             class="flex justify-center items-center"
                         >
                             <q-img
-                                src="/src/img/no-notifications2.jpg"
-                                class="w-4/5"
+                                src="/src/img/no-notifications.png"
+                                class="w-3/5"
                             />
+                            <div class="text-gray-600 dark:text-gray-400 text-lg mt-2 mb-5" >No Notifications available yet!</div>
                         </div>
                         <template v-slot:loading>
                             <div class="row justify-center q-my-md">

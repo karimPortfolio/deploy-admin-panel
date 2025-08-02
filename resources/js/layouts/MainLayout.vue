@@ -15,7 +15,7 @@
             :breakpoint="600"
             class="bg-white dark:bg-slate-800 shadow-md dark:shadow-slate-600 flex flex-col"
         >
-            <div class="p-3 pt-5 ps-4 pb-2">
+            <div class="p-3 ps-4 pb-2">
                 <a href="/">
                     <div
                         class="flex flex-nowrap items-center gap-3 text-center md:text-start"
@@ -51,7 +51,7 @@
     </q-layout>
 </template>
 <script setup>
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useAuthStore } from "../stores/auth";
 import ProfileDropdown from "./partials/ProfileDropdown.vue";
 import { useQuasar } from "quasar";
@@ -94,16 +94,41 @@ const authStore = useAuthStore();
 
 const user = ref(null);
 const appName = ref("");
+const userPreferences = computed(() => {
+    if (user.value && user.value.preferences) {
+        return user.value.preferences;
+    }
+
+    return [];
+});
+
+const setDarkModePreference = () => {
+    if (userPreferences.value && userPreferences.value.length) {
+        const userThemePreference =
+            userPreferences.value[0]?.preferences?.theme ?? "auto";
+        localStorage.setItem("dark", userThemePreference);
+        return;
+    }
+
+    const savedTheme = localStorage.getItem("dark") ?? "auto";
+    localStorage.setItem("dark", savedTheme);
+};
 
 const handleDarkMode = () => {
-    const userPereference = localStorage.getItem("dark");
-    const darkMode = JSON.parse(userPereference) || 'auto';
+    const userThemePreference = localStorage.getItem("dark");
+    if (userThemePreference === "auto") {
+        $q.dark.set(userThemePreference);
+        return;
+    }
+    
+    const darkMode = JSON.parse(userThemePreference) ?? "auto";
     $q.dark.set(darkMode);
-}
+};
 
 onMounted(() => {
     user.value = authStore.user;
     appName.value = import.meta.env.VITE_APP_NAME; //load from env
+    setDarkModePreference();
     handleDarkMode();
 });
 </script>

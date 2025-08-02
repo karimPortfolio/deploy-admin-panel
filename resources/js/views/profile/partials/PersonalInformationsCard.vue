@@ -73,6 +73,24 @@
                     </div>
                 </div>
 
+                <q-separator class="mt-4" />
+
+                <div class="mt-5 grid grid-cols-3">
+                    <div>
+                        <div class="text-sm">Company Name</div>
+                    </div>
+                    <div class="col-span-2">
+                        <q-input
+                            v-model="model.company_name"
+                            :error-message="validation.company_name?.[0]"
+                            :error="'company_name' in validation"
+                            outlined
+                            hide-bottom-space
+                            dense
+                        />
+                    </div>
+                </div>
+
                 <q-separator class="mt-5" />
 
                 <div class="mt-5 grid grid-cols-3">
