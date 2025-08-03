@@ -19,8 +19,8 @@ export const useAuthStore = defineStore("auth", () => {
     const errorMessages = ref(null);
     const registerValidationMessage = ref(null);
 
-    const fetchProfile = async () => {
-        if (user.value !== null) return;
+    const fetchProfile = async (force=false) => {
+        if (user.value !== null && !force) return;
 
         if (loadingPromise.value) return loadingPromise.value;
 

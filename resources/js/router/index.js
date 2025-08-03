@@ -51,7 +51,12 @@ const router = createRouter({
                     path: "profile",
                     name: "profile",
                     component: () => import("../views/profile/IndexView.vue"),
-                }
+                },
+                {
+                    path: "settings",
+                    name: "settings",
+                    component: () => import("../views/settings/IndexView.vue"),
+                },
             ],
         },
         {

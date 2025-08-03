@@ -15,9 +15,10 @@
         </q-item>
 
         <q-item
-            clickable
+            :to="{ name: 'settings' }"
             v-close-popup
-            class="py-2 mb-2 hover:cursor-pointer rounded-md "
+            clickable
+            class="py-2 mb-2 hover:cursor-pointer rounded-md"
             active-class=""
         >
             <q-item-section avatar class="min-w-fit pe-2">
@@ -33,7 +34,7 @@
             clickable
             @click="handleLogOut"
             v-close-popup
-            class="py-2 mt-2 hover:cursor-pointer rounded-md "
+            class="py-2 mt-2 hover:cursor-pointer rounded-md"
         >
             <q-item-section avatar class="min-w-fit pe-2">
                 <q-icon name="sym_r_logout" size="xs" />
@@ -44,11 +45,9 @@
     </q-list>
 </template>
 <script setup>
-
-const emit = defineEmits(['logout']);
+const emit = defineEmits(["logout"]);
 
 const handleLogOut = () => {
-    emit('logout');
+    emit("logout");
 };
-
 </script>

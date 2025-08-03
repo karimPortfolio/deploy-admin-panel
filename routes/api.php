@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\NotificationsController;
 use App\Http\Controllers\Api\V1\SecurityGroupController;
 use App\Http\Controllers\Api\V1\ServerController;
 use App\Http\Controllers\Api\V1\SshKeyController;
+use App\Http\Controllers\Api\V1\UserPreferenceController;
 use App\Http\Controllers\Api\V1\VpcController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -50,6 +51,9 @@ Route::middleware('auth:sanctum')
         Route::put('notifications/{id}/mark-as-read', [NotificationsController::class, 'markAsRead'])->name('notifications.mark-as-read');
         Route::put('notifications/mark-all-as-read', [NotificationsController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
         Route::delete('notifications/{id}', [NotificationsController::class, 'destroy'])->name('notifications.destroy');
+
+        // =============== USER PREFERENCES ROUTES
+        Route::put('user/preferences/{user_preference}', [UserPreferenceController::class, 'updatePreferences'])->name('user.preferences.update');
     });
 
 Route::post('v1/reset-password', [NewPasswordController::class, 'store'])
