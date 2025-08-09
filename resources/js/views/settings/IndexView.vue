@@ -211,9 +211,11 @@ const languagesOptions = [
 ];
 
 const userPreferences = ref({
+    theme: 'auto',
+    language: 'en',
     notification: {
-        email: false,
-        system: false,
+        email: true,
+        system: true,
     },
 });
 
