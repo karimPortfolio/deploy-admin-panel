@@ -15,7 +15,7 @@
                 icon="sym_r_menu"
                 @click="handleDrawerToggling"
             >
-                <q-tooltip anchor="center end" self="center middle" :offset="[55, 10]">
+                <q-tooltip v-if="$q.screen.gt.sm" anchor="center end" self="center middle" :offset="[55, 10]">
                     {{ drawer ? 'Close' : 'Open' }} the sidebar
                 </q-tooltip>
             </q-btn>

@@ -6,11 +6,11 @@
         <q-separator class="mt-3 mx-4" />
         <q-card-section class="mt-0">
             <q-form>
-                <div class="mt-1 grid grid-cols-3">
+                <div class="mt-1 grid sm:grid-cols-3">
                     <div>
                         <div class="text-sm">Current Password</div>
                     </div>
-                    <div class="col-span-2">
+                    <div class="col-span-2 mt-3 sm:mt-0">
                         <q-input
                             type="password"
                             v-model="model.current_password"
@@ -27,11 +27,11 @@
 
                 <q-separator class="mt-5" />
 
-                <div class="mt-5 grid grid-cols-3">
+                <div class="mt-5 grid sm:grid-cols-3">
                     <div>
                         <div class="text-sm">New Password</div>
                     </div>
-                    <div class="col-span-2">
+                    <div class="col-span-2 mt-3 sm:mt-0">
                         <q-input
                             type="password"
                             v-model="model.password"
@@ -46,11 +46,11 @@
 
                 <q-separator class="mt-5" />
 
-                <div class="mt-5 grid grid-cols-3">
+                <div class="mt-5 grid sm:grid-cols-3">
                     <div>
                         <div class="text-sm">Confirm Password</div>
                     </div>
-                    <div class="col-span-2">
+                    <div class="col-span-2 mt-3 sm:mt-0">
                         <q-input
                             type="password"
                             v-model="model.password_confirmation"

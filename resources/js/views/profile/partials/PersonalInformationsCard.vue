@@ -6,14 +6,14 @@
         <q-separator class="mt-3 mx-4" />
         <q-card-section class="mt-0">
             <q-form>
-                <div class="grid grid-cols-3">
+                <div class="grid sm:grid-cols-3">
                     <div>
                         <div class="text-sm">Your photo</div>
                         <div class="dark:text-gray-400 text-gray-600 text-xs">
                             These will be displayed on your profile
                         </div>
                     </div>
-                    <div class="col-span-2 flex gap-10 items-center">
+                    <div class="mt-5 sm:mt-0 col-span-2 flex gap-5 sm:gap-10 items-center">
                         <q-avatar v-if="uploadedPhoto" class="w-20 h-20">
                             <q-img
                                 :src="uploadedPhoto"
@@ -27,24 +27,15 @@
                                 "
                             />
                         </q-avatar>
-                        <div class="block md:hidden">
+                        <div class="flex gap-3">
                             <q-btn
-                                flat
-                                icon="sym_r_photo_camera"
-                                class="ml-4 rounded-full bg-gray-500 text-white dark:bg-gray-50 dark:text-black relative bottom-8 -right-6"
-                                padding="xs xs"
-                                @click="openFileSelector"
-                            />
-                        </div>
-                        <div class="hidden md:flex gap-3">
-                            <q-btn
-                                label="Change photo"
+                                :label="$q.screen.lt.sm ? 'Change' : 'Change photo'"
                                 color="primary"
                                 unelevated
                                 @click="openFileSelector"
                             />
                             <q-btn
-                                label="Delete photo"
+                                :label="$q.screen.lt.sm ? 'Delete' : 'Delete photo'"
                                 color="red"
                                 outline
                                 unelevated
@@ -57,11 +48,11 @@
 
                 <q-separator class="mt-4" />
 
-                <div class="mt-5 grid grid-cols-3">
+                <div class="mt-5 grid sm:grid-cols-3">
                     <div>
                         <div class="text-sm">Name</div>
                     </div>
-                    <div class="col-span-2">
+                    <div class="col-span-2 mt-3 sm:mt-0">
                         <q-input
                             v-model="model.name"
                             :error-message="validation.name?.[0]"
@@ -75,11 +66,11 @@
 
                 <q-separator class="mt-4" />
 
-                <div class="mt-5 grid grid-cols-3">
+                <div class="mt-5 grid sm:grid-cols-3">
                     <div>
                         <div class="text-sm">Company Name</div>
                     </div>
-                    <div class="col-span-2">
+                    <div class="col-span-2 mt-3 sm:mt-0">
                         <q-input
                             v-model="model.company_name"
                             :error-message="validation.company_name?.[0]"
@@ -93,11 +84,11 @@
 
                 <q-separator class="mt-5" />
 
-                <div class="mt-5 grid grid-cols-3">
+                <div class="mt-5 grid sm:grid-cols-3">
                     <div>
                         <div class="text-sm">Email Address</div>
                     </div>
-                    <div class="col-span-2">
+                    <div class="col-span-2 mt-3 sm:mt-0">
                         <q-input
                             v-model="model.email"
                             :error-message="validation.email?.[0]"

@@ -14,7 +14,7 @@
                 <q-separator class="mt-3 mx-4" />
                 <q-card-section class="mt-0">
                     <q-form>
-                        <div class="grid grid-cols-3">
+                        <div class="grid sm:grid-cols-3">
                             <div>
                                 <div class="text-sm">Dark Mode</div>
                                 <div
@@ -26,7 +26,7 @@
                             <div class="col-span-2 flex gap-10 items-center">
                                 <div class="os-family-grid q-field--outlined">
                                     <div
-                                        class="grid sm:grid-cols-2 lg:grid-cols-3 q-col-gutter-md q-pa-md"
+                                        class="grid grid-cols-2 lg:grid-cols-3 q-col-gutter-md q-pa-md"
                                     >
                                         <div
                                             v-for="option in themeOptions"
@@ -67,7 +67,7 @@
 
                         <q-separator class="mt-4" />
 
-                        <div class="mt-5 grid grid-cols-3">
+                        <div class="mt-5 grid sm:grid-cols-3">
                             <div>
                                 <div class="text-sm">Language</div>
                                 <div
@@ -79,7 +79,7 @@
 
                             <!-- ============ -->
 
-                            <div class="ms-3">
+                            <div class="ms- mt-3 sm:mt-0">
                                 <q-select
                                     v-model="userPreferences.language"
                                     :options="languagesOptions"
@@ -111,7 +111,7 @@
 
                         <q-separator class="mt-4" />
 
-                        <div class="mt-5 grid grid-cols-3">
+                        <div class="mt-5 grid sm:grid-cols-3">
                             <div>
                                 <div class="text-sm">Notifications</div>
                                 <div
