@@ -34,7 +34,7 @@
 
             <q-list padding class="px-2 mt-4">
                 <link-item
-                    v-for="item in drawerItems"
+                    v-for="item in activeDrawerItems"
                     :key="item.label"
                     :item="item"
                 />
@@ -66,7 +66,7 @@ const handleDrawerToggling = () => {
 
 const $q = useQuasar();
 
-const drawerItems = [
+const userDrawerItems = [
     {
         label: "Dashboard",
         icon: "sym_r_dashboard",
@@ -90,10 +90,48 @@ const drawerItems = [
     },
 ];
 
+const adminDrawerItems = [
+     {
+        label: "Dashboard",
+        icon: "sym_r_dashboard",
+        route: { name: "admin.dashboard" },
+        exact: true,
+    },
+    {
+        label: "Users",
+        icon: "sym_r_group",
+        route: { name: "admin.users" },
+    },
+    {
+        label: "Servers",
+        icon: "sym_r_host",
+        route: { name: "admin.servers.index" },
+    },
+    {
+        label: "Security Groups",
+        icon: "sym_r_security",
+        route: { name: "admin.security-groups" },
+    },
+    {
+        label: "SSH Keys",
+        icon: "sym_r_key",
+        route: { name: "admin.ssh-keys" },
+    },
+];
+
 const authStore = useAuthStore();
 
 const user = ref(null);
 const appName = ref("");
+
+const activeDrawerItems = computed(() => {
+    if (user.value && user.value.role?.value === "admin") {
+        return adminDrawerItems;
+    }
+
+    return userDrawerItems;
+});
+
 const userPreferences = computed(() => {
     if (user.value && user.value.preferences) {
         return user.value.preferences;

@@ -5,7 +5,6 @@ export async function AuthMiddleware({ to, next }) {
   const authStore = useAuthStore();
   
   await authStore.fetchProfile();
-
   if (!authStore.authenticated) {
     const redirectTo = window.location.href;
 

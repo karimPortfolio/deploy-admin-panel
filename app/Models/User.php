@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRole;
 use App\Notifications\Auth\ResetPasswordNotification;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -48,12 +49,29 @@ class User extends Authenticatable implements HasMedia
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'role' => UserRole::class,
+            'is_active' => 'boolean'
         ];
     }
 
     public function preferences()
     {
         return $this->hasMany(\App\Models\UserPreference::class);
+    }
+
+    public function servers()
+    {
+        return $this->hasMany(\App\Models\Server::class, 'created_by');
+    }
+
+    public function sshKeys()
+    {
+        return $this->hasMany(\App\Models\SshKey::class, 'created_by');
+    }
+
+    public function securityGroups()
+    {
+        return $this->hasMany(\App\Models\SecurityGroup::class, 'created_by');
     }
 
     public function registerMediaCollections(): void

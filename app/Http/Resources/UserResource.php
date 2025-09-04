@@ -23,6 +23,8 @@ class UserResource extends JsonResource
             'photo' => $this->whenLoaded("media", function ($media) {
                 return count($media) > 0 ? $media[0]->getFullUrl() : "/src/img/avatar.png";
             }),
+            'role' => $this->whenHas('role', fn($role) => $role->toArray()),
+            'is_active' => $this->whenHas('is_active') ,
             'preferences' => UserPreferenceResource::collection($this->whenLoaded('preferences'))
         ];
     }

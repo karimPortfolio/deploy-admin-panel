@@ -1,13 +1,15 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { api } from "@/boot/api";
 import { useQuasar } from "quasar";
+import { useRouter } from "vue-router";
 
 export const useAuthStore = defineStore("auth", () => {
     const user = ref(null);
     const authenticated = ref(false);
 
     const $q = useQuasar();
+    const router = useRouter();
 
     const loadingPromise = ref(null);
     const logoutPromise = ref(null);
@@ -18,6 +20,17 @@ export const useAuthStore = defineStore("auth", () => {
 
     const errorMessages = ref(null);
     const registerValidationMessage = ref(null);
+
+    const homeUrl = computed(() => {
+        if (user.value === null) return "auth.login";
+
+        if (user.value?.role?.value === "admin") 
+        {
+            return "admin.dashboard";
+        }
+
+        return "dashboard";
+    })
 
     const fetchProfile = async (force=false) => {
         if (user.value !== null && !force) return;
@@ -63,8 +76,10 @@ export const useAuthStore = defineStore("auth", () => {
         try {
             loginPromise.value = new Promise((resolve, reject) => {
                 api.post("login", credentials)
-                    .then((response) => {
+                    .then(async (response) => {
                         authenticated.value = true;
+                        await fetchProfile();
+
                         if (
                             redirectTo &&
                             redirectTo.startsWith(window.location.origin)
@@ -74,7 +89,7 @@ export const useAuthStore = defineStore("auth", () => {
                             return;
                         }
 
-                        window.location.href = "/";
+                        router.push({ name: homeUrl.value });
                         resolve(response);
                     })
                     .catch((error) => {
@@ -196,6 +211,7 @@ export const useAuthStore = defineStore("auth", () => {
         login,
         forgotPassword,
         resetPassword,
-        register
+        register,
+        homeUrl
     };
 });

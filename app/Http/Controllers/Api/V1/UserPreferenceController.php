@@ -12,7 +12,6 @@ class UserPreferenceController extends Controller
     public function updatePreferences(UserPreferenceRequest $request, UserPreference $userPreference)
     {
         $userPreference->update([
-            'user_id' => auth()->id(),
             'preferences' => [
                 'language' => $request->input('language'),
                 'theme' => $request->input('theme'),
