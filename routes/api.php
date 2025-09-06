@@ -67,8 +67,9 @@ Route::middleware('auth:sanctum')
             ->prefix('admin')
             ->group(function () {
             // =============== USERS ROUTES
-            Route::put('users/{user}/inactive', [UserController::class, 'changeUserToInactive'])->name('users.inactive');
-            Route::put('users/{user}/active', [UserController::class, 'changeUserToActive'])->name('users.active');
+            Route::put('users/{user}/deactivate', [UserController::class, 'deactivateUserAccount'])->name('users.deactivate');
+            Route::put('users/{user}/activate', [UserController::class, 'activateUserAccount'])->name(name: 'users.activate');
+            Route::get('users/roles', [UserController::class, 'getRoles'])->name('users.roles');
             Route::apiResource('users', UserController::class)->only(['index', 'show', 'destroy']);
             // =============== SERVERS ROUTES
             Route::put('servers/{server}/start', [AdminServerController::class, 'startServer'])->name('admin.servers.start');

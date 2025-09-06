@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\Admin;
 
+use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
@@ -14,7 +15,17 @@ class UserController extends Controller
     {
         $users = QueryBuilder::for(User::class)
             ->allowedFilters(['name', 'email', 'role'])
-            ->allowedSorts(['name', 'email', 'created_at'])
+            ->allowedSorts(['id', 'name', 'email', 'created_at'])
+            ->with('media')
+            ->when($request->has('search'), function ($query) use ($request) {
+                $search = $request->input('search');
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('role', 'like', "%{$search}%")
+                        ->orWhere('company_name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
             ->orderBy('updated_at', 'desc')
             ->paginate(function ($total) use ($request) {
                 $perPage = $request->integer('per_page', -1);
@@ -33,19 +44,25 @@ class UserController extends Controller
 
     public function show(User $user)
     {
+        $user->loadCount([
+            'servers',
+            'sshKeys',
+            'securityGroups',
+        ])->load('media');
+
         return new UserResource($user);
     }
 
-    public function changeUserToInactive(User $user)
+    public function activateUserAccount(User $user)
     {
-        $user->update(['is_active' => false]);
+        $user->update(['is_active' => true]);
 
         return response()->noContent();
     }
 
-    public function changeUserToActive(User $user)
+    public function deactivateUserAccount(User $user)
     {
-        $user->update(['is_active' => true]);
+        $user->update(['is_active' => false]);
 
         return response()->noContent();
     }
@@ -62,5 +79,15 @@ class UserController extends Controller
         $user->delete();
 
         return response()->noContent();
+    }
+
+    public function getRoles()
+    {
+        $roles = UserRole::cases();
+        $roles = array_map(fn($role) => $role->toArray(), $roles);
+
+        return response()->json([
+            'data' => $roles,
+        ]);
     }
 }

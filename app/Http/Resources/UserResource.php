@@ -25,7 +25,11 @@ class UserResource extends JsonResource
             }),
             'role' => $this->whenHas('role', fn($role) => $role->toArray()),
             'is_active' => $this->whenHas('is_active') ,
-            'preferences' => UserPreferenceResource::collection($this->whenLoaded('preferences'))
+            'preferences' => UserPreferenceResource::collection($this->whenLoaded('preferences')),
+            'servers_count' => $this->whenCounted('servers'),
+            'ssh_keys_count' => $this->whenCounted('sshKeys'),
+            'security_groups_count' => $this->whenCounted('securityGroups'),
+            'created_at' => $this->whenHas('created_at', fn($d) => $d->diffForHumans()),
         ];
     }
 }
