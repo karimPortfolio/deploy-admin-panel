@@ -58,6 +58,16 @@
                 flat
                 :rows-per-page-options="[5, 10, 20, 30, 40, 50, 100]"
             >
+                <template v-slot:body-cell-name="props">
+                    <q-td :props="props" :title="props.row.name">
+                        <q-avatar class="w-8 h-8 mr-1">
+                            <q-img
+                                :src="props.row?.photo ?? '/src/img/avatar.png'"
+                            />
+                        </q-avatar>
+                        {{ props.row.name ?? "N/A" }}
+                    </q-td>
+                </template>
                 <template v-slot:body-cell-company_name="props">
                     <q-td :props="props" :title="props.row.company_name">
                         {{ props.row.company_name ?? "N/A" }}
@@ -196,7 +206,7 @@ const userAccountStatusChangeActionLabel = computed(() => {
 });
 
 const userAccountStatusChangeLoading = computed(() => {
-    return newUserAccountStatus.value === "activate" ? updating : deactivating;
+    return newUserAccountStatus.value === "activate" ? updating.value : deactivating.value;
 });
 
 const {
@@ -207,11 +217,11 @@ const {
     onRequest,
 } = useResourceIndex("admin/users");
 
-const { update: activate, updating } = useResourceUpdate(
+const { update: activate, updating, validation } = useResourceUpdate(
     () => `admin/users/${itemToChangeStatus.value.id}/activate`
 );
 
-const { update: deactivate, updating: deactivating } = useResourceUpdate(
+const { update: deactivate, updating: deactivating, validation: deactivationValidation } = useResourceUpdate(
     () => `admin/users/${itemToChangeStatus.value.id}/deactivate`
 );
 

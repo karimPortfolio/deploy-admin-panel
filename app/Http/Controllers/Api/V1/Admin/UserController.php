@@ -6,7 +6,10 @@ use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Notifications\AccountActivationNotification;
+use App\Notifications\AccountDeactivationNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
@@ -17,6 +20,7 @@ class UserController extends Controller
             ->allowedFilters(['name', 'email', 'role'])
             ->allowedSorts(['id', 'name', 'email', 'created_at'])
             ->with('media')
+            ->whereNot('id', auth()->id())
             ->when($request->has('search'), function ($query) use ($request) {
                 $search = $request->input('search');
                 $query->where(function ($q) use ($search) {
@@ -57,12 +61,16 @@ class UserController extends Controller
     {
         $user->update(['is_active' => true]);
 
+        Notification::send($user, new AccountActivationNotification());
+
         return response()->noContent();
     }
 
     public function deactivateUserAccount(User $user)
     {
         $user->update(['is_active' => false]);
+
+        Notification::sendNow($user, new AccountDeactivationNotification());
 
         return response()->noContent();
     }

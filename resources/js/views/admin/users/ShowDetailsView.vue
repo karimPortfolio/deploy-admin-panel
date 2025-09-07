@@ -9,10 +9,7 @@
                     >
                         <q-avatar class="w-20 h-20">
                             <q-img
-                                :src="
-                                    user?.photo ??
-                                    '/src/img/avatar.png'
-                                "
+                                :src="user?.photo ?? '/src/img/avatar.png'"
                             />
                         </q-avatar>
                     </div>
@@ -59,7 +56,9 @@
                     <q-separator class="mt-2" />
                     <div class="grid grid-cols-2 justify-between mt-3">
                         <div class="text-subtitle2">Status</div>
-                        <div class="text-gray-700 dark:text-gray-400 flex justify-end">
+                        <div
+                            class="text-gray-700 dark:text-gray-400 flex justify-end"
+                        >
                             <q-badge
                                 v-if="user?.is_active"
                                 text-color="positive"
@@ -79,27 +78,46 @@
                     <q-separator class="mt-2" />
                     <div class="grid grid-cols-2 justify-between mt-3">
                         <div class="text-subtitle2">Total servers created</div>
-                        <div class="text-gray-700 dark:text-gray-400 text-end">
-                            {{ user?.servers_count }}
+                        <div class="text-gray-700 dark:text-gray-400 flex justify-end">
+                            <q-badge text-color="primary" class="w-fit">
+                                <q-icon
+                                    name="sym_r_host"
+                                    class="inline-block mr-1"
+                                />
+                                {{ user?.servers_count }}
+                            </q-badge>
                         </div>
                     </div>
 
                     <!-- ======= NUMBER OF SECURITY GROUPS ======= -->
                     <q-separator class="mt-2" />
                     <div class="grid grid-cols-2 justify-between mt-3">
-                        <div class="text-subtitle2">Total security groups created</div>
-                        <div class="text-gray-700 dark:text-gray-400 text-end">
-                            {{ user?.security_groups_count }}
+                        <div class="text-subtitle2">
+                            Total security groups created
+                        </div>
+                        <div class="text-gray-700 dark:text-gray-400 flex justify-end">
+                            <q-badge text-color="primary" class="w-fit">
+                                <q-icon
+                                    name="sym_r_security"
+                                    class="inline-block mr-1"
+                                />
+                                {{ user?.security_groups_count }}
+                            </q-badge>
                         </div>
                     </div>
 
-                    
                     <!-- ======= NUMBER OF SSH KEYS ======= -->
                     <q-separator class="mt-2" />
                     <div class="grid grid-cols-2 justify-between mt-3">
                         <div class="text-subtitle2">Total ssh keys created</div>
-                        <div class="text-gray-700 dark:text-gray-400 text-end">
-                            {{ user?.ssh_keys_count }}
+                        <div class="text-gray-700 dark:text-gray-400 flex justify-end">
+                            <q-badge text-color="primary" class="w-fit">
+                                <q-icon
+                                    name="sym_r_key"
+                                    class="inline-block mr-1"
+                                />
+                                {{ user?.ssh_keys_count }}
+                            </q-badge>
                         </div>
                     </div>
 
