@@ -11,7 +11,7 @@
                 <!-- ============= VIEW ========= -->
                 <!-- ============================ -->
                 <q-item
-                    :to="{ name: 'servers.show', params: { id: row.id } }"
+                    :to="{ name: 'admin.servers.show', params: { id: row.id } }"
                     clickable
                     v-close-popup
                     class="text-gray-600 dark:text-gray-200 rounded-md"

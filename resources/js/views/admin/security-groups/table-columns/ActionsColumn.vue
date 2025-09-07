@@ -64,7 +64,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(["delete"]);
+const emit = defineEmits(["delete", "show-details"]);
 
 const handleDelete = (row) => {
     emit("delete", row);
