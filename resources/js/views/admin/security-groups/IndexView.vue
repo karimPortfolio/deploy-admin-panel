@@ -20,7 +20,7 @@
         <!-- ======= MAIN CONTENT ======== -->
         <page-header
             title="Security Groups"
-            subtitle="Manage your security groups"
+            subtitle="Manage users security groups"
             icon="security"
         />
 

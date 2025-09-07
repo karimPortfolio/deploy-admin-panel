@@ -88,11 +88,11 @@ import { onMounted, ref } from "vue";
 import { useResourceIndex } from "@/composables/useResourceIndex";
 import { useResourceDestroy } from "@/composables/useResourceDestroy";
 import { useTextTruncate } from "@/composables/useTextTruncate";
-import FilterPanel from "../../components/FilterPanel.vue";
-import SearchBar from "../../components/SearchBar.vue";
+import FilterPanel from "@/components/FilterPanel.vue";
+import SearchBar from "@/components/SearchBar.vue";
 import ActionsColumn from "./table-columns/ActionsColumn.vue";
 import CreateView from "./CreateView.vue";
-import ConfirmationModal from "../../components/modals/ConfirmationModal.vue";
+import ConfirmationModal from "@/components/modals/ConfirmationModal.vue";
 import ShowDetailsView from "./ShowDetailsView.vue";
 
 const columns = [

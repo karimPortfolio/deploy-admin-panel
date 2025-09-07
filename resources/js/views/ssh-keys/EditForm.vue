@@ -32,7 +32,7 @@
 import { useResourceUpdate } from "@/composables/useResourceUpdate";
 import { useResourceShow } from "@/composables/useResourceShow";
 import { ref, watch } from "vue";
-import FormModal from "../../components/modals/FormModal.vue";
+import FormModal from "@/components/modals/FormModal.vue";
 
 const props = defineProps({
     id: {

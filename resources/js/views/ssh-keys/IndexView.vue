@@ -84,13 +84,13 @@
 import PageHeader from "@/components/PageHeader.vue";
 import { useResourceIndex } from "@/composables/useResourceIndex";
 import { useResourceDestroy } from "@/composables/useResourceDestroy";
-import FilterPanel from "../../components/FilterPanel.vue";
-import SearchBar from "../../components/SearchBar.vue";
+import FilterPanel from "@/components/FilterPanel.vue";
+import SearchBar from "@/components/SearchBar.vue";
 import { ref } from "vue";
 import ActionsColumn from "./table-columns/ActionsColumn.vue";
 import CreateForm from "./CreateForm.vue";
 import EditForm from "./EditForm.vue";
-import ConfirmationModal from "../../components/modals/ConfirmationModal.vue";
+import ConfirmationModal from "@/components/modals/ConfirmationModal.vue";
 import ShowDetailsView from "./ShowDetailsView.vue";
 
 const {

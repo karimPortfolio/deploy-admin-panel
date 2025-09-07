@@ -72,8 +72,8 @@
     </div>
 </template>
 <script setup>
-import ProfileDropdownList from "../../components/ProfileDropdownList.vue";
-import { useAuthStore } from "../../stores/auth";
+import ProfileDropdownList from "@/components/ProfileDropdownList.vue";
+import { useAuthStore } from "@/stores/auth";
 
 const props = defineProps({
     user: {

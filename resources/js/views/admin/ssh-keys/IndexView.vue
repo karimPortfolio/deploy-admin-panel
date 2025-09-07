@@ -20,7 +20,7 @@
         <!-- ===== PAGE CONTENT === -->
         <page-header
             title="SSH Keys"
-            subtitle="Manage your SSH keys"
+            subtitle="Manage users SSH keys"
             icon="key"
         />
 

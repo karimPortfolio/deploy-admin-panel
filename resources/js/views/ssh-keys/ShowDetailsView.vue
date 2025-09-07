@@ -83,7 +83,7 @@
 </template>
 <script setup>
 import { computed, watch } from "vue";
-import ShowModal from "../../components/modals/ShowModal.vue";
+import ShowModal from "@/components/modals/ShowModal.vue";
 import { useResourceShow } from "@/composables/useResourceShow";
 import { useTextTruncate } from "@/composables/useTextTruncate";
 

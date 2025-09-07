@@ -41,7 +41,7 @@
 <script setup>
 import { useResourceCreate } from "@/composables/useResourceCreate";
 import { ref } from "vue";
-import FormModal from "../../components/modals/FormModal.vue";
+import FormModal from "@/components/modals/FormModal.vue";
 
 const open = defineModel("open");
 const emit = defineEmits(["created"]);
