@@ -41,5 +41,10 @@ export default {
             component: () =>
                 import("../views/admin/security-groups/IndexView.vue"),
         },
+        {
+            path: "ssh-keys",
+            name: "admin.ssh-keys",
+            component: () => import("../views/admin/ssh-keys/IndexView.vue"),
+        },
     ],
 };
