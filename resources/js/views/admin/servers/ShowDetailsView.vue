@@ -101,31 +101,31 @@ import { useResourceShow } from "@/composables/useResourceShow";
 import { useTextTruncate } from "@/composables/useTextTruncate";
 import { useRoute } from "vue-router";
 
-const { data: server, fetch, loading } = useResourceShow("servers");
+const { data: server, fetch, loading } = useResourceShow("admin/servers");
 
 const route = useRoute();
 
-const dates = computed(() => {
-    return server.value?.statistics?.map((statistic) => {
-        return statistic.Timestamp;
-    });
-})
+// const dates = computed(() => {
+//     return server.value?.statistics?.map((statistic) => {
+//         return statistic.Timestamp;
+//     });
+// })
 
-const options = computed(() => ({
-    chart: {
-        id: "basic-bar",
-    },
-    xaxis: {
-        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-    },
-}));
+// const options = computed(() => ({
+//     chart: {
+//         id: "basic-bar",
+//     },
+//     xaxis: {
+//         categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+//     },
+// }));
 
-const series = computed(() => [
-    {
-        name: "Servers",
-        data: [30, 40, 45, 50, 49, 60, 70],
-    },
-]);
+// const series = computed(() => [
+//     {
+//         name: "Servers",
+//         data: [30, 40, 45, 50, 49, 60, 70],
+//     },
+// ]);
 
 onMounted(() => {
     const serverId = route.params.id;
