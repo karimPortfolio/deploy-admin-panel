@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory, RouterView } from "vue-router";
 import { AuthMiddleware } from "@/middlewares/AuthMiddleware";
-import { RedirectAuthMiddleware } from "@/middlewares/RedirectAuthMiddleware";
 import { AuthorizationMiddleware } from "../middlewares/AuthorizationMiddleware";
 import { middlewarePipeline } from "../middlewares/middlewarePipeline";
 import adminRoutes from "./admin-routes";
+import authRoutes from "./auth-routes";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -75,38 +75,7 @@ const router = createRouter({
         },
 
         // AUTH ROUTES
-        {
-            path: "/auth/register",
-            name: "auth.register",
-            meta: {
-                middleware: [RedirectAuthMiddleware],
-            },
-            component: () => import("@/views/auth/RegisterView.vue"),
-        },
-        {
-            path: "/auth/login",
-            name: "auth.login",
-            meta: {
-                middleware: [RedirectAuthMiddleware],
-            },
-            component: () => import("@/views/auth/LoginView.vue"),
-        },
-        {
-            path: "/auth/forget-password",
-            name: "auth.forget.password",
-            meta: {
-                middleware: [RedirectAuthMiddleware],
-            },
-            component: () => import("@/views/auth/ForgetPasswordView.vue"),
-        },
-        {
-            path: "/auth/reset-password",
-            name: "auth.reset.password",
-            meta: {
-                middleware: [RedirectAuthMiddleware],
-            },
-            component: () => import("@/views/auth/ResetPasswordView.vue"),
-        },
+        authRoutes,
 
         // ERROR PAGES ROUTES
         {

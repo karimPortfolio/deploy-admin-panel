@@ -7,7 +7,11 @@ export async function RedirectAuthMiddleware({ to, next }) {
   await authStore.fetchProfile();
 
   if (authStore.authenticated) {
-    return next({ name: "dashboard" });
+    if (authStore.user?.role && authStore.user.role.value === 'admin') {
+      return next({ name: 'admin.dashboard' });
+    }
+
+    return next({ name: 'dashboard' });
   }
 
   return next();
