@@ -35,5 +35,11 @@ export default {
                 },
             ],
         },
+        {
+            path: "security-groups",
+            name: "admin.security-groups",
+            component: () =>
+                import("../views/admin/security-groups/IndexView.vue"),
+        },
     ],
 };

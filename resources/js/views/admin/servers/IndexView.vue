@@ -182,7 +182,7 @@ const columns = [
     },
     {
         name: "created_at",
-        label: "Creation Info",
+        label: "Creation Details",
         field: "created_at",
         align: "left",
         sortable: true,
