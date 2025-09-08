@@ -2,10 +2,8 @@
     <q-layout>
         <q-page-container>
             <q-page class="w-full min-h-screen dark:bg-slate-900 sm:bg-gray-50 flex">
-                <!-- Settings Dropdown (Moved to top-right) -->
-                <div class="absolute top-4 right-4">
-                    <SettingsDropdown />
-                </div>
+
+                <AuthPageHeader />
 
                 <div class="sm:q-pa-xl flex-1 flex flex-col">
                     <!-- Card Container -->
@@ -62,6 +60,7 @@ import { useQuasar } from "quasar";
 import { useAuthStore } from "@/stores/auth";
 import SettingsDropdown from "./partials/SettingsDropdown.vue";
 import ImagesCarousel from "./partials/ImagesCarousel.vue";
+import AuthPageHeader from "./partials/AuthPageHeader.vue";
 
 const credentials = ref({});
 const loading = ref(false);

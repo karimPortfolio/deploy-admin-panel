@@ -5,10 +5,7 @@
                 <div
                     class="w-full min-h-screen dark:bg-slate-900 sm:bg-gray-50 flex"
                 >
-                    <!-- ====== SETTINNGS DDROPDOWN ====== -->
-                    <div class="absolute top-4 right-4">
-                        <SettingsDropdown />
-                    </div>
+                    <AuthPageHeader />
 
                     <!-- ============================/// FORM PART ///============================ -->
                     <div class="sm:q-pa-xl flex-1 flex flex-col">
@@ -111,6 +108,7 @@ import { useQuasar } from "quasar";
 import { useAuthStore } from "@/stores/auth";
 import { useRoute } from "vue-router";
 import SettingsDropdown from "./partials/SettingsDropdown.vue";
+import AuthPageHeader from "./partials/AuthPageHeader.vue";
 
 const credentials = ref({});
 const loading = ref(false);

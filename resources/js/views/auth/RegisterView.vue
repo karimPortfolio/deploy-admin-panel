@@ -5,9 +5,7 @@
                 <div
                     class="w-full min-h-screen dark:bg-slate-900 sm:bg-gray-50 flex"
                 >
-                    <div class="absolute top-4 right-4">
-                        <settings-dropdown />
-                    </div>
+                    <AuthPageHeader />
 
                     <!-- Form Section -->
                     <div class="sm:q-pa-xl flex-1 flex flex-col">
@@ -128,6 +126,7 @@ import { onMounted, ref, watch } from "vue";
 import SettingsDropdown from "./partials/SettingsDropdown.vue";
 import { useAuthStore } from "@/stores/auth";
 import { useQuasar } from "quasar";
+import AuthPageHeader from "./partials/AuthPageHeader.vue";
 
 const authStore = useAuthStore();
 

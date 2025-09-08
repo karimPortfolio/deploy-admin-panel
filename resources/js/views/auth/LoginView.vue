@@ -5,9 +5,8 @@
                 <div
                     class="w-full min-h-screen dark:bg-slate-900 sm:bg-gray-50 flex"
                 >
-                    <div class="absolute top-4 right-4">
-                        <SettingsDropdown />
-                    </div>
+                    
+                    <AuthPageHeader />
 
                     <!-- Form Section -->
                     <div class="sm:q-pa-xl flex-1 flex flex-col">
@@ -15,7 +14,6 @@
                             class="flex flex-col justify-center items-center my-auto sm:shadow-lg shadow-none sm:rounded-xl rounded-none sm:max-w-md max-w-full mx-auto w-full"
                         >
                             <q-card-section class="w-full text-center pt-8">
-                                <!-- Add your logo here if needed -->
                                 <h1 class="text-h4 font-bold text-primary mb-2">
                                     Welcome Back
                                 </h1>
@@ -93,8 +91,15 @@
                                         </template>
                                     </q-btn>
                                 </q-form>
-                                <div class="mt-6 text-center text-gray-600 dark:text-gray-500 text-sm" >
-                                    Don't have an account? <a href="/auth/register" class="text-primary hover:underline" >Sign up</a>
+                                <div
+                                    class="mt-6 text-center text-gray-600 dark:text-gray-500 text-sm"
+                                >
+                                    Don't have an account?
+                                    <a
+                                        href="/auth/register"
+                                        class="text-primary hover:underline"
+                                        >Sign up</a
+                                    >
                                 </div>
                             </q-card-section>
                         </q-card>
@@ -105,12 +110,13 @@
     </q-layout>
 </template>
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { api } from "@/boot/api";
 import { useQuasar } from "quasar";
 import { useAuthStore } from "@/stores/auth";
 import { useRoute } from "vue-router";
 import SettingsDropdown from "./partials/SettingsDropdown.vue";
+import AuthPageHeader from "./partials/AuthPageHeader.vue";
 
 const credentials = ref({
     remember: false,
@@ -125,16 +131,17 @@ const $q = useQuasar();
 
 const authStore = useAuthStore();
 
+
 const handleDarkMode = () => {
     const theme = localStorage.getItem("dark");
     if (theme === "auto") {
         $q.dark.set(theme);
         return;
     }
-    
+
     const darkMode = JSON.parse(theme) ?? "auto";
     $q.dark.set(darkMode);
-}
+};
 
 const handleAuth = async () => {
     try {
@@ -184,5 +191,4 @@ watch(
 onMounted(() => {
     handleDarkMode();
 });
-
 </script>
