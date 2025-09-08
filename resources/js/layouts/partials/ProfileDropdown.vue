@@ -14,11 +14,11 @@
                 </q-avatar>
             </q-card-section>
             <q-card-section class="p-0 truncate">
-                <div class="text-sm font-medium">
-                    {{ user?.name }}
+                <div class="text-sm font-medium" :title="user?.name" >
+                    {{ truncate(user?.name, 20) }}
                 </div>
-                <div class="text-xs dark:text-gray-400 text-grey-8 truncate">
-                    {{ user?.email }}
+                <div class="text-xs dark:text-gray-400 text-grey-8 truncate" :title="user?.email"> 
+                    {{ truncate(user?.email, 20) }}
                 </div>
             </q-card-section>
 
@@ -74,6 +74,9 @@
 <script setup>
 import ProfileDropdownList from "@/components/ProfileDropdownList.vue";
 import { useAuthStore } from "@/stores/auth";
+import { useTextTruncate } from "@/composables/useTextTruncate";
+
+const { truncate } = useTextTruncate();
 
 const props = defineProps({
     user: {
