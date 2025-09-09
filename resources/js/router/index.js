@@ -53,19 +53,16 @@ const router = createRouter({
                 {
                     path: "ssh-keys",
                     name: "ssh-keys",
-                    meta: { role: "user" },
                     component: () => import("../views/ssh-keys/IndexView.vue"),
                 },
                 {
                     path: "profile",
                     name: "profile",
-                    meta: { role: "user" },
                     component: () => import("../views/profile/IndexView.vue"),
                 },
                 {
                     path: "settings",
                     name: "settings",
-                    meta: { role: "user" },
                     component: () => import("../views/settings/IndexView.vue"),
                 },
 
