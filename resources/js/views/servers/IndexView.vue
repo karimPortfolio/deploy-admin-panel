@@ -280,7 +280,7 @@ const serverStatusChangeActionLabel = computed(() => {
 });
 
 const serverStatusChangeLoading = computed(() => {
-    return newServerStatus.value === "start" ? updating : stopping;
+    return newServerStatus.value === "start" ? updating.value : stopping.value;
 });
 
 const searchChange = () => {

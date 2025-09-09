@@ -17,6 +17,7 @@
             :message="`Are you sure you want to delete this security group: ${itemToDelete?.group_id} ?`"
             icon="warning"
             color="negative"
+            :loading="destroying"
             @confirm="handleDelete"
             @cancel="openDeleteConfirmationModal = false"
         />

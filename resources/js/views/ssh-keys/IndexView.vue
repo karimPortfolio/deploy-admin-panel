@@ -24,6 +24,7 @@
             :message="`Are you sure you want to delete this SSH key: ${itemToDelete?.name} ?`"
             icon="warning"
             color="negative"
+            :loading="destroying"
             @confirm="handleDelete"
             @cancel="openDeleteConfirmationModal = false"
         />

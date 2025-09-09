@@ -46,6 +46,10 @@ body, html {
   padding: 5px 10px !important;
 }
 
+.q-drawer__content {
+  overflow-x: hidden !important;
+}
+
 // body.desktop .q-focusable:focus > .q-focus-helper, body.desktop .q-manual-focusable--focused > .q-focus-helper, body.desktop .q-hoverable:hover > .q-focus-helper 
 // {
 //     background: currentColor;
