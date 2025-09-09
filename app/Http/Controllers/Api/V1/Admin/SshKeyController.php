@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SshKeyResource;
 use App\Models\SshKey;
+use App\Notifications\ResourceDeletedNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class SshKeyController extends Controller
@@ -52,7 +54,10 @@ class SshKeyController extends Controller
 
     public function destroy(SshKey $sshKey)
     {
+        $notifiable = \App\Models\User::find($sshKey->created_by);
         $sshKey->delete();
+
+        Notification::send($notifiable, new ResourceDeletedNotification($sshKey, 'ssh key', 'ssh-keys'));
 
         return response()->noContent();
     }

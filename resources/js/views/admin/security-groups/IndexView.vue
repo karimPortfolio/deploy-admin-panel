@@ -13,6 +13,7 @@
             :message="`Are you sure you want to delete this security group: ${itemToDelete?.group_id} ?`"
             icon="warning"
             color="negative"
+            :loading="destroying"
             @confirm="handleDelete"
             @cancel="openDeleteConfirmationModal = false"
         />
@@ -65,7 +66,7 @@
                 <template v-slot:body-cell-created_at="props">
                     <q-td :props="props" :title="props.row.created_at" >
                         {{ truncate(props.row.created_at, 20) }}
-                        <small class="block" >By: <span class="font-medium">{{ props.row.created_by?.name || 'N/A' }}</span></small>
+                        <small class="block" >By: <span class="font-medium">{{ truncate(props.row.created_by?.name, 20) }}</span></small>
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">

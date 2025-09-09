@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api\V1\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SecurityGroupResource;
 use App\Models\SecurityGroup;
+use App\Notifications\ResourceDeletedNotification;
+use App\Services\SecurityGroupService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -59,8 +62,30 @@ class SecurityGroupController extends Controller
 
     public function destroy(SecurityGroup $securityGroup)
     {
+        if ($this->securityGroupAssociated($securityGroup)) {
+            return response()->json([
+                'message' => 'This Security group is associated with servers and cannot be deleted.',
+            ], 422);
+        }
+
+        SecurityGroupService::deleteSecurityGroup($securityGroup->group_id);
+
+        $notifiable = \App\Models\User::find($securityGroup->created_by);
         $securityGroup->delete();
 
+        Notification::send($notifiable, new ResourceDeletedNotification($securityGroup, 'security group', 'security-groups'));
+
         return response()->noContent();
+    }
+
+    private function securityGroupAssociated(SecurityGroup $securityGroup)
+    {
+        $associatedServers = $securityGroup->servers;
+
+        if ($associatedServers->count() > 0) {
+            return true;
+        }
+
+        return false;
     }
 }

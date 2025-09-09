@@ -8,8 +8,10 @@ use App\Enums\ServerStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ServerResource;
 use App\Models\Server;
+use App\Notifications\ResourceDeletedNotification;
 use App\Services\Ec2InstanceService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -107,7 +109,17 @@ class ServerController extends Controller
 
     public function destroy(Server $server)
     {
+
+        $result = Ec2InstanceService::terminateInstance($server->instance_id);
+
+        if ($result['TerminatingInstances'][0]['CurrentState']['Name'] !== 'shutting-down') {
+            return response()->json(['message' => 'Failed to terminate the instance.'], 500);
+        }
+
+        $notifiable = \App\Models\User::find($server->created_by);
         $server->delete();
+
+        Notification::send($notifiable, new ResourceDeletedNotification($server, 'server', 'servers'));
 
         return response()->noContent();
     }

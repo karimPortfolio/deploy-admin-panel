@@ -15,6 +15,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\NewPasswordController;
 use \App\Http\Controllers\Api\V1\Admin\ServerController as AdminServerController;
+use \App\Http\Controllers\Api\V1\Admin\SecurityGroupController as AdminSecurityGroupController;
+use \App\Http\Controllers\Api\V1\Admin\SshKeyController as AdminSshKeyController;
+
 
 Route::middleware('auth:sanctum')
     ->prefix('v1')
@@ -74,14 +77,14 @@ Route::middleware('auth:sanctum')
             // =============== SERVERS ROUTES
             Route::put('servers/{server}/start', [AdminServerController::class, 'startServer'])->name('admin.servers.start');
             Route::put('servers/{server}/stop', [AdminServerController::class, 'stopServer'])->name('admin.servers.stop');
-            Route::get('servers/instance-types', [ServerController::class, 'getInstanceTypes'])->name('servers.instance-types');
-            Route::get('servers/os-families', [ServerController::class, 'getOsFamilies'])->name('servers.os-families');
-            Route::get('servers/statuses', [ServerController::class, 'getServerStatuses'])->name('servers.statuses');
+            Route::get('servers/instance-types', [AdminServerController::class, 'getInstanceTypes'])->name('servers.instance-types');
+            Route::get('servers/os-families', [AdminServerController::class, 'getOsFamilies'])->name('servers.os-families');
+            Route::get('servers/statuses', [AdminServerController::class, 'getServerStatuses'])->name('servers.statuses');
             Route::apiResource('servers', AdminServerController::class)->only(['index', 'show', 'destroy']);
             // =============== SECURITY GROUPS ROUTES
-            Route::apiResource('security-groups', SecurityGroupController::class)->only(['index', 'show', 'destroy']);
+            Route::apiResource('security-groups', AdminSecurityGroupController::class)->only(['index', 'show', 'destroy']);
             // =============== SSH KEYS ROUTES
-            Route::apiResource('ssh-keys', SshKeyController::class)->only(['index', 'show', 'destroy']);
+            Route::apiResource('ssh-keys', AdminSshKeyController::class)->only(['index', 'show', 'destroy']);
         });
     });
 
