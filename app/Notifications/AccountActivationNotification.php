@@ -26,7 +26,7 @@ class AccountActivationNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail', 'database'];
+        return $notifiable->preferredNotificationChannels();
     }
 
     /**
@@ -37,7 +37,7 @@ class AccountActivationNotification extends Notification implements ShouldQueue
         return (new MailMessage)
             ->subject('Account Activated')
             ->greeting("Hello {$notifiable->name},")
-            ->line('We are pleased to inform you that your account has been activated by our Administration. Welcome aboard again! and we are excited to have you back.')
+            ->line('We are pleased to inform you that your account has been activated by our Administration team. Welcome aboard again! and we are excited to have you back.')
             ->action('Visit your dashboard', url(config("app.url")))
             ->line('Thank you for using our application!');
     }
@@ -51,7 +51,7 @@ class AccountActivationNotification extends Notification implements ShouldQueue
     {
         return [
             "title" => "Account Activated",
-            "body" => "your account has been activated once again by our Administration.",
+            "body" => "your account has been activated once again by our Administration team.",
             "actionUrl" => url(config("app.url")),
             "actionLabel" => "Check Your Dashboard"
         ];

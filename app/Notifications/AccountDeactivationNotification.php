@@ -26,7 +26,7 @@ class AccountDeactivationNotification extends Notification
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return $notifiable->preferredNotificationChannels();
     }
 
     /**
@@ -37,7 +37,7 @@ class AccountDeactivationNotification extends Notification
         return (new MailMessage)
             ->subject('Account Deactivated')
             ->greeting("Hello {$notifiable->name},")
-            ->line('We are regret to inform you that your account has been deactivated by our Administration. If you believe this is a mistake or have any questions, please contact our support team for assistance.')
+            ->line('We are regret to inform you that your account has been deactivated by our Administration team. If you believe this is a mistake or have any questions, please contact our support team for assistance.')
             ->line('Thank you for using our application!');
     }
 
@@ -49,7 +49,10 @@ class AccountDeactivationNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            "title" => "Account Deactivated",
+            "body" => "your account has been deactivated by our Administration team.",
+            "actionUrl" => url(config("app.url")),
+            "actionLabel" => "Contact Support"
         ];
     }
 }

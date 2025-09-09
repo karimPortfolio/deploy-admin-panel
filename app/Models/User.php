@@ -80,21 +80,34 @@ class User extends Authenticatable implements HasMedia
     {
         $this->addMediaCollection('user-photo')->singleFile();
     }
-    
-    // public function profilePhotoUrl(): Attribute
-    // {
-    //     return Attribute::get(function () {
-    //         $this->loadMissing("media");
-    //         $media = $this->getFirstMedia("profile-picture");
 
-    //         if ($media && count($media))
-    //         {
-    //             return $media[0]->getFullUrl();
-    //         }
+    // In User.php (or the notifiable model)
+    public function preferredNotificationChannels(): array
+    {
+        $preferences = $this->preferences[0]->preferences['notification'] ?? null;
 
-    //         return "/src/img/avatar.png";
-    //     });
-    // }
+        if (!is_array($preferences)) {
+            return ['mail', 'database'];
+        }
+
+        $wantsSystem = $preferences['system'] ?? false;
+        $wantsEmail = $preferences['email'] ?? false;
+
+        if (!$wantsSystem && !$wantsEmail) {
+            return [];
+        }
+
+        if ($wantsEmail && !$wantsSystem) {
+            return ['mail'];
+        }
+
+        if ($wantsSystem && !$wantsEmail) {
+            return ['database'];
+        }
+
+        return ['mail', 'database'];
+    }
+
 
     public function sendPasswordResetNotification($token)
     {

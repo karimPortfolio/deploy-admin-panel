@@ -26,7 +26,7 @@ class UnusedResourcesAlertNotification extends Notification implements ShouldQue
      */
     public function via(object $notifiable): array
     {
-        return $this->getNotifiablePreferredChannels($notifiable);
+        return $notifiable->preferredNotificationChannels();;
     }
 
     /**
@@ -63,32 +63,6 @@ class UnusedResourcesAlertNotification extends Notification implements ShouldQue
     private function getTotalUnusedResources(): int
     {
         return $this->data['unused_security_groups_count'] + $this->data['unused_sshkeys_count'];
-    }
-
-    private function getNotifiablePreferredChannels(object $notifiable): array
-    {
-        $preferences = $notifiable->preferences[0]->preferences['notification'] ?? null;
-
-        if (!is_array($preferences)) {
-            return ['mail', 'database'];
-        }
-
-        $wantsSystem = $preferences['system'] ?? false;
-        $wantsEmail = $preferences['email'] ?? false;
-
-        if (!$wantsSystem && !$wantsEmail) {
-            return [];
-        }
-
-        if ($wantsEmail && !$wantsSystem) {
-            return ['mail'];
-        }
-
-        if ($wantsSystem && !$wantsEmail) {
-            return ['database'];
-        }
-
-        return ['mail', 'database'];
     }
 
 }
