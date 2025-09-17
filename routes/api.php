@@ -17,6 +17,7 @@ use Laravel\Fortify\Http\Controllers\NewPasswordController;
 use \App\Http\Controllers\Api\V1\Admin\ServerController as AdminServerController;
 use \App\Http\Controllers\Api\V1\Admin\SecurityGroupController as AdminSecurityGroupController;
 use \App\Http\Controllers\Api\V1\Admin\SshKeyController as AdminSshKeyController;
+use \App\Http\Controllers\Api\V1\Admin\DashboardController as AdminDashboardController;
 
 
 Route::middleware('auth:sanctum')
@@ -42,13 +43,13 @@ Route::middleware('auth:sanctum')
         Route::middleware('role:user')
             ->group(function () {
             // =============== DASHBOARD ROUTES
-            Route::get('/dashboard/servers-count', [DashboardController::class, 'getTotalServersCount'])->name('dashboard.total-servers');
-            Route::get('/dashboard/security-groups-count', [DashboardController::class, 'getTotalSecurityGroupsCount'])->name('dashboard.total-security-groups');
-            Route::get('/dashboard/sshkeys-count', [DashboardController::class, 'getTotalSshKeysCount'])->name('dashboard.total-sshkeys');
-            Route::get('/dashboard/monthly-servers-total', [DashboardController::class, 'getMonthlyServersTotal'])->name('dashboard.monthly-servers-total');
-            Route::get('/dashboard/monthly-security-groups-total', [DashboardController::class, 'getMonthlySecurityGroupsTotal'])->name('dashboard.monthly-security-groups-total');
-            Route::get('/dashboard/servers-by-security-groups', [DashboardController::class, 'getTotalServersBySecurityGroups'])->name('dashboard.servers-by-security-groups');
-            Route::get('/dashboard/servers-by-status', [DashboardController::class, 'getTotalServersByStatus'])->name('dashboard.servers-by-status');
+            Route::get('dashboard/servers-count', [DashboardController::class, 'getTotalServersCount'])->name('dashboard.total-servers');
+            Route::get('dashboard/security-groups-count', [DashboardController::class, 'getTotalSecurityGroupsCount'])->name('dashboard.total-security-groups');
+            Route::get('dashboard/sshkeys-count', [DashboardController::class, 'getTotalSshKeysCount'])->name('dashboard.total-sshkeys');
+            Route::get('dashboard/monthly-servers-total', [DashboardController::class, 'getMonthlyServersTotal'])->name('dashboard.monthly-servers-total');
+            Route::get('dashboard/monthly-security-groups-total', [DashboardController::class, 'getMonthlySecurityGroupsTotal'])->name('dashboard.monthly-security-groups-total');
+            Route::get('dashboard/servers-by-security-groups', [DashboardController::class, 'getTotalServersBySecurityGroups'])->name('dashboard.servers-by-security-groups');
+            Route::get('dashboard/servers-by-status', [DashboardController::class, 'getTotalServersByStatus'])->name('dashboard.servers-by-status');
 
             // =============== SSH KEYS ROUTES
             Route::apiResource('ssh-keys', SshKeyController::class);
@@ -85,6 +86,15 @@ Route::middleware('auth:sanctum')
             Route::apiResource('security-groups', AdminSecurityGroupController::class)->only(['index', 'show', 'destroy']);
             // =============== SSH KEYS ROUTES
             Route::apiResource('ssh-keys', AdminSshKeyController::class)->only(['index', 'show', 'destroy']);
+            // =============== DASHBOARD ROUTES
+            Route::get('dashboard/users-count', [AdminDashboardController::class, 'getTotalUsersCount'])->name('admin.dashboard.total-users');
+            Route::get('dashboard/servers-count', [AdminDashboardController::class, 'getTotalServersCount'])->name('admin.dashboard.total-servers');
+            Route::get('dashboard/security-groups-count', [AdminDashboardController::class, 'getTotalSecurityGroupsCount'])->name('admin.dashboard.total-security-groups');
+            Route::get('dashboard/sshkeys-count', [AdminDashboardController::class, 'getTotalSshKeysCount'])->name('admin.dashboard.total-sshkeys');
+            Route::get('dashboard/monthly-servers-total', [AdminDashboardController::class, 'getMonthlyServersTotal'])->name('admin.dashboard.monthly-servers-total');
+            Route::get('dashboard/monthly-security-groups-total', [AdminDashboardController::class, 'getMonthlySecurityGroupsTotal'])->name('admin.dashboard.monthly-security-groups-total');
+            Route::get('dashboard/servers-by-security-groups', [AdminDashboardController::class, 'getTotalServersBySecurityGroups'])->name('admin.dashboard.servers-by-security-groups');
+            Route::get('dashboard/servers-by-status', [AdminDashboardController::class, 'getTotalServersByStatus'])->name('admin.dashboard.servers-by-status');
         });
     });
 
