@@ -9,11 +9,6 @@ export default {
     },
     children: [
         {
-            path: "register",
-            name: "auth.register",
-            component: () => import("@/views/auth/RegisterView.vue"),
-        },
-        {
             path: "login",
             name: "auth.login",
             component: () => import("@/views/auth/LoginView.vue"),

@@ -91,16 +91,6 @@
                                         </template>
                                     </q-btn>
                                 </q-form>
-                                <div
-                                    class="mt-6 text-center text-gray-600 dark:text-gray-500 text-sm"
-                                >
-                                    Don't have an account?
-                                    <a
-                                        href="/auth/register"
-                                        class="text-primary hover:underline"
-                                        >Sign up</a
-                                    >
-                                </div>
                             </q-card-section>
                         </q-card>
                     </div>

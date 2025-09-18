@@ -46,5 +46,10 @@ export default {
             name: "admin.ssh-keys",
             component: () => import("../views/admin/ssh-keys/IndexView.vue"),
         },
+        {
+            path: "monitoring",
+            name: "admin.monitoring",
+            component: () => import("../views/admin/pulse/IndexView.vue"),
+        },
     ],
 };

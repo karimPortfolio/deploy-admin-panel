@@ -76,6 +76,11 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(\App\Models\SecurityGroup::class, 'created_by');
     }
 
+    public function isAdmin(): bool
+    {
+        return $this->role === UserRole::ADMIN;
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('user-photo')->singleFile();

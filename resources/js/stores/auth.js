@@ -14,12 +14,10 @@ export const useAuthStore = defineStore("auth", () => {
     const loadingPromise = ref(null);
     const logoutPromise = ref(null);
     const loginPromise = ref(null);
-    const registerPromise = ref(null);
     const forgetPasswordPromise = ref(null);
     const resetPasswordPromise = ref(null);
 
     const errorMessages = ref(null);
-    const registerValidationMessage = ref(null);
 
     const homeUrl = computed(() => {
         if (user.value === null) return "auth.login";
@@ -111,36 +109,6 @@ export const useAuthStore = defineStore("auth", () => {
         }
     };
 
-    const register = async (credentials) => {
-        if (registerPromise.value) return registerPromise.value;
-
-        try {
-            registerPromise.value = new Promise((resolve, reject) => {
-                api.post("register", credentials)
-                    .then((response) => {
-                        authenticated.value = true;
-                        window.location.href = "/";
-                        resolve(response);
-                    })
-                    .catch((error) => {
-                        if (error.response?.status === 422)
-                            registerValidationMessage.value = error.response.data.errors;
-                        $q.notify({
-                            message: "Error",
-                            caption: error.response.data?.message,
-                            type: "negative",
-                        });
-                        reject(error);
-                    });
-            });
-        } catch (err) {
-            if (err.response?.status === 422)
-                registerValidationMessage.value = err.response.data.errors;
-        } finally {
-            registerPromise.value = null;
-        }
-    };
-
     const forgotPassword = async (credentials) => {
         if (forgetPasswordPromise.value) return forgetPasswordPromise.value;
         try {
@@ -205,13 +173,11 @@ export const useAuthStore = defineStore("auth", () => {
         user,
         authenticated,
         errorMessages,
-        registerValidationMessage,
         fetchProfile,
         logout,
         login,
         forgotPassword,
         resetPassword,
-        register,
         homeUrl
     };
 });

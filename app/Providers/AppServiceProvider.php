@@ -6,6 +6,7 @@ use Aws\CloudWatch\CloudWatchClient;
 use Aws\Ec2\Ec2Client;
 use Aws\Ssm\SsmClient;
 use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
@@ -57,6 +58,10 @@ class AppServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function ($request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+        });
+
+        Gate::define('viewPulse', function (\App\Models\User $user) {
+            return $user->isAdmin();
         });
     }
 }

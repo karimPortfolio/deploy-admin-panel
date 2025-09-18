@@ -117,6 +117,11 @@ const adminDrawerItems = [
         icon: "sym_r_key",
         route: { name: "admin.ssh-keys" },
     },
+    {
+        label: "Monitoring",
+        icon: "sym_r_vital_signs",
+        route: { name: "admin.monitoring" },
+    },
 ];
 
 const authStore = useAuthStore();
