@@ -118,4 +118,9 @@ class User extends Authenticatable implements HasMedia
     {
         $this->notify(new ResetPasswordNotification($token));
     }
+
+    public static function generateRandomPassword(): string
+    {
+        return bin2hex(random_bytes(4));
+    }
 }

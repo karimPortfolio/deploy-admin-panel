@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\NotificationResource;
 use Illuminate\Http\Request;
 
-class NotificationsController extends Controller
+class NotificationController extends Controller
 {
     public function index(Request $request)
     {

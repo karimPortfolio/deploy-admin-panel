@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Enums\UserRole;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Notifications\AccountActivationNotification;
 use App\Notifications\AccountDeactivationNotification;
+use App\Notifications\NewUserNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -44,6 +46,24 @@ class UserController extends Controller
             });
 
         return UserResource::collection($users);
+    }
+
+    public function store(UserRequest $request)
+    {
+        $generatedPassword = User::generateRandomPassword();
+
+        $newUser = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'company_name' => $request->input('company_name', null),
+            'role' => $request->input('role', UserRole::USER),
+            'password' => bcrypt($generatedPassword),
+            'is_active' => $request->input('is_active', true),
+        ]);
+
+        Notification::send($newUser, new NewUserNotification($generatedPassword));
+
+        return response()->noContent();
     }
 
     public function show(User $user)

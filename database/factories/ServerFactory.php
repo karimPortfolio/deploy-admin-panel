@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\InstanceType;
+use App\Enums\OsFamily;
 use App\Enums\ServerStatus;
 use App\Models\SecurityGroup;
 use App\Models\SshKey;
@@ -25,6 +26,7 @@ class ServerFactory extends Factory
             'image_id' => $this->faker->uuid(),
             'name' => $this->faker->word(),
             'instance_type' => InstanceType::T2Micro->value,
+            'os_family' => OsFamily::AmazonLinux->value,
             'status' => ServerStatus::STOPPED->value,
             'private_ip_address' => $this->faker->ipv4(),
             'public_ip_address' => $this->faker->ipv4(),

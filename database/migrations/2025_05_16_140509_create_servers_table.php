@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('vpc_id')->nullable();
             $table->string('subnet_id')->nullable();
             $table->string('os_family');
-            $table->foreignId('user_id')->constrained();
+            $table->foreignId('created_by')->constrained('users');
             $table->timestamps();
         });
     }

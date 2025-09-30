@@ -34,7 +34,55 @@ class SshKeyControllerTest extends TestCase
                         'public_key',
                         'created_at',
                     ]
-                ]
+                ],
+                'links',
+                'meta'
+            ]);
+    }
+
+    public function test_it_can_search_ssh_keys()
+    {
+        SshKey::factory()->create(['name' => 'unique-key-name']);
+        SshKey::factory()->count(5)->create();
+
+        $response = $this->getJson(route("api.v1.ssh-keys.index", ['search' => 'unique-key-name']));
+
+        $response->assertStatus(200)
+            ->assertJsonCount(1, 'data')
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'id',
+                        'name',
+                        'public_key',
+                        'created_at',
+                    ]
+                ],
+                'links',
+                'meta'
+            ]);
+    }
+
+    public function test_it_can_filter_ssh_keys_by_name()
+    {
+        SshKey::factory()->create(['name' => 'filter-key-name']);
+        SshKey::factory()->count(5)->create();
+
+        $response = $this->getJson(route("api.v1.ssh-keys.index", ['filter[name]' => 'filter-key-name']));
+
+        $response->assertStatus(200)
+            ->assertJsonCount(1, 'data')
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'id',
+                        'name',
+                        'public_key',
+                        'created_at',
+                    ]
+                ],
+                'links',
+                'meta'
             ]);
     }
 

@@ -4,7 +4,7 @@ use App\Http\Controllers\Api\V1\Admin\UserController;
 use App\Http\Controllers\Api\V1\AmiController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DashboardController;
-use App\Http\Controllers\Api\V1\NotificationsController;
+use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\SecurityGroupController;
 use App\Http\Controllers\Api\V1\ServerController;
 use App\Http\Controllers\Api\V1\SshKeyController;
@@ -27,11 +27,11 @@ Route::middleware('auth:sanctum')
         Route::get('me', [AuthController::class, 'me'])->name('me');
 
         // =============== NOTIFCATIONS
-        Route::get('notifications', [NotificationsController::class, 'index'])->name('notifications.index');
-        Route::get('notifications/unreceived-notifications', [NotificationsController::class, 'unreceivedNotifications'])->name('notifications.unreceived-notifications');
-        Route::put('notifications/{id}/mark-as-read', [NotificationsController::class, 'markAsRead'])->name('notifications.mark-as-read');
-        Route::put('notifications/mark-all-as-read', [NotificationsController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
-        Route::delete('notifications/{id}', [NotificationsController::class, 'destroy'])->name('notifications.destroy');
+        Route::get('notifications', [NotificationController::class, 'index'])->name('notifications.index');
+        Route::get('notifications/unreceived-notifications', [NotificationController::class, 'unreceivedNotifications'])->name('notifications.unreceived-notifications');
+        Route::put('notifications/{id}/mark-as-read', [NotificationController::class, 'markAsRead'])->name('notifications.mark-as-read');
+        Route::put('notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.mark-all-as-read');
+        Route::delete('notifications/{id}', [NotificationController::class, 'destroy'])->name('notifications.destroy');
 
         // =============== USER PREFERENCES ROUTES
         Route::put('user/preferences/{user_preference}', [UserPreferenceController::class, 'updatePreferences'])->name('user.preferences.update');
@@ -69,15 +69,16 @@ Route::middleware('auth:sanctum')
         // =============== ADMIN ROUTES =============
         Route::middleware('role:admin')
             ->prefix('admin')
+            ->name('admin.')
             ->group(function () {
             // =============== USERS ROUTES
             Route::put('users/{user}/deactivate', [UserController::class, 'deactivateUserAccount'])->name('users.deactivate');
             Route::put('users/{user}/activate', [UserController::class, 'activateUserAccount'])->name(name: 'users.activate');
             Route::get('users/roles', [UserController::class, 'getRoles'])->name('users.roles');
-            Route::apiResource('users', UserController::class)->only(['index', 'show', 'destroy']);
+            Route::apiResource('users', UserController::class)->only(['index', 'store', 'show', 'destroy']);
             // =============== SERVERS ROUTES
-            Route::put('servers/{server}/start', [AdminServerController::class, 'startServer'])->name('admin.servers.start');
-            Route::put('servers/{server}/stop', [AdminServerController::class, 'stopServer'])->name('admin.servers.stop');
+            Route::put('servers/{server}/start', [AdminServerController::class, 'startServer'])->name('servers.start');
+            Route::put('servers/{server}/stop', [AdminServerController::class, 'stopServer'])->name('servers.stop');
             Route::get('servers/instance-types', [AdminServerController::class, 'getInstanceTypes'])->name('servers.instance-types');
             Route::get('servers/os-families', [AdminServerController::class, 'getOsFamilies'])->name('servers.os-families');
             Route::get('servers/statuses', [AdminServerController::class, 'getServerStatuses'])->name('servers.statuses');
@@ -87,14 +88,14 @@ Route::middleware('auth:sanctum')
             // =============== SSH KEYS ROUTES
             Route::apiResource('ssh-keys', AdminSshKeyController::class)->only(['index', 'show', 'destroy']);
             // =============== DASHBOARD ROUTES
-            Route::get('dashboard/users-count', [AdminDashboardController::class, 'getTotalUsersCount'])->name('admin.dashboard.total-users');
-            Route::get('dashboard/servers-count', [AdminDashboardController::class, 'getTotalServersCount'])->name('admin.dashboard.total-servers');
-            Route::get('dashboard/security-groups-count', [AdminDashboardController::class, 'getTotalSecurityGroupsCount'])->name('admin.dashboard.total-security-groups');
-            Route::get('dashboard/sshkeys-count', [AdminDashboardController::class, 'getTotalSshKeysCount'])->name('admin.dashboard.total-sshkeys');
-            Route::get('dashboard/monthly-servers-total', [AdminDashboardController::class, 'getMonthlyServersTotal'])->name('admin.dashboard.monthly-servers-total');
-            Route::get('dashboard/monthly-security-groups-total', [AdminDashboardController::class, 'getMonthlySecurityGroupsTotal'])->name('admin.dashboard.monthly-security-groups-total');
-            Route::get('dashboard/servers-by-security-groups', [AdminDashboardController::class, 'getTotalServersBySecurityGroups'])->name('admin.dashboard.servers-by-security-groups');
-            Route::get('dashboard/servers-by-status', [AdminDashboardController::class, 'getTotalServersByStatus'])->name('admin.dashboard.servers-by-status');
+            Route::get('dashboard/users-count', [AdminDashboardController::class, 'getTotalUsersCount'])->name('dashboard.total-users');
+            Route::get('dashboard/servers-count', [AdminDashboardController::class, 'getTotalServersCount'])->name('dashboard.total-servers');
+            Route::get('dashboard/security-groups-count', [AdminDashboardController::class, 'getTotalSecurityGroupsCount'])->name('dashboard.total-security-groups');
+            Route::get('dashboard/sshkeys-count', [AdminDashboardController::class, 'getTotalSshKeysCount'])->name('dashboard.total-sshkeys');
+            Route::get('dashboard/monthly-servers-total', [AdminDashboardController::class, 'getMonthlyServersTotal'])->name('dashboard.monthly-servers-total');
+            Route::get('dashboard/monthly-security-groups-total', [AdminDashboardController::class, 'getMonthlySecurityGroupsTotal'])->name('dashboard.monthly-security-groups-total');
+            Route::get('dashboard/servers-by-security-groups', [AdminDashboardController::class, 'getTotalServersBySecurityGroups'])->name('dashboard.servers-by-security-groups');
+            Route::get('dashboard/servers-by-status', [AdminDashboardController::class, 'getTotalServersByStatus'])->name('dashboard.servers-by-status');
         });
     });
 

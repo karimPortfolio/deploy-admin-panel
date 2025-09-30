@@ -14,9 +14,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            // SshKeySeeder::class,
+            SshKeySeeder::class,
             SecurityGroupSeeder::class,
-            // ServerSeeder::class,
+            ServerSeeder::class,
+            UserPreferenceSeeder::class,
         ]);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Http\Controllers\Api\V1;
+namespace Tests\Feature\Http\Controllers\Api\V1\Admin;
 
 use App\Enums\InstanceType;
 use App\Enums\OsFamily;
@@ -22,13 +22,13 @@ class ServerControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->actingAsUser();
+        $this->actingAsAdmin();
     }
     public function test_can_list_servers_with_paginatoin()
     {
         $server = Server::factory()->create();
 
-        $response = $this->getJson(route('api.v1.servers.index'));
+        $response = $this->getJson(route('api.v1.admin.servers.index'));
 
         $response->assertOk()
             ->assertJsonCount(1, 'data')
@@ -44,7 +44,7 @@ class ServerControllerTest extends TestCase
         $server1 = Server::factory()->create(['instance_type' => InstanceType::T2Micro->value]);
         $server2 = Server::factory()->create(['instance_type' => InstanceType::T3Micro->value]);
 
-        $response = $this->getJson(route('api.v1.servers.index', ['filter[instance_type]' => InstanceType::T2Micro->value]));
+        $response = $this->getJson(route('api.v1.admin.servers.index', ['filter[instance_type]' => InstanceType::T2Micro->value]));
 
         $response->assertOk()
             ->assertJsonCount(1, 'data')
@@ -63,7 +63,7 @@ class ServerControllerTest extends TestCase
         $server1 = Server::factory()->create(['security_group_id' => $securityGroup1->id]);
         $server2 = Server::factory()->create(['security_group_id' => $securityGroup2->id]);
 
-        $response = $this->getJson(route('api.v1.servers.index', ['filter[security_group_id]' => $securityGroup1->group_id]));
+        $response = $this->getJson(route('api.v1.admin.servers.index', ['filter[security_group_id]' => $securityGroup1->group_id]));
 
         $response->assertOk()
             ->assertJsonCount(1, 'data')
@@ -79,7 +79,7 @@ class ServerControllerTest extends TestCase
         $server1 = Server::factory()->create(['name' => 'TestServerOne']);
         $server2 = Server::factory()->create(['name' => 'AnotherServer']);
 
-        $response = $this->getJson(route('api.v1.servers.index', ['search' => 'TestServer']));
+        $response = $this->getJson(route('api.v1.admin.servers.index', ['search' => 'TestServer']));
 
         $response->assertOk()
             ->assertJsonCount(1, 'data')
@@ -95,54 +95,27 @@ class ServerControllerTest extends TestCase
         $server1 = Server::factory()->create(['name' => 'AlphaServer']);
         $server2 = Server::factory()->create(['name' => 'BetaServer']);
 
-        $response = $this->getJson(route('api.v1.servers.index', ['sort' => 'name']));
+        $response = $this->getJson(route('api.v1.admin.servers.index', ['sort' => 'name']));
 
         $response->assertOk()
             ->assertJsonPath('data.0.name', 'AlphaServer')
             ->assertJsonPath('data.1.name', 'BetaServer');
     }
 
-    public function test_can_create_server()
+    public function test_index_method_returns_403_when_user_not_admin()
     {
-        Bus::fake();
+        $this->actingAsUser();
 
-        $securityGroup = SecurityGroup::factory()->create();
+        $response = $this->getJson(route('api.v1.admin.servers.index'));
 
-        $data = [
-            'name' => 'test-server',
-            'instance_type' => [
-                'value' => InstanceType::T2Micro->value
-            ],
-            'os_family' => [
-                'value' => OsFamily::Ubuntu->value
-            ],
-            'vpc_id' => [
-                'vpc_id' => 'vpc-123456',
-            ],
-            'security_group_id' => [
-                'id' => $securityGroup->id
-            ]
-        ];
-
-        $response = $this->postJson(route('api.v1.servers.store'), $data);
-
-        $response->assertCreated()
-            ->assertJsonStructure(['data', 'message']);
-
-        $this->assertDatabaseHas('servers', [
-            'name' => 'test-server',
-            'instance_type' => InstanceType::T2Micro->value,
-            'security_group_id' => $securityGroup->id
-        ]);
-
-        Bus::assertDispatched(CreateEc2InstanceJob::class);
+        $response->assertForbidden();
     }
 
     public function test_can_show_server()
     {
         $server = Server::factory()->create();
 
-        $response = $this->getJson(route('api.v1.servers.show', $server));
+        $response = $this->getJson(route('api.v1.admin.servers.show', $server));
 
         $response->assertOk()
             ->assertJsonStructure(['data' => ['id', 'name', 'instance_type', 'status']]);
@@ -150,7 +123,7 @@ class ServerControllerTest extends TestCase
 
     public function test_show_method_returns_404_for_non_existent_server()
     {
-        $response = $this->getJson(route('api.v1.servers.show', ['server' => 999]));
+        $response = $this->getJson(route('api.v1.admin.servers.show', ['server' => 999]));
 
         $response->assertNotFound();
     }
@@ -165,7 +138,7 @@ class ServerControllerTest extends TestCase
     //             ->andReturn(['StartingInstances' => [['CurrentState' => ['Name' => 'pending']]]]);
     //     });
 
-    //     $response = $this->putJson(route('api.v1.servers.start', $server));
+    //     $response = $this->putJson(route('api.v1.admin.servers.start', $server));
 
     //     $response->assertNoContent();
     //     $this->assertEquals('running', $server->fresh()->status);
@@ -173,7 +146,7 @@ class ServerControllerTest extends TestCase
 
     public function test_start_method_returns_404_for_non_existent_server()
     {
-        $response = $this->putJson(route('api.v1.servers.start', ['server' => 999]));
+        $response = $this->putJson(route('api.v1.admin.servers.start', ['server' => 999]));
 
         $response->assertNotFound();
     }
@@ -188,7 +161,7 @@ class ServerControllerTest extends TestCase
     //             ->andReturn(['StoppingInstances' => [['CurrentState' => ['Name' => 'stopping']]]]);
     //     });
 
-    //     $response = $this->putJson(route('api.v1.servers.stop', $server));
+    //     $response = $this->putJson(route('api.v1.admin.servers.stop', $server));
 
     //     $response->assertNoContent();
     //     $this->assertEquals('stopped', $server->fresh()->status);
@@ -196,7 +169,7 @@ class ServerControllerTest extends TestCase
 
     public function test_stop_method_returns_404_for_non_existent_server()
     {
-        $response = $this->putJson(route('api.v1.servers.stop', ['server' => 999]));
+        $response = $this->putJson(route('api.v1.admin.servers.stop', ['server' => 999]));
 
         $response->assertNotFound();
     }
@@ -211,7 +184,7 @@ class ServerControllerTest extends TestCase
     //             ->andReturn(['TerminatingInstances' => [['CurrentState' => ['Name' => 'shutting-down']]]]);
     //     });
 
-    //     $response = $this->deleteJson(route('api.v1.servers.destroy', $server));
+    //     $response = $this->deleteJson(route('api.v1.admin.servers.destroy', $server));
 
     //     $response->assertNoContent();
     //     $this->assertDatabaseMissing('servers', ['id' => $server->id]);
@@ -219,7 +192,7 @@ class ServerControllerTest extends TestCase
 
     public function test_delete_method_returns_404_for_non_existent_server()
     {
-        $response = $this->deleteJson(route('api.v1.servers.destroy', ['server' => 999]));
+        $response = $this->deleteJson(route('api.v1.admin.servers.destroy', ['server' => 999]));
 
         $response->assertNotFound();
     }

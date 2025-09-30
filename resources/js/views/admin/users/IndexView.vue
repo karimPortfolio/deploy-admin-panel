@@ -1,9 +1,13 @@
 <template>
     <q-page class="q-pa-md">
-
         <show-details-view
             v-model:open="openShowDetailsModal"
             :id="itemToShow?.id"
+        />
+
+        <create-view
+            v-model:open="openCreationModal"
+            @created="handleCreated"
         />
 
         <confirmation-modal
@@ -33,6 +37,9 @@
             title="Users"
             subtitle="Manage all users"
             icon="sym_r_group"
+            actionLabel="Create User"
+            actionIcon="sym_r_add"
+            :action="() => (openCreationModal = true)"
         />
 
         <div class="mt-4 bg-white dark:bg-slate-800 p-3 rounded-md">
@@ -86,7 +93,12 @@
                             label="Active"
                             class="w-fit"
                         />
-                        <q-badge v-else text-color="negative" label="Inactive" class="w-fit" />
+                        <q-badge
+                            v-else
+                            text-color="negative"
+                            label="Inactive"
+                            class="w-fit"
+                        />
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">
@@ -114,6 +126,7 @@ import SearchBar from "@/components/SearchBar.vue";
 import ActionsColumn from "./table-columns/ActionsColumn.vue";
 import ConfirmationModal from "@/components/modals/ConfirmationModal.vue";
 import ShowDetailsView from "./ShowDetailsView.vue";
+import CreateView from "./CreateView.vue";
 
 const columns = [
     {
@@ -186,6 +199,7 @@ const filters = [
 
 const search = ref("");
 const openDeleteConfirmationModal = ref(false);
+const openCreationModal = ref(false);
 const openShowDetailsModal = ref(false);
 const itemToDelete = ref(null);
 const itemToShow = ref(null);
@@ -206,7 +220,9 @@ const userAccountStatusChangeActionLabel = computed(() => {
 });
 
 const userAccountStatusChangeLoading = computed(() => {
-    return newUserAccountStatus.value === "activate" ? updating.value : deactivating.value;
+    return newUserAccountStatus.value === "activate"
+        ? updating.value
+        : deactivating.value;
 });
 
 const {
@@ -217,11 +233,19 @@ const {
     onRequest,
 } = useResourceIndex("admin/users");
 
-const { update: activate, updating, validation } = useResourceUpdate(
+const {
+    update: activate,
+    updating,
+    validation,
+} = useResourceUpdate(
     () => `admin/users/${itemToChangeStatus.value.id}/activate`
 );
 
-const { update: deactivate, updating: deactivating, validation: deactivationValidation } = useResourceUpdate(
+const {
+    update: deactivate,
+    updating: deactivating,
+    validation: deactivationValidation,
+} = useResourceUpdate(
     () => `admin/users/${itemToChangeStatus.value.id}/deactivate`
 );
 
@@ -230,6 +254,15 @@ const { destroy, destroying, destroyed } = useResourceDestroy("admin/users");
 const searchChange = () => {
     onRequest({
         filter: search.value,
+    });
+};
+
+const handleCreated = () => {
+    openCreationModal.value = false;
+
+    fetch({
+        filter: search.value,
+        filters: options.filters,
     });
 };
 
@@ -286,6 +319,4 @@ const handleDelete = async () => {
         });
     }
 };
-
-
 </script>

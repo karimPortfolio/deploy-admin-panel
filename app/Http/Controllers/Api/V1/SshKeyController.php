@@ -7,13 +7,11 @@ use App\Http\Requests\SshKeyRequest;
 use App\Http\Resources\SshKeyResource;
 use App\Models\SshKey;
 use App\Services\SshKeyService;
-use GuzzleHttp\Psr7\Query;
 use Illuminate\Http\Request;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class SshKeyController extends Controller
 {
-
     public function index(Request $request)
     {
         $sshKeys = QueryBuilder::for(SshKey::class)
@@ -47,21 +45,22 @@ class SshKeyController extends Controller
         return SshKeyResource::collection($sshKeys);
     }
 
-
     public function store(SshKeyRequest $request)
     {
-        // create the ssh  public and private keys
-        $keys = SshKeyService::createSshKey($request->validated('name'));
+        return \DB::transaction(function () use ($request) {
+            // create the ssh  public and private keys
+            $keys = SshKeyService::createSshKey($request->validated('name'));
 
-        // store the ssh key
-        $newSshKey = SshKey::create([
-            'name' => $request->validated('name'),
-            'public_key' => $keys['public_key'],
-            'private_key' => $keys['private_key'],
-            'created_by' => auth()->id()
-        ]);
+            // store the ssh key
+            $newSshKey = SshKey::create([
+                'name' => $request->validated('name'),
+                'public_key' => $keys['public_key'],
+                'private_key' => $keys['private_key'],
+                'created_by' => auth()->id(),
+            ]);
 
-        return new SshKeyResource($newSshKey);
+            return new SshKeyResource($newSshKey);
+        });
     }
 
     public function show(SshKey $sshKey)

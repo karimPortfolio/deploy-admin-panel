@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->mediumText('public_key')->nullable();
             $table->mediumText('private_key')->nullable();
-            $table->foreignId('user_id')->constrained('users');
+            $table->foreignId('created_by')->constrained('users');
             $table->timestamps();
         });
     }
