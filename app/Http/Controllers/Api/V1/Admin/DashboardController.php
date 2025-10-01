@@ -62,7 +62,7 @@ class DashboardController extends Controller
     {
         $year = $request->input('filter.year') ?? date('Y');
         $servers = Server::query()
-            ->select($this->monthQuery(), \DB::raw("COUNT(*) as count"))
+            ->select(\DB::raw($this->monthQuery()), \DB::raw("COUNT(*) as count"))
             ->whereYear('created_at', $year)
             ->groupBy('month')
             ->get()
@@ -87,7 +87,7 @@ class DashboardController extends Controller
     {
         $year = $request->input('filter.year') ?? date('Y');
         $securityGroups = SecurityGroup::query()
-            ->select($this->monthQuery(), \DB::raw("COUNT(*) as count"))
+            ->select(\DB::raw($this->monthQuery()), \DB::raw("COUNT(*) as count"))
             ->whereYear("created_at", $year)
             ->groupBy('month')
             ->get()
@@ -149,13 +149,12 @@ class DashboardController extends Controller
         ]);
     }
 
-    private function monthQuery()
+    private function monthQuery(): string
     {
-        match (config('database.default')) {
-            'mysql', 'pgsql' => 'MONTH(created_at)',
-            'sqlite' => "CAST(strftime('%m', created_at) AS INTEGER)",
-            'sqlsrv' => 'MONTH(created_at)',
-            'postgres' => 'EXTRACT(MONTH FROM created_at)',
+        return match (config('database.default')) {
+            'mysql', 'pgsql' => 'MONTH(created_at) as month', 
+            'sqlite' => "CAST(strftime('%m', created_at) AS INTEGER) as month",
+            'sqlsrv' => 'MONTH(created_at) as month',
             default => throw new \Exception('Unsupported database driver: ' . config('database.default')),
         };
     }
