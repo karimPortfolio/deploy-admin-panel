@@ -17,13 +17,23 @@ class SshKeyService
     public static function createSshKey(string $name): array
     {
         $name = preg_replace('/[^a-zA-Z0-9_-]/', '', $name);
-        $path = storage_path("app/keys/{$name}");
+
+        $dir = storage_path("app/keys");
+        if (!is_dir($dir)) {
+            mkdir($dir, 0755, true);
+        }
+    
+        $path = "{$dir}/{$name}";
 
         if (file_exists($path)) {
             throw new \RuntimeException('SSH key already exists.');
         }
 
-        Process::run("ssh-keygen -t rsa -b 2048 -f $path -q -N ''");
+        $result = Process::run("ssh-keygen -t rsa -b 2048 -f $path -q -N ''");
+
+        if ($result->failed()) {
+            throw new \RuntimeException("ssh-keygen failed: " . $result->errorOutput());
+        }
 
         $publicKey = file_get_contents("{$path}.pub");
         $privateKey = file_get_contents($path);

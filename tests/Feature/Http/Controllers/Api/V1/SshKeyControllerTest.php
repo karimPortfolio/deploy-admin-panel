@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers\Api\V1;
 use App\Models\SshKey;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Process;
 use Tests\TestCase;
 
 class SshKeyControllerTest extends TestCase
@@ -96,26 +97,22 @@ class SshKeyControllerTest extends TestCase
 
     public function test_it_can_create_ssh_key()
     {
-        $sshKeyData = [
-            'name' => 'test-key-name'
-        ];
-
+    
+        $sshKeyData = ['name' => 'test-key-name'];
+    
         $response = $this->postJson(route("api.v1.ssh-keys.store"), $sshKeyData);
-
+    
         $response->assertStatus(201)
             ->assertJsonStructure([
-                'data' => [
-                    'id',
-                    'name',
-                    'public_key',
-                    'created_at',
-                ]
+                'data' => ['id', 'name', 'public_key', 'created_at']
             ]);
-
-        // no need to test the public and private keys because they are generated in the runtime
+    
         $this->assertDatabaseHas('ssh_keys', [
             'name' => $sshKeyData['name'],
         ]);
+
+        $this->assertFileDoesNotExist(storage_path("app/keys/test-key-name"));
+        $this->assertFileDoesNotExist(storage_path("app/keys/test-key-name.pub"));
     }
 
 
