@@ -2,8 +2,8 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
   <title>{{ strtoupper(config('app.name')) }}</title>
   <style>
     @media screen and (max-width: 776px) {
@@ -13,20 +13,18 @@
       }
     }
   </style>
-  <link href="/src/css/style.css" rel="stylesheet"/>
-  <link rel="stylesheet"
-        href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Rounded">
 
-  <link rel="stylesheet"
-        href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  {{-- @vite(['resources/scss/quasar.scss']) --}}
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
+  @vite(['resources/scss/quasar.scss'])
 </head>
 
 <body>
-<div id="app" style=""></div>
 
-@vite(['resources/js/app.js'])
+  <div id="app" style=""></div>
+
+  @vite(['resources/js/app.js'])
 
 </body>
 

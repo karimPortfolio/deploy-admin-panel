@@ -71,7 +71,7 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            cd /var/www/laravel-app
+            cd /var/www/futurixtech
             git pull origin main
 
             # Backend (Laravel)
@@ -83,7 +83,6 @@ jobs:
 
             # Frontend (Vue.js)
             npm install
-            npm run build
             cp -r dist/* public/   # adjust if your Vue build outputs elsewhere
 
             # Restart PHP + Nginx
