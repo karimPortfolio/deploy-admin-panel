@@ -12,7 +12,7 @@
                 <q-icon :name="item.icon" />
             </q-item-section>
             <q-item-section class="m-0 p-0 w-fit">
-                {{ item.label }}
+                {{ $t(item.label) }}
             </q-item-section>
         </div>
     </q-item>

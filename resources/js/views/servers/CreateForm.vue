@@ -1,7 +1,7 @@
 <template>
     <form-modal
         v-model:open="open"
-        title="Create Server"
+        title="servers.create"
         form="servers-form"
         @close="handleClose"
         :loading="creating"
@@ -15,7 +15,7 @@
                 <q-input
                     dense
                     v-model="newServer.name"
-                    label="Name*"
+                    :label="$t('name') + '*'"
                     :error-message="validation.name?.[0]"
                     :error="'name' in validation"
                     outlined
@@ -24,7 +24,7 @@
 
                 <custom-select
                     v-model="newServer.instance_type"
-                    label="Instance Type*"
+                    :label="$t('servers.instance_type') + '*'"
                     resource="servers/instance-types"
                     option-label="value"
                     option-value="value"
@@ -48,7 +48,7 @@
                 </custom-select>
 
                 <div class="q-mb-md">
-                    <div class="text-subtitle1 q-mb-sm">Operating System*</div>
+                    <div class="text-subtitle1 q-mb-sm">{{ $t("servers.operating_system") }}*</div>
                     
                     <div
                         class="os-family-grid q-field--outlined"
@@ -79,7 +79,7 @@
 
                 <custom-select
                     v-model="newServer.security_group_id"
-                    label="Security Group*"
+                    :label="$t('security_groups.title') + '*'"
                     resource="security-groups"
                     option-label="name"
                     :error-message="validation.security_group_id?.[0]"
@@ -116,7 +116,7 @@
                 <custom-select
                     v-model="newServer.ssh_key_id"
                     resource="ssh-keys"
-                    label="SSH Key"
+                    :label="$t('ssh_keys.title')"
                     :error-message="validation.ssh_key_id?.[0]"
                     :error="'ssh_key_id' in validation"
                     outlined

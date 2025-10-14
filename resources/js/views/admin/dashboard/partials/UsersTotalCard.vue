@@ -7,7 +7,7 @@
         </q-card-section>
         <q-card-section>
             <div class="font-bold text-xl">{{ data?.total }}</div>
-            <div class="text-gray-500 dark:text-gray-400">Users</div>
+            <div class="text-gray-500 dark:text-gray-400">{{ $t("users.title") }}</div>
         </q-card-section>
         <q-inner-loading :showing="loading">
             <q-spinner-tail color="warning" size="40px" />

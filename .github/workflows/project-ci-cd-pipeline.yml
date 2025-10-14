@@ -64,6 +64,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Disable host key checking
+        run: |
+          mkdir -p ~/.ssh
+          echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@v0.1.10
         with:

@@ -1,14 +1,16 @@
 <template>
     <q-card class="mt-4">
         <q-card-section class="pb-0">
-            <div class="font-medium">Update Password</div>
+            <div class="font-medium">{{ $t('profile.password.label') }}</div>
         </q-card-section>
         <q-separator class="mt-3 mx-4" />
         <q-card-section class="mt-0">
             <q-form>
                 <div class="mt-1 grid sm:grid-cols-3">
                     <div>
-                        <div class="text-sm">Current Password</div>
+                        <div class="text-sm">
+                            {{ $t('profile.password.current_password') }}
+                        </div>
                     </div>
                     <div class="col-span-2 mt-3 sm:mt-0">
                         <q-input
@@ -29,7 +31,9 @@
 
                 <div class="mt-5 grid sm:grid-cols-3">
                     <div>
-                        <div class="text-sm">New Password</div>
+                        <div class="text-sm">
+                            {{ $t('profile.password.new_password') }}
+                        </div>
                     </div>
                     <div class="col-span-2 mt-3 sm:mt-0">
                         <q-input
@@ -48,7 +52,9 @@
 
                 <div class="mt-5 grid sm:grid-cols-3">
                     <div>
-                        <div class="text-sm">Confirm Password</div>
+                        <div class="text-sm">
+                            {{ $t('profile.password.confirm_password') }}
+                        </div>
                     </div>
                     <div class="col-span-2 mt-3 sm:mt-0">
                         <q-input
@@ -71,7 +77,7 @@
 
                 <div class="mt-6 flex justify-end">
                     <q-btn
-                        label="Save"
+                        :label="$t('save')"
                         icon="sym_r_save"
                         color="primary"
                         unelevated

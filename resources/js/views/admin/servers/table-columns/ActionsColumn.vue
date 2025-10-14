@@ -23,7 +23,7 @@
                                 size="xs"
                                 class="me-1"
                             />
-                            View Details
+                            {{ $t("view_details") }}
                         </q-item-label>
                     </q-item-section>
                 </q-item>
@@ -46,7 +46,7 @@
                                 size="xs"
                                 class="me-1"
                             />
-                            Stop Server
+                            {{ $t("servers.stop_server") }}
                         </q-item-label>
                     </q-item-section>
                 </q-item>
@@ -68,7 +68,7 @@
                                 size="xs"
                                 class="me-1"
                             />
-                            Start Server
+                            {{ $t("servers.start_server") }}
                         </q-item-label>
                     </q-item-section>
                 </q-item>
@@ -92,7 +92,7 @@
                                 size="xs"
                                 class="me-1"
                             />
-                            Delete
+                            {{ $t("delete") }}
                         </q-item-label>
                     </q-item-section>
                 </q-item>

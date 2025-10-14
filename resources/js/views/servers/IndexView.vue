@@ -11,10 +11,9 @@
             :id="itemToShow?.id"
         /> -->
 
-        <confirmation-modal
+       <confirmation-modal
             v-model:open="openDeleteConfirmationModal"
-            title="Delete Server"
-            :message="`Are you sure you want to delete this server: ${itemToDelete?.name} ?`"
+            title="servers.delete"
             icon="warning"
             color="negative"
             :loading="destroying"
@@ -25,7 +24,6 @@
         <confirmation-modal
             v-model:open="openStatusChangeConfirmationModal"
             :title="serverStatusChangeModalTitle"
-            :message="`Are you sure you want to ${newServerStatus} the server: ${itemToChangeStatus?.name} ?`"
             icon="info"
             color="warning"
             :actionLabel="serverStatusChangeActionLabel"
@@ -36,10 +34,10 @@
 
         <!-- ======= PAGE CONTENT ======== -->
         <page-header
-            title="Servers"
-            subtitle="Manage your servers"
+            title="servers.title"
+            subtitle="servers.subtitle"
             icon="sym_r_host"
-            actionLabel="Create Server"
+            actionLabel="servers.create"
             actionIcon="add"
             :action="handleCreate"
         />
@@ -104,16 +102,6 @@
                 <template v-slot:body-cell-created_at="props">
                     <q-td :props="props" :title="props.row.created_by?.name ?? props.row.create_at"> 
                         {{ props.row.created_at }}
-                        <div>
-                            <span
-                                class="font-medium me-1 text-gray-600 dark:text-gray-400"
-                                >By:</span
-                            >
-                            <span v-if="props.row.created_by">{{
-                                truncate(props.row.created_by?.name, 10)
-                            }}</span>
-                            <span v-else>N/A</span>
-                        </div>
                     </q-td>
                 </template>
                 <template v-slot:body-cell-actions="props">
@@ -144,62 +132,65 @@ import CreateForm from "./CreateForm.vue";
 import InstanceTypeColumn from "./table-columns/InstanceTypeColumn.vue";
 import SecurityGroupColumn from "./table-columns/SecurityGroupColumn.vue";
 import InstanceNameColumn from "./table-columns/InstanceNameColumn.vue";
-import ShowDetailsView from "./ShowDetailsView.vue";
+import { useI18n } from "vue-i18n";
 
-const columns = [
+
+const { t } = useI18n();
+
+const columns = computed(() => [
     {
         name: "id",
-        label: "ID",
+        label: t("id"),
         field: "id",
         align: "left",
         sortable: true,
     },
     {
         name: "name",
-        label: "Name",
+        label: t("name"),
         field: "name",
         align: "left",
         sortable: true,
     },
     {
         name: "security_group",
-        label: "Security Group",
+        label: t("security_groups.title"),
         field: "security_group",
         align: "left",
         sortable: false,
     },
     {
         name: "instance_type",
-        label: "Instance Type",
+        label: t("servers.instance_type"),
         field: "instance_type",
         align: "left",
         sortable: false,
     },
     {
         name: "public_ip_address",
-        label: "Public IP Address",
+        label: t("servers.public_ip_address"),
         field: "public_ip_address",
         align: "left",
         sortable: true,
     },
     {
         name: "status",
-        label: "Status",
+        label: t("status"),
         field: "status",
         align: "left",
         sortable: false,
     },
     {
         name: "created_at",
-        label: "Creation Info",
+        label: t("creation_date"),
         field: "created_at",
         align: "left",
         sortable: true,
     },
-    { label: "Actions", name: "actions", field: "actions", align: "center" },
-];
+    { label: t("actions"), name: "actions", field: "actions", align: "center" },
+]);
 
-const filters = [
+const filters = computed(() => [
     {
         name: "vpc_id",
         label: "VPC ID",
@@ -210,7 +201,7 @@ const filters = [
     },
     {
         name: "security_group_id",
-        label: "Group ID",
+        label: t("security_groups.group_id"),
         type: "relation",
         resource: "security-groups",
         optionLabel: "group_id",
@@ -218,7 +209,7 @@ const filters = [
     },
     {
         name: "instance_type",
-        label: "Instance Type",
+        label: t("servers.instance_type"),
         type: "enum",
         resource: "servers/instance-types",
         optionLabel: "value",
@@ -226,7 +217,7 @@ const filters = [
     },
     {
         name: "os_family",
-        label: "Operating System",
+        label: t("servers.operating_system"),
         type: "enum",
         resource: "servers/os-families",
         optionLabel: "value",
@@ -234,7 +225,7 @@ const filters = [
     },
     {
         name: "status",
-        label: "Status",
+        label: t("status"),
         type: "enum",
         resource: "servers/statuses",
         optionLabel: "label",
@@ -242,10 +233,10 @@ const filters = [
     },
     {
         name: "created_at",
-        label: "Creation Date",
+        label: t("creation_date"),
         type: "date",
     },
-];
+]);
 
 const search = ref("");
 
@@ -272,11 +263,11 @@ const itemToChangeStatus = ref(null);
 const newServerStatus = ref(false);
 
 const serverStatusChangeModalTitle = computed(() => {
-    return newServerStatus.value === "start" ? "Start Server" : "Stop Server";
+    return newServerStatus.value === "start" ? t("servers.start_server") : t("servers.stop_server");
 });
 
 const serverStatusChangeActionLabel = computed(() => {
-    return newServerStatus.value === "start" ? "Start" : "Stop";
+    return newServerStatus.value === "start" ? t("servers.start") : t("servers.stop");
 });
 
 const serverStatusChangeLoading = computed(() => {

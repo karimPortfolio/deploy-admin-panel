@@ -5,7 +5,7 @@
       <q-icon name="sym_r_warning"
               class="text-yellow-800 flex-shrink-0 inline text-[21px]" />
     </template>
-    <slot name="message" >{{ message }}</slot>
+    <slot name="message" >{{ $t(message) }}</slot>
   </q-banner>
 
 </template>

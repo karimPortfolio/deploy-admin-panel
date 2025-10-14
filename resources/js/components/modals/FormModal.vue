@@ -6,7 +6,7 @@
                     <template v-if="icon">
                         <q-icon :name="icon" class="q-mr-sm" size="sm" />
                     </template>
-                    {{ title }}
+                    {{ truncate($t(title), 40) }}
                 </div>
                 <q-space />
                 <q-btn icon="close" flat round dense v-close-popup />
@@ -15,11 +15,11 @@
                 <slot name="form" :class="{ invisible: modalLoading }" ></slot>
             </q-card-section>
             <q-card-actions align="right" class="mt-4">
-                <q-btn flat @click="handleClose" label="Cancel" />
+                <q-btn flat @click="handleClose" :label="$t('cancel')" />
 
                 <q-btn
                     unelevated
-                    label="Save"
+                    :label="$t('save')"
                     :form="form"
                     type="submit"
                     icon="sym_r_save"
@@ -35,6 +35,8 @@
     </q-dialog>
 </template>
 <script setup>
+import { useTextTruncate } from "@/composables/useTextTruncate";
+
 defineProps({
     title: {
         type: String,
@@ -63,6 +65,8 @@ defineProps({
 
 const emit = defineEmits(["close"]);
 const open = defineModel("open");
+
+const { truncate } = useTextTruncate();
 
 const handleClose = () => {
     emit("close");

@@ -2,7 +2,7 @@
     <template>
         <form-modal
             v-model:open="open"
-            title="Create Security Group"
+            title="security_groups.create"
             form="security-group-form"
             @close="handleClose"
             :loading="creating"
@@ -16,7 +16,7 @@
                     <q-input
                         dense
                         v-model="newSecurityGroup.name"
-                        label="Name"
+                        :label="$t('name')"
                         :error-message="validation.name?.[0]"
                         :error="'name' in validation"
                         outlined
@@ -27,7 +27,7 @@
                         type="textarea"
                         dense
                         v-model="newSecurityGroup.description"
-                        label="Description"
+                        :label="$t('description')"
                         :error-message="validation.description?.[0]"
                         :error="'description' in validation"
                         outlined

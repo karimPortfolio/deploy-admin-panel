@@ -6,20 +6,20 @@
             </q-card-section>
             <q-card-section class="pb-3" >
                 <div class="text-h6 text-center">
-                    {{ title }}
+                    {{ $t(title) || $t('confirm_action') }}
                 </div>
             </q-card-section>
             <q-card-section class="px-10 pb-5 pt-0">
-                <p v-if="message" class="text-center">{{ message }}</p>
+                <p v-if="message" class="text-center">{{ $t(message) }}</p>
                 <p v-else class="text-center">
-                    Are you sure you want to do this action? This action cannot be undone.
+                    {{ $t('confirm_action_paragraph') }}
                 </p>
             </q-card-section>
 
             <q-card-actions align="between" class="flex-nowrap px-3 py-4" >
                 <q-btn 
                     flat 
-                    label="Cancel" 
+                    :label="$t('cancel')" 
                     v-close-popup 
                     class="w-1/2"
                     @click="onCancel"
@@ -28,7 +28,7 @@
                     :loading="loading"
                     :disable="loading"
                     unelevated
-                    :label="actionLabel" 
+                    :label="actionLabel || $t('delete')" 
                     :color="color" 
                     class="w-1/2"
                     @click="onConfirm"
@@ -38,7 +38,6 @@
     </q-dialog>
 </template>
 <script setup>
-import { computed } from 'vue';
 
 const props = defineProps({
     modelValue: {
@@ -67,7 +66,6 @@ const props = defineProps({
     },
     actionLabel: {
         type: String,
-        default: 'Delete'
     }
 });
 

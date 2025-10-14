@@ -6,9 +6,9 @@
             >
                 <q-icon :name="icon" size="md" />
                 <div>
-                    <div class="text-xl font-medium">{{ title }}</div>
+                    <div class="text-xl font-medium">{{ $t(title) }}</div>
                     <div class="text-xs text-gray-600 dark:text-gray-400">
-                        {{ subtitle }}
+                        {{ $t(subtitle) }}
                     </div>
                 </div>
             </div>
@@ -16,7 +16,7 @@
         <div v-if="action" >
             <q-btn
                 :icon="actionIcon"
-                :label="$q.screen.gt.sm ? actionLabel : 'Add'"
+                :label="$q.screen.gt.sm ? $t(actionLabel) : $t('add')"
                 @click="action"
                 color="primary"
                 class="text-white"

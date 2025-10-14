@@ -2,7 +2,7 @@
     <template>
         <form-modal
             v-model:open="open"
-            title="Create SSH Key"
+            title="ssh_keys.create"
             form="ssh-key-form"
             @close="handleClose"
             :loading="creating"
@@ -16,7 +16,7 @@
                     <q-input
                         dense
                         v-model="newSshKey.name"
-                        label="Name"
+                        :label="$t('name')"
                         :error-message="validation.name?.[0]"
                         :error="'name' in validation"
                         outlined

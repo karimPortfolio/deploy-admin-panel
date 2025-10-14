@@ -11,7 +11,7 @@
                 <q-icon name="sym_r_person" size="xs" />
             </q-item-section>
 
-            <q-item-section class="text-sm">Profile</q-item-section>
+            <q-item-section class="text-sm">{{ $t('profile.title') }}</q-item-section>
         </q-item>
 
         <q-item
@@ -25,7 +25,7 @@
                 <q-icon name="sym_r_settings" size="xs" />
             </q-item-section>
 
-            <q-item-section class="text-sm"> Settings </q-item-section>
+            <q-item-section class="text-sm"> {{ $t('settings.title') }} </q-item-section>
         </q-item>
 
         <q-separator />
@@ -40,7 +40,7 @@
                 <q-icon name="sym_r_logout" size="xs" />
             </q-item-section>
 
-            <q-item-section class="text-sm"> Sign out </q-item-section>
+            <q-item-section class="text-sm"> {{ $t('logout') }} </q-item-section>
         </q-item>
     </q-list>
 </template>

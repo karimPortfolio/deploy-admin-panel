@@ -3,7 +3,7 @@
         <q-card-section class="flex items-center justify-between">
             <div class="flex items-center gap-2">
                 <q-icon name="sym_r_host" color="primary" size="sm" />
-                <div class="font-medium">Servers Monthly Total</div>
+                <div class="font-medium" :title="$t('servers.monthly_total')" >{{ truncate($t("servers.monthly_total"), 40) }}</div>
             </div>
             <div>
                 <q-select
@@ -34,6 +34,8 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { useResourceIndex } from "@/composables/useResourceIndex";
 import { useQuasar } from "quasar";
+import { useTextTruncate } from "@/composables/useTextTruncate";
+import { useI18n } from "vue-i18n";
 
 const currentYear = new Date().getFullYear();
 const selectedYear = ref(currentYear);
@@ -42,13 +44,16 @@ const { data, fetch, loading } = useResourceIndex(
     "admin/dashboard/monthly-servers-total"
 );
 
+const { truncate } = useTextTruncate();
+const { t } = useI18n();
+
 const $q = useQuasar();
 
 const categories = computed(() => {
     if (!data.value || !Array.isArray(data.value)) return [];
 
     return data.value.map((v) => {
-        return v.month;
+        return t(`months.${v.month}`);
     });
 });
 
@@ -123,7 +128,7 @@ const series = computed(() => {
 
     return [
         {
-            name: "Servers",
+            name: t("servers.title"),
             color: "#1b75bb",
             data: values,
         },

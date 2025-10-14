@@ -7,7 +7,7 @@
         </q-card-section>
         <q-card-section>
             <div class="font-bold text-xl">{{ data?.total }}</div>
-            <div class="text-gray-500 dark:text-gray-400">Total SSH Keys</div>
+            <div class="text-gray-500 dark:text-gray-400">{{ truncate($t("ssh_keys.title"), 15) }}</div>
         </q-card-section>
         <q-inner-loading :showing="loading">
             <q-spinner-tail color="primary" size="40px" />
@@ -17,8 +17,10 @@
 <script setup>
 import { useResourceIndex } from "@/composables/useResourceIndex";
 import { onMounted } from "vue";
+import { useTextTruncate } from "@/composables/useTextTruncate";
 
 const { data, fetch, loading } = useResourceIndex("dashboard/sshkeys-count");
+const { truncate } = useTextTruncate();
 
 onMounted(() => fetch());
 </script>

@@ -23,7 +23,7 @@
                                 size="xs"
                                 class="me-1"
                             />
-                            View Details
+                            {{ $t("view_details") }}
                         </q-item-label>
                     </q-item-section>
                 </q-item>
@@ -47,7 +47,7 @@
                                 size="xs"
                                 class="me-1"
                             />
-                            Delete
+                            {{ $t("delete") }}
                         </q-item-label>
                     </q-item-section>
                 </q-item>

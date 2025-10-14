@@ -3,9 +3,9 @@
         {{ truncate(row.name, 30) }}
         <div>
             <span class="font-medium me-2 text-gray-600 dark:text-gray-400"
-                >Instance ID:</span
+                >{{ $t("servers.instance_id") }}:</span
             >
-            <span v-if="row.instance_id" >{{ truncate(row.instance_id, 15) }}</span>
+            <span v-if="row.instance_id" >{{ truncate(row.instance_id, 10) }}</span>
             <span v-else >N/A</span>
         </div>
     </div>

@@ -7,12 +7,14 @@ import VueApexCharts from "vue3-apexcharts";
 // Import icon libraries
 import "@quasar/extras/roboto-font/roboto-font.css";
 import "@quasar/extras/material-icons/material-icons.css";
+import "@quasar/extras/fontawesome-v6/fontawesome-v6.css";
 
 // Import Quasar css
 import "quasar/src/css/index.sass";
 import "../scss/quasar.scss";
 
 import { createPinia } from "pinia";
+import i18n from "./plugins/i18n";
 
 const app = createApp(App);
 
@@ -28,6 +30,8 @@ app.use(Quasar, {
     },
   },
 });
+
+app.use(i18n);
 
 app.use(VueApexCharts);
 

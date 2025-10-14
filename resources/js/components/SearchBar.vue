@@ -4,7 +4,7 @@
         v-model="searchValue"
         dense
         outlined
-        placeholder="Search..."
+        :placeholder="`${$t('search')}...`"
         class="ms-auto"
         @keydown.enter="emit('search')"
         hide-bottom-space

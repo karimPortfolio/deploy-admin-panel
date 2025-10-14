@@ -3,7 +3,7 @@
         <q-card-section>
             <div class="flex items-center gap-2">
                 <q-icon name="sym_r_host" color="purple" size="sm" />
-                <div class="font-medium">Total Servers By Status</div>
+                <div class="font-medium" :title="$t('servers.total_by_status')" >{{ truncate($t("servers.total_by_status"), 40) }}</div>
             </div>
         </q-card-section>
         <q-card-section v-if="loading || series.length" class="p-0">
@@ -16,7 +16,7 @@
         </q-card-section>
         <q-card-section v-else class="pb-0">
             <warning-alert
-                message="No data available currently. Please try again later."
+                message="no_data_available_msg"
             />
         </q-card-section>
         <q-inner-loading :showing="loading">
@@ -27,12 +27,17 @@
 <script setup>
 import { computed, onMounted, ref, watch } from "vue";
 import { useResourceIndex } from "@/composables/useResourceIndex";
+import { useTextTruncate } from "@/composables/useTextTruncate";
 import { useQuasar } from "quasar";
 import WarningAlert from "@/components/alerts/WarningAlert.vue";
+import { useI18n } from "vue-i18n";
+
 
 const { data, fetch, loading } = useResourceIndex(
     "dashboard/servers-by-status"
 );
+
+const { truncate } = useTextTruncate();
 
 const $q = useQuasar();
 

@@ -12,8 +12,7 @@
 
         <confirmation-modal
             v-model:open="openDeleteConfirmationModal"
-            title="Delete Server"
-            :message="`Are you sure you want to delete the user account for ${itemToDelete?.name}?`"
+            title="users.delete"
             icon="warning"
             color="negative"
             :loading="destroying"
@@ -24,7 +23,6 @@
         <confirmation-modal
             v-model:open="openStatusChangeConfirmationModal"
             :title="userAccountStatusChangeModalTitle"
-            :message="`Are you sure you want to ${newUserAccountStatus} the user account for ${itemToChangeStatus?.name}?`"
             icon="info"
             color="warning"
             :actionLabel="userAccountStatusChangeActionLabel"
@@ -34,10 +32,10 @@
         />
 
         <page-header
-            title="Users"
-            subtitle="Manage all users"
+            title="users.title"
+            subtitle="users.subtitle"
             icon="sym_r_group"
-            actionLabel="Create User"
+            actionLabel="users.create"
             actionIcon="sym_r_add"
             :action="() => (openCreationModal = true)"
         />
@@ -127,64 +125,67 @@ import ActionsColumn from "./table-columns/ActionsColumn.vue";
 import ConfirmationModal from "@/components/modals/ConfirmationModal.vue";
 import ShowDetailsView from "./ShowDetailsView.vue";
 import CreateView from "./CreateView.vue";
+import { useI18n } from "vue-i18n";
 
-const columns = [
+const { t } = useI18n();
+
+const columns = computed(() => [
     {
         name: "id",
-        label: "ID",
+        label: t("id"),
         field: "id",
         align: "left",
         sortable: true,
     },
     {
         name: "name",
-        label: "Name",
+        label: t("name"),
         field: "name",
         align: "left",
         sortable: true,
     },
     {
         name: "company_name",
-        label: "Company Name",
+        label: t("users.company_name"),
         field: "company_name",
         align: "left",
         sortable: false,
     },
     {
         name: "email",
-        label: "Email",
+        label: t("users.email"),
         field: "email",
         align: "left",
         sortable: true,
     },
     {
         name: "role",
-        label: "Role",
+        label: t("users.role"),
         field: "role",
         align: "left",
         sortable: false,
     },
     {
         name: "status",
-        label: "Status",
+        label: t("status"),
         field: "is_active",
         align: "left",
         sortable: false,
     },
     {
         name: "created_at",
-        label: "Creation Date",
+        label: t("creation_date"),
         field: "created_at",
         align: "left",
         sortable: true,
     },
-    { label: "Actions", name: "actions", field: "actions", align: "center" },
-];
+    { label: t("actions"), name: "actions", field: "actions", align: "center" },
+]);
 
-const filters = [
+const filters = computed(() => [
     {
         name: "role",
-        label: "Role",
+        label: t("users.role"),
         type: "enum",
         resource: "admin/users/roles",
         optionLabel: "label",
@@ -192,10 +193,10 @@ const filters = [
     },
     {
         name: "created_at",
-        label: "Creation Date",
+        label: t("creation_date"),
         type: "date",
     },
-];
+]);
 
 const search = ref("");
 const openDeleteConfirmationModal = ref(false);
@@ -209,14 +210,14 @@ const newUserAccountStatus = ref(false);
 
 const userAccountStatusChangeModalTitle = computed(() => {
     return newUserAccountStatus.value === "activate"
-        ? "Activate User Account"
-        : "Deactivate User Account";
+        ? t("users.activate_user_account")
+        : t("users.deactivate_user_account");
 });
 
 const userAccountStatusChangeActionLabel = computed(() => {
     return newUserAccountStatus.value === "activate"
-        ? "Activate"
-        : "Deactivate";
+        ? t("activate")
+        : t("deactivate");
 });
 
 const userAccountStatusChangeLoading = computed(() => {

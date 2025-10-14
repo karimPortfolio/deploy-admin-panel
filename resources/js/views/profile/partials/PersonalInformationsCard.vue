@@ -1,16 +1,16 @@
 <template>
     <q-card >
         <q-card-section class="pb-0">
-            <div class="font-medium">Personal informations</div>
+            <div class="font-medium">{{ $t('profile.personal_info') }}</div>
         </q-card-section>
         <q-separator class="mt-3 mx-4" />
         <q-card-section class="mt-0">
             <q-form>
                 <div class="grid sm:grid-cols-3">
                     <div>
-                        <div class="text-sm">Your photo</div>
+                        <div class="text-sm">{{ $t('profile.photo.label') }}</div>
                         <div class="dark:text-gray-400 text-gray-600 text-xs">
-                            These will be displayed on your profile
+                            {{ $t('profile.photo.subtitle') }}
                         </div>
                     </div>
                     <div class="mt-5 sm:mt-0 col-span-2 flex gap-5 sm:gap-10 items-center">
@@ -29,13 +29,13 @@
                         </q-avatar>
                         <div class="flex gap-3">
                             <q-btn
-                                :label="$q.screen.lt.sm ? 'Change' : 'Change photo'"
+                                :label="$q.screen.lt.sm ? $t('profile.photo.change') : $t('profile.photo.change_photo')"
                                 color="primary"
                                 unelevated
                                 @click="openFileSelector"
                             />
                             <q-btn
-                                :label="$q.screen.lt.sm ? 'Delete' : 'Delete photo'"
+                                :label="$q.screen.lt.sm ? $t('profile.photo.remove') : $t('profile.photo.remove_photo')"
                                 color="red"
                                 outline
                                 unelevated
@@ -50,7 +50,7 @@
 
                 <div class="mt-5 grid sm:grid-cols-3">
                     <div>
-                        <div class="text-sm">Name</div>
+                        <div class="text-sm">{{ $t('name') }}</div>
                     </div>
                     <div class="col-span-2 mt-3 sm:mt-0">
                         <q-input
@@ -68,7 +68,7 @@
 
                 <div class="mt-5 grid sm:grid-cols-3">
                     <div>
-                        <div class="text-sm">Company Name</div>
+                        <div class="text-sm">{{ $t('users.company_name') }}</div>
                     </div>
                     <div class="col-span-2 mt-3 sm:mt-0">
                         <q-input
@@ -86,7 +86,7 @@
 
                 <div class="mt-5 grid sm:grid-cols-3">
                     <div>
-                        <div class="text-sm">Email Address</div>
+                        <div class="text-sm">{{ $t('users.email') }}</div>
                     </div>
                     <div class="col-span-2 mt-3 sm:mt-0">
                         <q-input
@@ -104,7 +104,7 @@
 
                 <div class="mt-6 flex justify-end">
                     <q-btn
-                        label="Save"
+                        :label=" $t('save')"
                         icon="sym_r_save"
                         color="primary"
                         unelevated

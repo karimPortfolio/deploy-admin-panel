@@ -5,7 +5,7 @@
             <q-btn
                 class="md:hidden"
                 icon="filter_list"
-                label="Filters"
+                :label="$t('filters')"
                 @click="drawerOpen = true"
                 flat
             />
@@ -35,7 +35,9 @@
                     style="min-width: 300px; max-width: 350px"
                 >
                     <div class="flex flex-col gap-3">
-                        <div class="font-medium" >Filter by</div>
+                        <div class="font-medium">
+                            {{ $t("filter_by") }}
+                        </div>
                         <FilterField
                             v-for="filter in filtersList"
                             :key="filter.name"
@@ -49,14 +51,14 @@
 
                     <div class="flex flex-nowrap justify-between gap-2">
                         <q-btn
-                            label="Clear Filters"
+                            :label="$t('clear_filters')"
                             color="negative"
                             unelevated
                             flat
                             @click="clearFilters"
                         />
                         <q-btn
-                            label="Apply Filters"
+                            :label="$t('apply_filters')"
                             icon="sym_r_filter_alt"
                             color="primary"
                             unelevated
@@ -76,7 +78,7 @@
             class="bg-white p-4"
         >
             <div class="flex justify-between items-center mb-4">
-                <div class="text-lg font-semibold">Filters</div>
+                <div class="text-lg font-semibold">{{ $t("filters") }}</div>
                 <q-btn flat icon="close" @click="drawerOpen = false" />
             </div>
 
@@ -91,7 +93,7 @@
 
             <div class="flex justify-between gap-2 mt-6">
                 <q-btn
-                    label="Clear Filters"
+                    :label="$t('clear_filters')"
                     color="negative"
                     outline
                     class="w-full"
@@ -99,7 +101,7 @@
                     @click="clearFilters"
                 />
                 <q-btn
-                    label="Apply Filters"
+                    :label="$t('apply_filters')"
                     color="primary"
                     class="w-full"
                     icon="sym_r_filter_list"

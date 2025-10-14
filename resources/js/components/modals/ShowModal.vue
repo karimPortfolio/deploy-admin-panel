@@ -6,7 +6,7 @@
                     <template v-if="icon">
                         <q-icon :name="icon" class="q-mr-sm" size="sm" />
                     </template>
-                    {{ title }}
+                    {{ $t(title) }}
                 </div>
                 <q-space />
                 <q-btn icon="close" flat round dense v-close-popup />

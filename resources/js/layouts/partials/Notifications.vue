@@ -19,7 +19,7 @@
                     class="flex justify-between items-center flex-nowrap py-3 px-4"
                 >
                     <div class="flex items-center gap-2">
-                        <h3 class="text-lg font-medium">Notifications</h3>
+                        <h3 class="text-lg font-medium">{{ $t('notifications.title') }}</h3>
                         <q-badge
                             v-if="unreadNotificationsCount > 0"
                             class="bg-blue-100 rounded-full py-1 text-blue-500 maw-h-0"
@@ -31,12 +31,13 @@
                             role="button"
                             class="text-primary text-sm font-medium"
                             @click="markAllAsRead()"
+                            :title="$t('notifications.mark_all_as_read')"
                         >
                             <q-icon
                                 name="sym_r_done_all"
                                 class="text-sm me-1"
                             />
-                            Mark all as read
+                            {{ truncate($t('notifications.mark_all_as_read'), 12) }}
                         </a>
                     </div>
                 </div>
@@ -47,7 +48,7 @@
                             <q-item
                                 v-for="(notification, index) in notifications"
                                 :key="`notification-${index}`"
-                                clickable
+                                :clickable="notification.data.link !== null"
                                 class="py-4 border-b group w-full"
                                 target="_blank"
                                 :href="notification.data.link"
@@ -110,7 +111,7 @@
                                                             anchor="top middle"
                                                             self="center middle"
                                                         >
-                                                            Make as read
+                                                            {{ $t('notifications.mark_as_read') }}
                                                         </q-tooltip>
                                                     </button>
                                                     <button
@@ -129,7 +130,7 @@
                                                             anchor="top middle"
                                                             self="center middle"
                                                         >
-                                                            Delete Notification
+                                                            {{ $t('notifications.delete') }}
                                                         </q-tooltip>
                                                     </button>
                                                 </div>
@@ -147,7 +148,11 @@
                                 src="/src/img/no-notifications.png"
                                 class="w-3/5"
                             />
-                            <div class="text-gray-600 dark:text-gray-400 text-lg mt-2 mb-5" >No Notifications available yet!</div>
+                            <div class="text-gray-600 dark:text-gray-400 text-lg mt-2 mb-5"
+                                :title="$t('notifications.no_notifications')" 
+                            >
+                                {{ truncate($t('notifications.no_notifications'), 40) }}
+                            </div>
                         </div>
                         <template v-slot:loading>
                             <div class="row justify-center q-my-md">
@@ -164,7 +169,9 @@
 import { useFetch } from "@/composables/useFetch";
 import { useQuasar } from "quasar";
 import { useResourceIndex } from "@/composables/useResourceIndex";
+import { useTextTruncate } from "@/composables/useTextTruncate";
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 // const toast = useToast();
 const showConfirmDeleteAllDialog = ref(false);
@@ -173,6 +180,8 @@ const showConfirmDeleteDialog = ref(false);
 const showPopup = ref(false);
 
 const $q = useQuasar();
+const { truncate } = useTextTruncate();
+const { t } = useI18n();
 
 const notifications = ref([]);
 
@@ -236,8 +245,8 @@ const { loading: markAllAsReadLoading, execute: markAllAsRead } = useFetch({
         appendNotifications();
         $q.notify({
             type: "positive",
-            message: "Success",
-            caption: "All notifications have been marked as read successfully.",
+            message: t('success'),
+            caption: t('notifications.marked_all_as_read_success'),
             position: "bottom-right",
             timeout: 3000,
         });
@@ -246,10 +255,10 @@ const { loading: markAllAsReadLoading, execute: markAllAsRead } = useFetch({
     onError(err) {
         $q.notify({
             type: "negative",
-            message: "Error",
+            message: t('error'),
             caption:
                 err.response.data.message ??
-                "Something went wrong. Please try again.",
+                t('something_went_wrong_error_msg'),
             closeBtn: true,
             timeout: 3000,
         });
@@ -267,8 +276,8 @@ const { execute: deleteAll, loading: deleteAllLoading } = useFetch({
     onSuccess() {
         $q.notify({
             type: "positive",
-            message: "Success",
-            caption: "All notifications have been deleted successfully.",
+            message: t('success'),
+            caption: t('notifications.all_deleted_success'),
             position: "bottom-right",
             timeout: 3000,
         });
@@ -279,10 +288,10 @@ const { execute: deleteAll, loading: deleteAllLoading } = useFetch({
     onError(err) {
         $q.notify({
             type: "negative",
-            message: "Error",
+            message: t('error'),
             caption:
                 err.response.data.message ??
-                "Something went wrong. Please try again.",
+                t('something_went_wrong_error_msg'),
             closeBtn: true,
             timeout: 3000,
         });
@@ -304,8 +313,8 @@ const { execute: markAsRead } = useFetch({
 
     onError() {
         toast.add({
-            message: "Something went wrong. Please try again.",
-            title: "Error",
+            message: t('something_went_wrong_error_msg'),
+            title: t('error'),
             position: "bottom-right",
             closeable: true,
             type: "error",
@@ -328,10 +337,10 @@ const { execute: fetchUnreceivedNotification } = useFetch({
     onError() {
         $q.notify({
             type: "negative",
-            message: "Error",
+            message: t('error'),
             caption:
                 err.response.data.message ??
-                "Something went wrong. Please try again.",
+                t('something_went_wrong_error_msg'),
             closeBtn: true,
             timeout: 3000,
         });
@@ -348,8 +357,8 @@ const { execute: destroy } = useFetch({
     onSuccess() {
         $q.notify({
             type: "positive",
-            message: "Success",
-            caption: "Notification has been deleted successfully.",
+            message: t('success'),
+            caption: t('notifications.deleted_success'),
             position: "bottom-right",
             timeout: 3000,
         });
@@ -359,10 +368,10 @@ const { execute: destroy } = useFetch({
     onError(err) {
         $q.notify({
             type: "negative",
-            message: "Error",
+            message: t('error'),
             caption:
                 err.response.data.message ??
-                "Something went wrong. Please try again.",
+                t('something_went_wrong_error_msg'),
             closeBtn: true,
             timeout: 3000,
         });

@@ -3,7 +3,7 @@
         <q-card-section class="flex items-center justify-between">
             <div class="flex items-center gap-2">
                 <q-icon name="sym_r_host" color="warning" size="sm" />
-                <div class="font-medium">Total Servers By Security Groups</div>
+                <div class="font-medium" :title="$t('servers.total_by_security_group')" >{{ truncate($t("servers.total_by_security_group"), 40) }}</div>
             </div>
             <!-- <div>
                 <q-select
@@ -27,7 +27,7 @@
         </q-card-section>
         <q-card-section v-else class="pb-0">
             <warning-alert
-                message="No data available currently. Please try again later."
+                message="no_data_available_msg"
             />
         </q-card-section>
         <q-inner-loading :showing="loading">

@@ -10,8 +10,8 @@
                     <q-card class="flex flex-col justify-center items-center my-auto sm:shadow-lg shadow-none sm:rounded-xl rounded-none sm:max-w-md max-w-full mx-auto w-full">
                         <!-- Logo/Brand Section -->
                         <q-card-section class="text-center pt-8">
-                            <h1 class="text-3xl font-bold text-primary mb-2">Forgot Password</h1>
-                            <p class="text-gray-600 dark:text-gray-400">Enter your email to reset your password</p>
+                            <h1 class="text-3xl font-bold text-primary mb-2">{{ $t("forgot_password_title") }}</h1>
+                            <p class="text-gray-600 dark:text-gray-400">{{ $t("forgot_password_subtitle") }}</p>
                         </q-card-section>
 
                         <!-- Form Section -->
@@ -19,7 +19,7 @@
                             <q-form @submit="handleLogin" class="q-gutter-y-md">
                                 <q-input
                                     v-model="credentials.email"
-                                    label="Email"
+                                    :label="$t('users.email')"
                                     lazy-rules
                                     :error-message="messages.email?.[0]"
                                     :error="'email' in messages"
@@ -32,8 +32,8 @@
                                 </q-input>
 
                                 <q-btn
-                                    label="Reset Password"
-                                    @click="handleForgetPassword"
+                                    :label="$t('reset_password')"
+                                    @click="handleForgotPassword"
                                     class="w-full bg-primary text-white q-py-md rounded-lg"
                                     color="primary"
                                     :loading="loading"
@@ -43,7 +43,7 @@
                                 <!-- Back to Login Link -->
                                 <div class="text-center q-mt-md">
                                     <router-link :to="{name: 'auth.login'}" class="text-primary text-sm">
-                                        Back to Login
+                                        {{ $t("back_to_login") }}
                                     </router-link>
                                 </div>
                             </q-form>
@@ -58,9 +58,9 @@
 import { onMounted, ref, watch } from "vue";
 import { useQuasar } from "quasar";
 import { useAuthStore } from "@/stores/auth";
-import SettingsDropdown from "./partials/SettingsDropdown.vue";
-import ImagesCarousel from "./partials/ImagesCarousel.vue";
 import AuthPageHeader from "./partials/AuthPageHeader.vue";
+import i18n from "../../plugins/i18n";
+import { useI18n } from "vue-i18n";
 
 const credentials = ref({});
 const loading = ref(false);
@@ -71,7 +71,9 @@ const $q = useQuasar();
 
 const authStore = useAuthStore();
 
-const handleForgetPassword = async () => {
+const { t } = useI18n();
+
+const handleForgotPassword = async () => {
     loading.value = true;
     try {
         await authStore.forgotPassword(credentials.value);
@@ -83,17 +85,23 @@ const handleForgetPassword = async () => {
             message: "Error",
             caption:
                 err.response?.data?.message ??
-                "Something went wrong. Please try again.",
+                t("something_went_wrong_error_msg"),
             type: "negative",
         });
     } finally {
         loading.value = false;
     }
 };
+
 const handleDarkMode = () => {
     const userPereference = localStorage.getItem("dark");
     $q.dark.set(JSON.parse(userPereference) || 'auto');
 }
+
+const handleInternationalization = () => {
+    const language = localStorage.getItem("language") ?? "en";
+    i18n.global.locale.value = language;
+};
 
 watch(
     () => authStore.errorMessages,
@@ -104,5 +112,8 @@ watch(
     }
 );
 
-onMounted(() => handleDarkMode());
+onMounted(() => {
+    handleDarkMode();
+    handleInternationalization();
+});
 </script>

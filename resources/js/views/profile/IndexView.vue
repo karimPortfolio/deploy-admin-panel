@@ -1,8 +1,8 @@
 <template>
     <q-page class="q-pa-md">
         <page-header
-            title="Profile"
-            subtitle="Manage your personal informations and password here"
+            title="profile.title"
+            subtitle="profile.subtitle"
             icon="sym_r_person"
         />
 

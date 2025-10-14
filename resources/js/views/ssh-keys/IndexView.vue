@@ -20,8 +20,7 @@
 
         <confirmation-modal
             v-model:open="openDeleteConfirmationModal"
-            title="Delete SSH Key"
-            :message="`Are you sure you want to delete this SSH key: ${itemToDelete?.name} ?`"
+            title="ssh_keys.delete"
             icon="warning"
             color="negative"
             :loading="destroying"
@@ -31,10 +30,10 @@
 
         <!-- ===== PAGE CONTENT === -->
         <page-header
-            title="SSH Keys"
-            subtitle="Manage your SSH keys"
+            title="ssh_keys.title"
+            subtitle="ssh_keys.subtitle"
             icon="key"
-            actionLabel="Create SSH Key"
+            actionLabel="ssh_keys.create"
             actionIcon="add"
             :action="() => openCreateModal=true"
         />
@@ -87,12 +86,13 @@ import { useResourceIndex } from "@/composables/useResourceIndex";
 import { useResourceDestroy } from "@/composables/useResourceDestroy";
 import FilterPanel from "@/components/FilterPanel.vue";
 import SearchBar from "@/components/SearchBar.vue";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import ActionsColumn from "./table-columns/ActionsColumn.vue";
 import CreateForm from "./CreateForm.vue";
 import EditForm from "./EditForm.vue";
 import ConfirmationModal from "@/components/modals/ConfirmationModal.vue";
 import ShowDetailsView from "./ShowDetailsView.vue";
+import { useI18n } from "vue-i18n";
 
 const {
     data: sshKeysData,
@@ -105,23 +105,24 @@ const {
 const { destroy, destroyed, destroying } =
     useResourceDestroy("ssh-keys");
 
-const columns = [
-    { name: 'id', label: 'ID', field: 'id', sortable: true, align: 'left' },
-    { name: 'name', label: 'Name', field: 'name', sortable: true, align: 'left' },
-    { name: 'public_key', label: 'Public Key', field: 'public_key', align: 'left' },
-    { name: 'servers_count', label: 'Assigned Servers', field: 'servers_count', align: 'center' },
-    { name: 'created_at', label: 'Creation Date', sortable: true, field: 'created_at', align: 'left' },
-    { name: 'actions', label: 'Actions', field: 'actions', align: 'center' }
-];
+const { t } = useI18n();
 
-const filters = [
+const columns = computed(() => [
+    { name: 'id', label: t("id"), field: 'id', sortable: true, align: 'left' },
+    { name: 'name', label: t("name"), field: 'name', sortable: true, align: 'left' },
+    { name: 'public_key', label: t("ssh_keys.public_key"), field: 'public_key', align: 'left' },
+    { name: 'servers_count', label: t("assigned_servers"), field: 'servers_count', align: 'center' },
+    { name: 'created_at', label: t("creation_details"), sortable: true, field: 'created_at', align: 'left' },
+    { name: 'actions', label: t("actions"), field: 'actions', align: 'center' }
+]);
+
+const filters = computed(() => [
     {
         name: 'created_at',
-        label: 'Creation Date',
+        label: t('creation_date'),
         type: 'date',
-        placeholder: 'Filter by date'
     }
-]
+]);
 
 const search = ref('');
 

@@ -1,5 +1,5 @@
 <template>
-    <show-modal title="Security Group Details" :loading="loading">
+    <show-modal title="security_groups.security_group_details" :loading="loading">
         >
         <template #content>
             <q-card class="shadow-none bg-transparent">
@@ -20,7 +20,7 @@
                     </div>
                     <!-- ======= NAME ======= -->
                     <div class="grid grid-cols-2 justify-between mt-5">
-                        <div class="text-subtitle2">Name</div>
+                        <div class="text-subtitle2">{{ $t("name") }}</div>
                         <div class="text-gray-700 dark:text-gray-400 text-end">
                             {{ securityGroup?.name }}
                         </div>
@@ -28,7 +28,7 @@
                     <!-- ======= VPC ID ======= -->
                     <q-separator class="mt-2" />
                     <div class="grid grid-cols-2 justify-between mt-3">
-                        <div class="text-subtitle2">VPC ID</div>
+                        <div class="text-subtitle2">{{ $t("vpc_id") }}</div>
                         <div class="text-gray-700 dark:text-gray-400 text-end">
                             {{ securityGroup?.vpc_id || "N/A" }}
                         </div>
@@ -36,11 +36,11 @@
                     <!-- ======= CREATION DATE ======= -->
                     <q-separator class="mt-2" />
                     <div class="grid grid-cols-2 justify-between mt-3">
-                        <div class="text-subtitle2">Creation Details</div>
+                        <div class="text-subtitle2">{{ $t("creation_details") }}</div>
                         <div class="text-gray-700 dark:text-gray-400 text-end">
                             {{ securityGroup?.created_at }}
                             <div class="text-sm">
-                                By
+                                {{ $t("by") }}
                                 <span class="text-primary">{{
                                     securityGroup?.created_by?.name
                                 }}</span>
@@ -50,7 +50,7 @@
                     <!-- ======= DESCRIPTION ======= -->
                     <q-separator class="mt-2" />
                     <div class="grid grid-cols-2 justify-between mt-3">
-                        <div class="text-subtitle2">Description</div>
+                        <div class="text-subtitle2">{{ $t("description") }}</div>
                         <div class="text-gray-700 dark:text-gray-400 text-end">
                             {{ securityGroup?.description || "N/A" }}
                         </div>
@@ -59,7 +59,7 @@
                     <!-- ======= ASSIGNED SERVERS ======= -->
                     <template v-if="servers && servers.length">
                         <q-separator class="mt-2" />
-                        <div class="mt-5">Assigned Servers</div>
+                        <div class="mt-5">{{ $t("assigned_servers") }}</div>
                         <div
                             class="grid grid-cols-2 gap-x-3 justify-between items-center"
                         >

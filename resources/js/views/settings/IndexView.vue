@@ -1,26 +1,26 @@
 <template>
     <q-page class="q-pa-md">
         <page-header
-            title="Settings"
-            subtitle="Manage your preferences here"
+            title="settings.title"
+            subtitle="settings.subtitle"
             icon="sym_r_settings"
         />
 
         <div class="mt-4">
             <q-card>
                 <q-card-section class="pb-0">
-                    <div class="font-medium">Preferences</div>
+                    <div class="font-medium">{{ $t("settings.preferences") }}</div>
                 </q-card-section>
                 <q-separator class="mt-3 mx-4" />
                 <q-card-section class="mt-0">
                     <q-form>
                         <div class="grid sm:grid-cols-3">
                             <div>
-                                <div class="text-sm">Dark Mode</div>
+                                <div class="text-sm">{{ $t("settings.theme.label") }}</div>
                                 <div
                                     class="dark:text-gray-400 text-gray-600 text-xs"
                                 >
-                                    Choice between dark and light themes
+                                    {{ $t("settings.theme.subtitle") }}
                                 </div>
                             </div>
                             <div class="col-span-2 flex gap-10 items-center">
@@ -36,7 +36,7 @@
                                             <div
                                                 class="cursor-pointer text-center q-pa-sm sm:q-pa-md border border-[#ddd] transition-all ease-in-out hover:ring-1 hover:ring-primary-300 rounded-md dark:border-gray-600"
                                                 :class="{
-                                                    'ring-2 ring-primary-700  text-primary':
+                                                    'ring-2 ring-primary-600  text-primary':
                                                         userPreferences.theme ===
                                                         option.value,
                                                 }"
@@ -69,11 +69,11 @@
 
                         <div class="mt-5 grid sm:grid-cols-3">
                             <div>
-                                <div class="text-sm">Language</div>
+                                <div class="text-sm">{{ $t("settings.language.label") }}</div>
                                 <div
                                     class="dark:text-gray-400 text-gray-600 text-xs"
                                 >
-                                    Choice your prefered language
+                                    {{ $t("settings.language.subtitle") }}
                                 </div>
                             </div>
 
@@ -87,7 +87,6 @@
                                     emit-value
                                     outlined
                                     hide-bottom-space
-                                    disable
                                     dense
                                 >
                                     <template v-slot:option="scope">
@@ -113,11 +112,11 @@
 
                         <div class="mt-5 grid sm:grid-cols-3">
                             <div>
-                                <div class="text-sm">Notifications</div>
+                                <div class="text-sm">{{ $t("settings.notifications.label") }}</div>
                                 <div
                                     class="dark:text-gray-400 text-gray-600 text-xs"
                                 >
-                                    Manage your notification preferences
+                                    {{ $t("settings.notifications.subtitle") }}
                                 </div>
                             </div>
 
@@ -126,7 +125,7 @@
                             <div>
                                 <q-toggle
                                     v-model="userPreferences.notification.email"
-                                    label="Email Notifications"
+                                    :label="$t('settings.notifications.email_notifications_label')"
                                     color="primary"
                                     class="q-mt-sm flex gap-1"
                                 />
@@ -134,7 +133,7 @@
                                     v-model="
                                         userPreferences.notification.system
                                     "
-                                    label="In-App Notifications"
+                                    :label="$t('settings.notifications.in_app_notifications_label')"
                                     color="primary"
                                     class="q-mt-sm flex gap-1 mt-0"
                                 />
@@ -145,7 +144,7 @@
 
                         <div class="mt-6 flex justify-end">
                             <q-btn
-                                label="Save"
+                                :label="$t('save')"
                                 icon="sym_r_save"
                                 color="primary"
                                 unelevated
@@ -162,57 +161,67 @@
 <script setup>
 import PageHeader from "@/components/PageHeader.vue";
 import { useAuthStore } from "@/stores/auth";
-import { onMounted, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useResourceUpdate } from "@/composables/useResourceUpdate";
+import { useI18n } from "vue-i18n";
 
 const { user, fetchProfile } = useAuthStore();
-const { update, updating, validation } = useResourceUpdate(() => `user/preferences/${user.preferences[0].id}`);
+const { update, updating, validation } = useResourceUpdate(
+    () => `user/preferences/${user.preferences[0].id}`
+);
+const { t } = useI18n();
 
-const themeOptions = [
+const themeOptions = computed(() => [
     {
         id: 1,
-        label: "System",
+        label: t("system"),
         value: "auto",
         img: "/src/img/system-placeholder.png",
     },
     {
         id: 2,
-        label: "Light",
+        label: t("light"),
         value: "false",
         img: "/src/img/light-mode-placeholder.png",
     },
     {
         id: 3,
-        label: "Dark",
+        label: t("dark"),
         value: "true",
         img: "/src/img/dark-mode-placeholder.png",
     },
-];
+]);
 
-const languagesOptions = [
+const languagesOptions = computed(() => [
     {
         id: 1,
-        label: "English",
+        label: t("settings.language.english"),
         value: "en",
         img: "/src/img/flags/english-img.png",
     },
     {
         id: 2,
-        label: "French",
+        label: t("settings.language.french"),
         value: "fr",
         img: "/src/img/flags/french-img.png",
     },
     {
         id: 3,
-        label: "Arabic",
-        value: "ar",
-        img: "/src/img/flags/arabic-img.png",
+        label: t("settings.language.german"),
+        value: "de",
+        img: "/src/img/flags/german-img.png",
     },
-];
+    {
+        id: 4,
+        label: t("settings.language.spanish"),
+        value: "es",
+        img: "/src/img/flags/spain-img.png",
+    },
+]);
 
 const userPreferences = ref({
-    theme: 'auto',
-    language: 'en',
+    theme: "auto",
+    language: "en",
     notification: {
         email: true,
         system: true,
@@ -226,7 +235,7 @@ const handleThemeChange = (option) => {
 const handlePreferencesUpdate = async () => {
     await update(null, userPreferences.value);
 
-    handleSaved();  
+    handleSaved();
 };
 
 const handleSaved = async () => {
@@ -237,9 +246,13 @@ const handleSaved = async () => {
     }, 300);
 };
 
-watch(() => user.preferences, (newValue) => {
-    if (newValue && newValue.length > 0) {
-        userPreferences.value = { ...newValue[0].preferences };
-    }
-}, { immediate: true });
+watch(
+    () => user.preferences,
+    (newValue) => {
+        if (newValue && newValue.length > 0) {
+            userPreferences.value = { ...newValue[0].preferences };
+        }
+    },
+    { immediate: true }
+);
 </script>

@@ -14,10 +14,10 @@
                         >
                             <q-card-section class="w-full text-center pt-8">
                                 <div class="text-bold text-h4 text-primary">
-                                    Reset Password
+                                    {{ $t("reset_password") }}
                                 </div>
                                 <div class="text-gray-600 text-sm">
-                                    Enter your new password below
+                                    {{ $t("reset_password_subtitle") }}
                                 </div>
                             </q-card-section>
 
@@ -28,7 +28,7 @@
                                 >
                                     <q-input
                                         v-model="credentials.email"
-                                        label="Email"
+                                        :label="$t('users.email')"
                                         lazy-rules
                                         :error-message="messages.email?.[0]"
                                         :error="'email' in messages"
@@ -46,7 +46,7 @@
                                     <q-input
                                         type="password"
                                         v-model="credentials.password"
-                                        label="Password"
+                                        :label="$t('users.password')"
                                         lazy-rules
                                         :error-message="messages.password?.[0]"
                                         :error="'password' in messages"
@@ -64,7 +64,7 @@
                                         v-model="
                                             credentials.password_confirmation
                                         "
-                                        label="Password Confirmation"
+                                        :label="$t('profile.password.confirm_password')"
                                         lazy-rules
                                         :error-message="
                                             messages.password_confirmation?.[0]
@@ -83,7 +83,7 @@
                                     </q-input>
 
                                     <q-btn
-                                        label="Reset Password"
+                                        :label="$t('reset_password')"
                                         @click="handleResetPassword"
                                         :loading="loading"
                                         class="w-full bg-primary text-white q-py-md rounded-lg"
@@ -109,6 +109,8 @@ import { useAuthStore } from "@/stores/auth";
 import { useRoute } from "vue-router";
 import SettingsDropdown from "./partials/SettingsDropdown.vue";
 import AuthPageHeader from "./partials/AuthPageHeader.vue";
+import { useI18n } from "vue-i18n";
+import i18n from "../../plugins/i18n";
 
 const credentials = ref({});
 const loading = ref(false);
@@ -120,6 +122,8 @@ const route = useRoute();
 const $q = useQuasar();
 
 const authStore = useAuthStore();
+
+const { t } = useI18n();
 
 const handleResetPassword = async () => {
     loading.value = true;
@@ -135,7 +139,7 @@ const handleResetPassword = async () => {
             message: "Error",
             caption:
                 err.response?.data?.message ??
-                "Something went wrong. Please try again.",
+                t("something_went_wrong_error_msg"),
             type: "negative",
         });
     } finally {
@@ -147,6 +151,11 @@ const handleDarkMode = () => {
     const userPereference = localStorage.getItem("dark");
     $q.dark.set(JSON.parse(userPereference) || 'auto');
 }
+
+const handleInternationalization = () => {
+    const language = localStorage.getItem("language") ?? "en";
+    i18n.global.locale.value = language;
+};
 
 watch(
     () => authStore.errorMessages,
@@ -161,5 +170,6 @@ onMounted(() => {
     credentials.value.email = route.query.email;
     credentials.value.token = route.query.token;
     handleDarkMode();
+    handleInternationalization();
 });
 </script>

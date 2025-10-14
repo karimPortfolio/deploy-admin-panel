@@ -3,7 +3,7 @@
         <q-card-section class="flex items-center justify-between">
             <div class="flex items-center gap-2">
                 <q-icon name="sym_r_security" color="green" size="sm" />
-                <div class="font-medium">Security Group Monthly Total</div>
+                <div class="font-medium" :title="$t('security_groups.monthly_total')" >{{ truncate($t("security_groups.monthly_total") ,40) }}</div>
             </div>
             <div>
                 <q-select
@@ -34,6 +34,8 @@
 import { computed, onMounted, ref, watch } from "vue";
 import { useResourceIndex } from "@/composables/useResourceIndex";
 import { useQuasar } from "quasar";
+import { useTextTruncate } from "@/composables/useTextTruncate";
+import { useI18n } from "vue-i18n";
 
 const currentYear = new Date().getFullYear();
 const selectedYear = ref(currentYear);
@@ -42,13 +44,16 @@ const { data, fetch, loading } = useResourceIndex(
     "dashboard/monthly-security-groups-total"
 );
 
+const { truncate } = useTextTruncate();
+const { t } = useI18n();
+
 const $q = useQuasar();
 
 const categories = computed(() => {
     if (!data.value || !Array.isArray(data.value)) return [];
 
     return data.value.map((v) => {
-        return v.month;
+        return t(`months.${v.month}`);
     });
 });
 
@@ -111,15 +116,6 @@ const chartOptions = computed(() => {
         theme: {
             mode: $q.dark.isActive ? "dark" : "light",
         },
-        // tooltip: {
-        //     custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-        //         const value = series[seriesIndex][dataPointIndex];
-        //         const label = w.globals.labels[dataPointIndex];
-        //         return `<div class="my-tooltip">
-        //       <strong>${label}</strong>: ${value}%
-        //     </div>`;
-        //     },
-        // },
     };
 });
 
@@ -132,7 +128,7 @@ const series = computed(() => {
 
     return [
         {
-            name: "Security Groups",
+            name: t("security_groups.title"),
             color: "#00a63e",
             data: values,
         },

@@ -2,7 +2,7 @@
     <template>
         <form-modal
             v-model:open="open"
-            title="Create New User"
+            title="users.create"
             form="user-creation-form"
             @close="handleClose"
             :loading="creating"
@@ -16,7 +16,7 @@
                     <q-input
                         dense
                         v-model="newUser.name"
-                        label="Name*"
+                        :label="$t('name')+'*'"
                         :error-message="validation.name?.[0]"
                         :error="'name' in validation"
                         outlined
@@ -26,7 +26,7 @@
                     <q-input
                         dense
                         v-model="newUser.company_name"
-                        label="Company Name"
+                        :label="$t('users.company_name')"
                         :error-message="validation.company_name?.[0]"
                         :error="'company_name' in validation"
                         outlined
@@ -35,7 +35,7 @@
                     <q-input
                         dense
                         v-model="newUser.email"
-                        label="Email*"
+                        :label="$t('users.email')+'*'"
                         :error-message="validation.email?.[0]"
                         :error="'email' in validation"
                         outlined
@@ -46,7 +46,7 @@
                         dense
                         v-model="newUser.role"
                         :options="rolesOptions"
-                        label="Role"
+                        :label="$t('users.role')"
                         :error-message="validation.role?.[0]"
                         :error="'role' in validation"
                         outlined
@@ -55,7 +55,7 @@
 
                     <q-toggle
                         v-model="newUser.is_active"
-                        label="Active Account"
+                        :label="$t('users.activate_user_account')"
                         color="primary"
                         dense
                         class="flex"
@@ -70,16 +70,20 @@
 import { useResourceCreate } from "@/composables/useResourceCreate";
 import { ref } from "vue";
 import FormModal from "@/components/modals/FormModal.vue";
+import { useI18n } from "vue-i18n";
 
 const open = defineModel("open");
 const emit = defineEmits(["created"]);
+
+const { t } = useI18n();
+
 const newUser = ref({
     is_active: true,
 });
 
 const rolesOptions = [
-    { label: "Admin", value: "admin" },
-    { label: "User", value: "user" },
+    { label: t("users.admin"), value: "admin" },
+    { label: t("users.user"), value: "user" },
 ];
 
 const { create, creating, validation } = useResourceCreate("admin/users");

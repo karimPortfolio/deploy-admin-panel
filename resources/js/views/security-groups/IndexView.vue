@@ -13,8 +13,7 @@
 
         <confirmation-modal
             v-model:open="openDeleteConfirmationModal"
-            title="Delete Security Group"
-            :message="`Are you sure you want to delete this security group: ${itemToDelete?.group_id} ?`"
+            title="security_groups.delete"
             icon="warning"
             color="negative"
             :loading="destroying"
@@ -24,10 +23,10 @@
 
         <!-- ======= MAIN CONTENT ======== -->
         <page-header
-            title="Security Groups"
-            subtitle="Manage your security groups"
+            title="security_groups.title"
+            subtitle="security_groups.subtitle"
             icon="security"
-            actionLabel="Create Security Group"
+            actionLabel="security_groups.create"
             actionIcon="sym_r_add"
             :action="() => (openCreationModal = true)"
         />
@@ -85,7 +84,7 @@
 </template>
 <script setup>
 import PageHeader from "@/components/PageHeader.vue";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { useResourceIndex } from "@/composables/useResourceIndex";
 import { useResourceDestroy } from "@/composables/useResourceDestroy";
 import { useTextTruncate } from "@/composables/useTextTruncate";
@@ -95,57 +94,60 @@ import ActionsColumn from "./table-columns/ActionsColumn.vue";
 import CreateView from "./CreateView.vue";
 import ConfirmationModal from "@/components/modals/ConfirmationModal.vue";
 import ShowDetailsView from "./ShowDetailsView.vue";
+import { useI18n } from "vue-i18n";
 
-const columns = [
+const { t } = useI18n();
+
+const columns = computed(() => [
     {
         name: "id",
-        label: "ID",
+        label: t("id"),
         field: "id",
         align: "left",
         sortable: true,
     },
     {
         name: "group_id",
-        label: "Group ID",
+        label: t("security_groups.group_id"),
         field: "group_id",
         align: "left",
         sortable: true,
     },
     {
         name: "name",
-        label: "Name",
+        label: t("name"),
         field: "name",
         align: "left",
         sortable: true,
     },
     {
         name: "vpc_id",
-        label: "VPC ID",
+        label: t("vpc_id"),
         field: "vpc_id",
         align: "left",
         sortable: true,
     },
     {
         name: "servers_count",
-        label: "Assigned Servers",
+        label: t("assigned_servers"),
         field: "servers_count",
         align: "center",
         sortable: true,
     },
     {
         name: "created_at",
-        label: "Creation Date",
+        label: t("creation_details"),
         field: "created_at",
         align: "left",
         sortable: true,
     },
-    { label: "Actions", name: "actions", field: "actions", align: "center" },
-];
+    { label: t("actions"), name: "actions", field: "actions", align: "center" },
+]);
 
-const filters = [
+const filters = computed(() => [
     {
         name: "vpc_id",
-        label: "VPC ID",
+        label: t("vpc_id"),
         type: "relation",
         resource: "vpcs",
         optionLabel: "vpc_id",
@@ -153,10 +155,10 @@ const filters = [
     },
     {
         name: "created_at",
-        label: "Creation Date",
+        label: t("creation_date"),
         type: "date",
     },
-];
+]);
 
 const search = ref("");
 const openCreationModal = ref(false);

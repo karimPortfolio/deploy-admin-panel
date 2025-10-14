@@ -1,5 +1,5 @@
 <template>
-    <show-modal title="Security Group Details" :loading="loading"> >
+    <show-modal title="security_groups.security_group_details" :loading="loading"> >
         <template #content>
             <q-card class="shadow-none bg-transparent">
                 <q-card-section class="p-0 flex justify-center items-center">
@@ -14,8 +14,9 @@
                         {{ securityGroup?.group_id }}
                     </div>
                     <!-- ======= NAME ======= -->
+                    <!-- ======= NAME ======= -->
                     <div class="grid grid-cols-2 justify-between mt-5">
-                        <div class="text-subtitle2">Name</div>
+                        <div class="text-subtitle2">{{ $t("name") }}</div>
                         <div class="text-gray-700 dark:text-gray-400 text-end">
                             {{ securityGroup?.name }}
                         </div>
@@ -23,7 +24,7 @@
                     <!-- ======= VPC ID ======= -->
                     <q-separator class="mt-2" />
                     <div class="grid grid-cols-2 justify-between mt-3">
-                        <div class="text-subtitle2">VPC ID</div>
+                        <div class="text-subtitle2">{{ $t("vpc_id") }}</div>
                         <div class="text-gray-700 dark:text-gray-400 text-end">
                             {{ securityGroup?.vpc_id || "N/A" }}
                         </div>
@@ -31,7 +32,7 @@
                     <!-- ======= CREATION DATE ======= -->
                     <q-separator class="mt-2" />
                     <div class="grid grid-cols-2 justify-between mt-3">
-                        <div class="text-subtitle2">Creation Date</div>
+                        <div class="text-subtitle2">{{ $t("creation_date") }}</div>
                         <div class="text-gray-700 dark:text-gray-400 text-end">
                             {{ securityGroup?.created_at }}
                         </div>
@@ -39,50 +40,60 @@
                     <!-- ======= DESCRIPTION ======= -->
                     <q-separator class="mt-2" />
                     <div class="grid grid-cols-2 justify-between mt-3">
-                        <div class="text-subtitle2">Description</div>
+                        <div class="text-subtitle2">{{ $t("description") }}</div>
                         <div class="text-gray-700 dark:text-gray-400 text-end">
                             {{ securityGroup?.description || "N/A" }}
                         </div>
                     </div>
-                    
+
                     <!-- ======= ASSIGNED SERVERS ======= -->
-                    <template v-if="servers && servers.length" >
+                    <template v-if="servers && servers.length">
                         <q-separator class="mt-2" />
-                        <div class="mt-5">Assigned Servers</div>
+                        <div class="mt-5">{{ $t("assigned_servers") }}</div>
                         <div
                             class="grid grid-cols-2 gap-x-3 justify-between items-center"
                         >
-                            <q-card
+                            <template
                                 v-for="server in servers"
                                 :key="server.id"
-                                class="w-full flex flex-nowrap gap-2 items-center p-3 border mt-3"
                             >
-                                <q-card-section class="p-0">
-                                    <div
-                                        class="p-2 w-fit rounded-md bg-primary-50"
+                                <router-link :to="{ name: 'admin.servers.show', params: { id: server.id } }">
+                                    <q-card
+                                        class="w-full flex flex-nowrap gap-2 items-center p-3 border mt-3"
                                     >
-                                        <q-icon
-                                            name="sym_r_host"
-                                            size="sm"
-                                            class="text-primary"
-                                        />
-                                    </div>
-                                </q-card-section>
-                                <q-card-section class="p-0">
-                                    <div class="text-sm font-medium">
-                                        {{ server.instance_id }}
-                                    </div>
-                                    <div class="w-fit">
-                                        <q-badge
-                                            :text-color="server.status.color"
-                                            size="xs"
-                                            class="q-mt-xs"
-                                        >
-                                            {{ server.status.label }}
-                                        </q-badge>
-                                    </div>
-                                </q-card-section>
-                            </q-card>
+                                        <q-card-section class="p-0">
+                                            <div
+                                                class="p-2 w-fit rounded-md bg-primary-50"
+                                            >
+                                                <q-icon
+                                                    name="sym_r_host"
+                                                    size="sm"
+                                                    class="text-primary"
+                                                />
+                                            </div>
+                                        </q-card-section>
+                                        <q-card-section class="p-0">
+                                            <div v-if="server.instance_id && server.instance_id !== null" class="text-sm font-medium">
+                                                {{ server.instance_id }}
+                                            </div>
+                                            <div v-else class="text-sm font-medium">
+                                                N/A
+                                            </div>
+                                            <div class="w-fit">
+                                                <q-badge
+                                                    :text-color="
+                                                        server.status.color
+                                                    "
+                                                    size="xs"
+                                                    class="q-mt-xs"
+                                                >
+                                                    {{ server.status.label }}
+                                                </q-badge>
+                                            </div>
+                                        </q-card-section>
+                                    </q-card>
+                                </router-link>
+                            </template>
                         </div>
                     </template>
                 </q-card-section>

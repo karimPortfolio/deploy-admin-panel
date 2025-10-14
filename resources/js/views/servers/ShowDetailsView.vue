@@ -4,25 +4,25 @@
         <q-card class="p-4">
             <q-card-section class="p-0 flex items-center gap-2 pb-4">
                 <q-icon name="sym_r_host" color="primary" size="sm" />
-                <h4 class="font-meduim text-lg">Server details</h4>
+                <h4 class="font-meduim text-lg">{{ $t("servers.server_details") }}</h4>
             </q-card-section>
             <q-card-section
                 class="grid grid-cols-1 sm:grid-cols-2 gap-y-2 sm:gap-y-0 p-0"
             >
                 <div class="q-gutter-xs pb-3 text-sm">
-                    <div>Name</div>
+                    <div>{{ $t("name") }}</div>
                     <div class="text-gray-600 dark:text-gray-400">
                         {{ server?.name }}
                     </div>
                 </div>
                 <div class="q-gutter-xs pb-3 text-sm">
-                    <div>Instance ID</div>
+                    <div>{{ $t("servers.instance_id") }}</div>
                     <div class="text-gray-600 dark:text-gray-400">
                         {{ server?.instance_id }}
                     </div>
                 </div>
                 <div class="q-gutter-xs pb-3 text-sm">
-                    <div>Security Group</div>
+                    <div>{{ $t("security_groups.title") }}</div>
                     <div class="text-gray-600 dark:text-gray-400">
                         {{ server?.security_group?.group_id }}
                     </div>
@@ -40,31 +40,31 @@
                     </div>
                 </div>
                 <div class="q-gutter-xs pb-3 text-sm">
-                    <div>Instance Type</div>
+                    <div>{{ $t("servers.instance_type") }}</div>
                     <div class="text-gray-600 dark:text-gray-400">
                         {{ server?.instance_type?.value }}
                     </div>
                 </div>
                 <div class="q-gutter-xs pb-3 text-sm">
-                    <div>OS Family</div>
+                    <div>{{ $t("servers.os_family") }}</div>
                     <div class="text-gray-600 dark:text-gray-400">
                         {{ server?.os_family?.label }}
                     </div>
                 </div>
                 <div class="q-gutter-xs pb-3 text-sm">
-                    <div>Image ID</div>
+                    <div>{{ $t("servers.image_id") }}</div>
                     <div class="text-gray-600 dark:text-gray-400">
                         {{ server?.image_id }}
                     </div>
                 </div>
                 <div class="q-gutter-xs pb-3 text-sm">
-                    <div>Public IP Address</div>
+                    <div>{{ $t("servers.public_ip_address") }}</div>
                     <div class="text-gray-600 dark:text-gray-400">
                         {{ server?.public_ip_address }}
                     </div>
                 </div>
                 <div class="q-gutter-xs pb-3 text-sm">
-                    <div>Status</div>
+                    <div>{{ $t("status") }}</div>
                     <q-badge
                         :text-color="server?.status?.color"
                         size="xs"
@@ -74,7 +74,7 @@
                     </q-badge>
                 </div>
                 <div class="q-gutter-xs pb-3 text-sm">
-                    <div>SSH Key</div>
+                    <div>{{ $t("servers.ssh_key") }}</div>
                     <div
                         v-if="server?.ssh_key?.name"
                         class="text-gray-600 dark:text-gray-400"
@@ -86,16 +86,16 @@
                     </div>
                 </div>
             </q-card-section>
-            <q-card-secttion>
+            <q-card-section>
                 <q-inner-loading :showing="loading" class="rounded-lg" >
                     <q-spinner-tail color="primary" size="40px" />
                 </q-inner-loading>
-            </q-card-secttion>
+            </q-card-section>
         </q-card>
     </q-page>
 </template>
 <script setup>
-import { computed, onMounted, watch } from "vue";
+import { onMounted } from "vue";
 import PageHeader from "@/components/PageHeader.vue";
 import { useResourceShow } from "@/composables/useResourceShow";
 import { useTextTruncate } from "@/composables/useTextTruncate";
@@ -104,28 +104,6 @@ import { useRoute } from "vue-router";
 const { data: server, fetch, loading } = useResourceShow("servers");
 
 const route = useRoute();
-
-const dates = computed(() => {
-    return server.value?.statistics?.map((statistic) => {
-        return statistic.Timestamp;
-    });
-})
-
-const options = computed(() => ({
-    chart: {
-        id: "basic-bar",
-    },
-    xaxis: {
-        categories: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
-    },
-}));
-
-const series = computed(() => [
-    {
-        name: "Servers",
-        data: [30, 40, 45, 50, 49, 60, 70],
-    },
-]);
 
 onMounted(() => {
     const serverId = route.params.id;

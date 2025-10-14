@@ -57,6 +57,12 @@ import ProfileDropdown from "./partials/ProfileDropdown.vue";
 import { useQuasar } from "quasar";
 import Header from "./partials/Header.vue";
 import LinkItem from "../components/LinkItem.vue";
+import i18n from "../plugins/i18n";
+import langEng from "quasar/lang/en-US";
+import langDe from "quasar/lang/de";
+import langFr from "quasar/lang/fr";
+import langEs from "quasar/lang/es";
+import { useI18n } from "vue-i18n";
 
 const drawer = ref(true);
 
@@ -64,65 +70,73 @@ const handleDrawerToggling = () => {
     drawer.value = !drawer.value;
 };
 
+const { t } = useI18n();
 const $q = useQuasar();
 
-const userDrawerItems = [
+const userDrawerItems = computed(() => [
     {
-        label: "Dashboard",
+        label: "dashboard",
         icon: "sym_r_dashboard",
         route: { name: "dashboard" },
         exact: true,
     },
     {
-        label: "Servers",
+        label: "servers.title",
         icon: "sym_r_host",
         route: { name: "servers.index" },
     },
     {
-        label: "Security Groups",
+        label: "security_groups.title",
         icon: "sym_r_security",
         route: { name: "security-groups" },
     },
     {
-        label: "SSH Keys",
+        label: "ssh_keys.title",
         icon: "sym_r_key",
         route: { name: "ssh-keys" },
     },
-];
+]);
 
-const adminDrawerItems = [
-     {
-        label: "Dashboard",
+const adminDrawerItems = computed(() => [
+    {
+        label: "dashboard",
         icon: "sym_r_dashboard",
         route: { name: "admin.dashboard" },
         exact: true,
     },
     {
-        label: "Users",
+        label: "users.title",
         icon: "sym_r_group",
         route: { name: "admin.users" },
     },
     {
-        label: "Servers",
+        label: "servers.title",
         icon: "sym_r_host",
         route: { name: "admin.servers.index" },
     },
     {
-        label: "Security Groups",
+        label: "security_groups.title",
         icon: "sym_r_security",
         route: { name: "admin.security-groups" },
     },
     {
-        label: "SSH Keys",
+        label: "ssh_keys.title",
         icon: "sym_r_key",
         route: { name: "admin.ssh-keys" },
     },
     {
-        label: "Monitoring",
+        label: "monitoring",
         icon: "sym_r_vital_signs",
         route: { name: "admin.monitoring" },
     },
-];
+]);
+
+const quasarLangs = {
+    en: langEng,
+    de: langDe,
+    fr: langFr,
+    es: langEs,
+};
 
 const authStore = useAuthStore();
 
@@ -131,10 +145,10 @@ const appName = ref("");
 
 const activeDrawerItems = computed(() => {
     if (user.value && user.value.role?.value === "admin") {
-        return adminDrawerItems;
+        return adminDrawerItems.value;
     }
 
-    return userDrawerItems;
+    return userDrawerItems.value;
 });
 
 const userPreferences = computed(() => {
@@ -163,9 +177,17 @@ const handleDarkMode = () => {
         $q.dark.set(userThemePreference);
         return;
     }
-    
+
     const darkMode = JSON.parse(userThemePreference) ?? "auto";
     $q.dark.set(darkMode);
+};
+
+const handleInternationalization = () => {
+    const userLang = userPreferences.value[0]?.preferences?.language ?? localStorage.getItem("language");
+    if (userLang) {
+        i18n.global.locale.value = userLang;
+        $q.lang.set(quasarLangs[userLang]);
+    }
 };
 
 onMounted(() => {
@@ -173,6 +195,7 @@ onMounted(() => {
     appName.value = import.meta.env.VITE_APP_NAME; //load from env
     setDarkModePreference();
     handleDarkMode();
+    handleInternationalization();
 });
 </script>
 <style scoped>

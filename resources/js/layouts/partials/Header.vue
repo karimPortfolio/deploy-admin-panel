@@ -15,8 +15,14 @@
                 icon="sym_r_menu"
                 @click="handleDrawerToggling"
             >
-                <q-tooltip v-if="$q.screen.gt.sm" anchor="center end" self="center middle" :offset="[55, 10]">
-                    {{ drawer ? 'Close' : 'Open' }} the sidebar
+                <q-tooltip
+                    v-if="$q.screen.gt.sm"
+                    anchor="center end"
+                    self="center middle"
+                    :offset="[63, 10]"
+                >
+                    <span v-if="drawer">{{ $t("close_sidebar") }}</span>
+                    <span v-else>{{ $t("open_sidebar") }}</span>
                 </q-tooltip>
             </q-btn>
             <!-- ============== SEARCH BAR =============== -->
@@ -48,7 +54,11 @@
                     flat
                     size="sm"
                     padding="sm"
-                    icon="dark_mode"
+                    :icon="
+                        $q.dark.isActive
+                            ? 'sym_r_light_mode'
+                            : 'sym_r_dark_mode'
+                    "
                     @click="handleDarkToggling"
                 />
             </div>

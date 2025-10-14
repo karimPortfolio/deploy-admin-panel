@@ -17,23 +17,21 @@
                         <h2
                             class="text-4xl font-bold text-gray-800 tracking-wider mb-4 transform hover:scale-105 transition-transform duration-300"
                         >
-                            Oops! Page Not Found
+                            {{ $t("not_found") }}
                         </h2>
 
                         <p
                             class="text-gray-600 mb-8 max-w-md mx-auto leading-relaxed"
                         >
-                            The page you are looking for does not exist or has
-                            been moved. Please check the URL or return to the
-                            home page.
+                            {{ $t("not_found_subtitle") }}
                         </p>
 
                         <router-link
-                            :to="{ name: authStore.homeUrl }"
+                            :to="{ name: homeUrl }"
                             class="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary-700 transition-all duration-300 hover:shadow-lg transform hover:-translate-y-0.5"
                         >
                             <i class="fas fa-home mr-2"></i>
-                            Return Home
+                            {{ $t("back_home") }}
                         </router-link>
                     </div>
                 </div>
@@ -43,6 +41,35 @@
 </template>
 <script setup>
 import { useAuthStore } from '@/stores/auth';
+import { useQuasar } from 'quasar';
+import i18n from '../../plugins/i18n';
+import { onMounted } from 'vue';
+import langEng from "quasar/lang/en-US";
+import langDe from "quasar/lang/de";
+import langFr from "quasar/lang/fr";
+import langEs from "quasar/lang/es";
 
-const authStore = useAuthStore();
+const { homeUrl } = useAuthStore();
+
+const quasarLangs = {
+    en: langEng,
+    de: langDe,
+    fr: langFr,
+    es: langEs,
+};
+
+const $q = useQuasar();
+
+const handleInternationalization = () => {
+    const lang = localStorage.getItem("language") || "en";
+    if (lang) {
+        i18n.global.locale.value = lang;
+        $q.lang.set(quasarLangs[lang]);
+    }
+};
+
+
+onMounted(() => {
+    handleInternationalization();
+});
 </script>

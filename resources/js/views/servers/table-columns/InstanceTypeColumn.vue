@@ -3,7 +3,7 @@
         {{ row.instance_type.value }}
         <div>
             <span class="font-medium me-2 text-gray-600 dark:text-gray-400"
-                >Image:</span
+                >{{ $t("servers.image") }}:</span
             >
             <span v-if="row.image_id">{{ truncate(row.image_id, 15) }}</span>
             <span v-else>N/A</span>
