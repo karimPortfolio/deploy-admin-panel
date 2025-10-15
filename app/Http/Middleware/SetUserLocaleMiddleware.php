@@ -15,6 +15,11 @@ class SetUserLocaleMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
+
+        if (app()->runningInConsole()) {
+            return $next($request);
+        }
+
         //check user preference first
         $userPreference = $request->user()?->preferences()?->first()->toArray();
         if ($userPreference && $userPreference['preferences'] && $userPreference['preferences']['language']) {
