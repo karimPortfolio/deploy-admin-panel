@@ -26,15 +26,15 @@ enum InstanceType: string
     public function description(): string
     {
         return match($this) {
-            self::T2Micro    => 'Free-tier eligible, general purpose',
-            self::T3Micro    => 'General purpose, burstable performance',
-            self::T3Small    => 'Small general purpose',
-            self::T3Medium   => 'Medium general purpose',
-            self::C5Large    => 'Compute-optimized, good for high-performance workloads',
-            self::C5Xlarge   => 'Compute-optimized, extra capacity',
-            self::R5Large    => 'Memory-optimized, good for data-intensive apps',
-            self::R5Xlarge   => 'Memory-optimized, more RAM',
-            self::G4dnXlarge => 'GPU instance, good for ML or graphics workloads',
+            self::T2Micro    => __('messages.servers.instance_type.description.T2Micro'),
+            self::T3Micro    => __('messages.servers.instance_type.description.T3Micro'),
+            self::T3Small    => __('messages.servers.instance_type.description.T3Small'),
+            self::T3Medium   => __('messages.servers.instance_type.description.T3Medium'),
+            self::C5Large    => __('messages.servers.instance_type.description.C5Large'),
+            self::C5Xlarge   => __('messages.servers.instance_type.description.C5Xlarge'),
+            self::R5Large    => __('messages.servers.instance_type.description.R5Large'),
+            self::R5Xlarge   => __('messages.servers.instance_type.description.R5Xlarge'),
+            self::G4dnXlarge => __('messages.servers.instance_type.description.G4dnXlarge'),
         };
     }
 

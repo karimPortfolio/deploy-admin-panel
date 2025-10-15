@@ -82,7 +82,7 @@ const handleForgotPassword = async () => {
             messages.value = err.response.data.errors;
         }
         $q.notify({
-            message: "Error",
+            message: t("error"),
             caption:
                 err.response?.data?.message ??
                 t("something_went_wrong_error_msg"),
@@ -94,8 +94,14 @@ const handleForgotPassword = async () => {
 };
 
 const handleDarkMode = () => {
-    const userPereference = localStorage.getItem("dark");
-    $q.dark.set(JSON.parse(userPereference) || 'auto');
+    const theme = localStorage.getItem("dark");
+    if (theme === "auto") {
+        $q.dark.set(theme);
+        return;
+    }
+
+    const darkMode = JSON.parse(theme) ?? "auto";
+    $q.dark.set(darkMode);
 }
 
 const handleInternationalization = () => {

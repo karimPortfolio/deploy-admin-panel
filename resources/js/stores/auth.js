@@ -22,15 +22,18 @@ export const useAuthStore = defineStore("auth", () => {
     const homeUrl = computed(() => {
         if (user.value === null) return "auth.login";
 
-        if (user.value?.role?.value === "admin") 
-        {
+        if (user.value?.role?.value === "admin") {
             return "admin.dashboard";
         }
 
         return "dashboard";
-    })
+    });
 
-    const fetchProfile = async (force=false) => {
+    const language = computed(() => {
+        return localStorage.getItem("language") ?? "en";
+    });
+
+    const fetchProfile = async (force = false) => {
         if (user.value !== null && !force) return;
 
         if (loadingPromise.value) return loadingPromise.value;
@@ -73,7 +76,11 @@ export const useAuthStore = defineStore("auth", () => {
 
         try {
             loginPromise.value = new Promise((resolve, reject) => {
-                api.post("login", credentials)
+                api.post("login", credentials, {
+                    headers: {
+                        "Accept-Language": language.value,
+                    },
+                })
                     .then(async (response) => {
                         authenticated.value = true;
                         await fetchProfile();
@@ -113,7 +120,11 @@ export const useAuthStore = defineStore("auth", () => {
         if (forgetPasswordPromise.value) return forgetPasswordPromise.value;
         try {
             forgetPasswordPromise.value = new Promise((resolve, reject) => {
-                api.post("forgot-password", credentials)
+                api.post("forgot-password", credentials, {
+                    headers: {
+                        "Accept-Language": language.value,
+                    },
+                })
                     .then((response) => {
                         $q.notify({
                             message: "Success",
@@ -144,7 +155,11 @@ export const useAuthStore = defineStore("auth", () => {
         if (resetPasswordPromise.value) return resetPasswordPromise.value;
         try {
             resetPasswordPromise.value = new Promise((resolve, reject) => {
-                api.post("reset-password", credentials)
+                api.post("reset-password", credentials, {
+                    headers: {
+                        "Accept-Language": language.value,
+                    },
+                })
                     .then((response) => {
                         authenticated.value = true;
                         window.location.href = redirectTo;
@@ -178,6 +193,6 @@ export const useAuthStore = defineStore("auth", () => {
         login,
         forgotPassword,
         resetPassword,
-        homeUrl
+        homeUrl,
     };
 });

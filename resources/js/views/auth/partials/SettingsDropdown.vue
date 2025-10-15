@@ -100,7 +100,6 @@ const languagesOptions = [
 
 const handleLanguageChange = (value) => {
     localStorage.setItem("language", value.value);
-    // console.log(i18n.global.locale);
     i18n.global.locale.value = value.value;
 };
 

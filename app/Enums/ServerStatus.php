@@ -12,10 +12,10 @@ enum ServerStatus: string
     public function label(): string
     {
         return match($this) {
-            self::RUNNING   => 'Running',
-            self::STOPPED   => 'Stopped',
-            self::TERMINATED => 'Terminated',
-            self::PENDING   => 'Pending',
+            self::RUNNING   => __('messages.servers.status.running'),
+            self::STOPPED   => __('messages.servers.status.stopped'),
+            self::TERMINATED => __('messages.servers.status.terminated'),
+            self::PENDING   => __('messages.servers.status.pending'),
         };
     }
 

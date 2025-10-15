@@ -64,7 +64,7 @@ class SecurityGroupController extends Controller
     {
         if ($this->securityGroupAssociated($securityGroup)) {
             return response()->json([
-                'message' => 'This Security group is associated with servers and cannot be deleted.',
+                'message' => __('messages.security_groups.associated_servers_msg'),
             ], 422);
         }
 

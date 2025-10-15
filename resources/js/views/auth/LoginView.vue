@@ -145,10 +145,10 @@ const handleAuth = async () => {
         await api.get(import.meta.env.VITE_SANCTUM_URL);
     } catch (err) {
         $q.notify({
-            message: "Error",
+            message: t("error"),
             caption:
                 err.response.data.message ??
-                "Something went wrong. Please try again.",
+                t("something_went_wrong_error_msg"),
             type: "negative",
         });
     }
@@ -165,7 +165,7 @@ const handleLogin = async () => {
             messages.value = err.response.data.errors;
         }
         $q.notify({
-            message: "Error",
+            message: t("error"),
             caption:
                 err.response?.data?.message ??
                 t("something_went_wrong_error_msg"),

@@ -43,7 +43,6 @@ class CreateEc2InstanceJob implements ShouldQueue
         }
         catch (\Exception $e) {
             $this->server->forceDelete();
-            info("reached here");
             \Log::error('EC2 creation failed', ['error' => $e->getMessage()]);
         }
     }

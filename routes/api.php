@@ -20,7 +20,7 @@ use \App\Http\Controllers\Api\V1\Admin\SshKeyController as AdminSshKeyController
 use \App\Http\Controllers\Api\V1\Admin\DashboardController as AdminDashboardController;
 
 
-Route::middleware('auth:sanctum')
+Route::middleware(['auth:sanctum', 'setUserLocale'])
     ->prefix('v1')
     ->name('api.v1.')
     ->group(function () {
@@ -100,4 +100,5 @@ Route::middleware('auth:sanctum')
     });
 
 Route::post('v1/reset-password', [NewPasswordController::class, 'store'])
-    ->name('password.reset');
+    ->name('password.reset')
+    ->middleware('setUserLocale');

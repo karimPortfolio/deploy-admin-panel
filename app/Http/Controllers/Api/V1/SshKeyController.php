@@ -81,8 +81,25 @@ class SshKeyController extends Controller
 
     public function destroy(SshKey $sshKey)
     {
+        if ($this->sshKeyAssociated($sshKey)) {
+            return response()->json([
+                'message' => __('messages.ssh_keys.associated_servers_msg'),
+            ], 422);
+        }
+
         $sshKey->delete();
 
         return response()->noContent();
+    }
+
+    private function sshKeyAssociated(SshKey $sshKey)
+    {
+        $associatedServers = $sshKey->servers;
+
+        if ($associatedServers->count() > 0) {
+            return true;
+        }
+
+        return false;
     }
 }

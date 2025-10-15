@@ -96,7 +96,7 @@ class ServerController extends Controller
 
         return (new ServerResource($server))
             ->additional([
-                'message' => 'Server creation in progress. You can check the status later.',
+                'message' => __('messages.servers.servers_creation_msg'),
             ])
             ->response()
             ->setStatusCode(201);
@@ -123,7 +123,7 @@ class ServerController extends Controller
         $result = Ec2InstanceService::startInstance($server->instance_id);
 
         if ($result['StartingInstances'][0]['CurrentState']['Name'] !== 'pending') {
-            return response()->json(['message' => 'Failed to start the instance.'], 500);
+            return response()->json(['message' => __('messages.servers.failed_to_start_msg')], 500);
         }
 
         $server->update([
@@ -138,7 +138,7 @@ class ServerController extends Controller
         $result = Ec2InstanceService::stopInstance($server->instance_id);
 
         if ($result['StoppingInstances'][0]['CurrentState']['Name'] !== 'stopping') {
-            return response()->json(['message' => 'Failed to stop the instance.'], 500);
+            return response()->json(['message' => __('messages.servers.failed_to_stop_msg')], 500);
         }
 
         $server->update([
@@ -154,7 +154,7 @@ class ServerController extends Controller
         $result = Ec2InstanceService::terminateInstance($server->instance_id);
 
         if ($result['TerminatingInstances'][0]['CurrentState']['Name'] !== 'shutting-down') {
-            return response()->json(['message' => 'Failed to terminate the instance.'], 500);
+            return response()->json(['message' => __('messages.servers.failed_to_terminate_msg')], 500);
         }
 
         $server->delete();
