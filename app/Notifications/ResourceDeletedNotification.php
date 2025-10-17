@@ -35,11 +35,11 @@ class ResourceDeletedNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject("Resource Deleted")
-            ->greeting("Hello {$notifiable->name}!")
-            ->line("We wanted to let you know that your {$this->resourceType} (ID: {$this->resource->id}) has been deleted by our administration team.")
-            ->action('Check Your Dashboard', $this->getActionUrl())
-            ->line('Thank you for using our application!');
+            ->subject(__('messages.notifications.deleted_resource.mail.subject'))
+            ->greeting(__('messages.notifications.deleted_resource.mail.greeting', ['name' => $notifiable->name]))
+            ->line(__('messages.notifications.deleted_resource.mail.line1', ['resourceType' => $this->resourceType, 'resourceId' => $this->resource->id]))
+            ->action(__('messages.notifications.deleted_resource.mail.action'), $this->getActionUrl())
+            ->line(__('messages.notifications.deleted_resource.mail.line2'));
     }
 
     /**
@@ -50,10 +50,10 @@ class ResourceDeletedNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            "title" => "Resource Deleted",
-            "body" => "Your {$this->resourceType} (ID: {$this->resource->id}) has been deleted by our administration team.",
+            "title" => __('messages.notifications.deleted_resource.database.title'),
+            "body" => __('messages.notifications.deleted_resource.database.body', ['resourceType' => $this->resourceType, 'resourceId' => $this->resource->id]),
             "actionUrl" => $this->getActionUrl(),
-            "actionLabel" => "Check Your Dashboard"
+            "actionLabel" => __('messages.notifications.deleted_resource.database.actionLabel')
         ];
     }
 

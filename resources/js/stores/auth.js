@@ -3,6 +3,7 @@ import { computed, ref } from "vue";
 import { api } from "@/boot/api";
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
+import i18n from "../plugins/i18n";
 
 export const useAuthStore = defineStore("auth", () => {
     const user = ref(null);
@@ -10,6 +11,7 @@ export const useAuthStore = defineStore("auth", () => {
 
     const $q = useQuasar();
     const router = useRouter();
+    const t = i18n.global.t;
 
     const loadingPromise = ref(null);
     const logoutPromise = ref(null);
@@ -43,7 +45,15 @@ export const useAuthStore = defineStore("auth", () => {
             user.value = loadingPromise.value.data.data;
             authenticated.value = true;
         } catch (err) {
-            console.log(err);
+            if (err.response?.status === 403 || err.response?.status === 500) {
+                $q.notify({
+                    message: t("error"),
+                    caption:
+                        err.response?.data?.message ??
+                        t("something_went_wrong_error_msg"),
+                    type: "negative",
+                });
+            }
         } finally {
             loadingPromise.value = null;
         }
@@ -101,8 +111,10 @@ export const useAuthStore = defineStore("auth", () => {
                         if (error.response?.status === 422)
                             errorMessages.value = error.response.data.errors;
                         $q.notify({
-                            message: "Error",
-                            caption: error.response.data?.message,
+                            message: t("error"),
+                            caption:
+                                error.response?.data?.message ??
+                                t("something_went_wrong_error_msg"),
                             type: "negative",
                         });
                         reject(error);
@@ -127,7 +139,7 @@ export const useAuthStore = defineStore("auth", () => {
                 })
                     .then((response) => {
                         $q.notify({
-                            message: "Success",
+                            message: t("success"),
                             caption: response.data.message,
                             type: "positive",
                         });
@@ -136,8 +148,10 @@ export const useAuthStore = defineStore("auth", () => {
                         if (error.response?.status === 422)
                             errorMessages.value = error.response.data.errors;
                         $q.notify({
-                            message: "Error",
-                            caption: error.response.data?.message,
+                            message: t("error"),
+                            caption:
+                                error.response?.data?.message ??
+                                t("something_went_wrong_error_msg"),
                             type: "negative",
                         });
                         reject(error);
@@ -169,8 +183,10 @@ export const useAuthStore = defineStore("auth", () => {
                         if (error.response?.status === 422)
                             errorMessages.value = error.response.data.errors;
                         $q.notify({
-                            message: "Error",
-                            caption: error.response.data?.message,
+                            message: t("error"),
+                            caption:
+                                error.response?.data?.message ??
+                                t("something_went_wrong_error_msg"),
                             type: "negative",
                         });
                         reject(error);

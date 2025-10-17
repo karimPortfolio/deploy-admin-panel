@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class SetUserLocaleMiddleware
+class VerifyAccountIsActiveMiddleware
 {
     /**
      * Handle an incoming request.
@@ -15,24 +15,16 @@ class SetUserLocaleMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-
         if (app()->runningInConsole()) {
             return $next($request);
         }
 
-        //check user preference first
-        $userLanguage = $request->user()?->language;
-        if ($userLanguage) {
-            app()->setLocale($userLanguage);
+        if (!$request->user() || !$request->user()->is_active) {
+            return response()->json([
+                'message' => __('messages.middlewares.account_inactive')
+            ], 403);
         }
 
-        //check browser settings if no user preference is set
-        else if ($browserLocale = $request->header('Accept-Language')) {
-            if (in_array($browserLocale, ['en', 'fr', 'es', 'de'])) {
-                app()->setLocale($browserLocale);
-            }
-        }
-        
         return $next($request);
     }
 }

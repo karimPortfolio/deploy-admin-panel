@@ -36,14 +36,12 @@ class NewUserNotification extends Notification implements ShouldQueue
     {
         $appName = config('app.name');
         return (new MailMessage)
-            ->subject("Welcome to {$appName}")
-            ->greeting("Hello {$notifiable->name},")
-            ->line("We are excited to have you on board! Your account has been
-             successfully created. You can get started by sign in to our application using your 
-             email, and your temporary password: {$this->password}")
-            ->line('Please make sure to change your password after your first login.')
-            ->action('Sign-in Now', url('/auth/login'))
-            ->line('Thank you for using our application!');
+            ->subject(__('messages.notifications.new_user.mail.subject', ['appName' => $appName]))
+            ->greeting(__('messages.notifications.new_user.mail.greeting', ['name' => $notifiable->name]))
+            ->line(__('messages.notifications.new_user.mail.line1', ['password' => $this->password]))
+            ->line(__('messages.notifications.new_user.mail.line2'))
+            ->action(__('messages.notifications.new_user.mail.action'), url('/auth/login'))
+            ->line(__('messages.notifications.new_user.mail.line3'));
     }
 
     /**

@@ -116,10 +116,13 @@ class ServerController extends Controller
             return response()->json(['message' => __('messages.servers.failed_to_terminate_msg')], 500);
         }
 
-        $notifiable = \App\Models\User::find($server->created_by);
         $server->delete();
-
-        Notification::send($notifiable, new ResourceDeletedNotification($server, 'server', 'servers'));
+        
+        $notifiable = \App\Models\User::find($server->created_by);
+        $lang = $notifiable->language ?? 'en';
+        
+        Notification::locale($lang)
+        ->send($notifiable, new ResourceDeletedNotification($server, 'server', 'servers'));
 
         return response()->noContent();
     }

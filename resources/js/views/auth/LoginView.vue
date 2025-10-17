@@ -164,13 +164,6 @@ const handleLogin = async () => {
         if (err.response?.status === 422) {
             messages.value = err.response.data.errors;
         }
-        $q.notify({
-            message: t("error"),
-            caption:
-                err.response?.data?.message ??
-                t("something_went_wrong_error_msg"),
-            type: "negative",
-        });
     } finally {
         loading.value = false;
     }

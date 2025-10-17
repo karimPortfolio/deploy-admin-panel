@@ -27,7 +27,8 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'role' => App\Http\Middleware\CheckRole::class,
-            'setUserLocale' => App\Http\Middleware\SetUserLocaleMiddleware::class
+            'setUserLocale' => App\Http\Middleware\SetUserLocaleMiddleware::class,
+            'isActive' => App\Http\Middleware\VerifyAccountIsActiveMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

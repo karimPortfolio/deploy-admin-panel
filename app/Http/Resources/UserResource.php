@@ -29,6 +29,7 @@ class UserResource extends JsonResource
             'servers_count' => $this->whenCounted('servers'),
             'ssh_keys_count' => $this->whenCounted('sshKeys'),
             'security_groups_count' => $this->whenCounted('securityGroups'),
+            'session' => $this->whenAppended('session'),
             'created_at' => $this->whenHas('created_at', fn($d) => $d->diffForHumans()),
         ];
     }

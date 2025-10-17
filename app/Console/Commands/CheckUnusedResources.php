@@ -37,7 +37,9 @@ class CheckUnusedResources extends Command
 
             if ($data['unused_security_groups_count'] > 0 || $data['unused_sshkeys_count'] > 0) {
                 $this->info("Sending notification");
-                Notification::send($user, new UnusedResourcesAlertNotification($data));
+                $lang = $user->language ?? 'en';
+                Notification::locale($lang)
+                ->send($user, new UnusedResourcesAlertNotification($data));
             }
         }
 

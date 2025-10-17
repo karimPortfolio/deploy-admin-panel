@@ -135,13 +135,6 @@ const handleResetPassword = async () => {
         if (err.response?.status === 422) {
             messages.value = err.response.data.errors;
         }
-        $q.notify({
-            message: "Error",
-            caption:
-                err.response?.data?.message ??
-                t("something_went_wrong_error_msg"),
-            type: "negative",
-        });
     } finally {
         loading.value = false;
     }

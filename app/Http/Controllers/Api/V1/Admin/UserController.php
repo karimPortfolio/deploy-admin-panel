@@ -7,10 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Models\UserPreference;
 use App\Notifications\AccountActivationNotification;
 use App\Notifications\AccountDeactivationNotification;
 use App\Notifications\NewUserNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -45,6 +47,10 @@ class UserController extends Controller
                 return $perPage;
             });
 
+        $users->map(function ($user) {
+            $user->append('session');
+        });
+
         return UserResource::collection($users);
     }
 
@@ -57,8 +63,16 @@ class UserController extends Controller
             'email' => $request->input('email'),
             'company_name' => $request->input('company_name', null),
             'role' => $request->input('role', UserRole::USER),
-            'password' => bcrypt($generatedPassword),
+            'password' => Hash::make($generatedPassword),
             'is_active' => $request->input('is_active', true),
+        ]);
+
+        $newUser->preferences()->create([
+            'preferences' => [
+                'theme' => 'auto',
+                'language' => 'en',
+                'notification' => ['email' => true, 'system' => true]
+            ]
         ]);
 
         Notification::send($newUser, new NewUserNotification($generatedPassword));
@@ -79,9 +93,13 @@ class UserController extends Controller
 
     public function activateUserAccount(User $user)
     {
+        
         $user->update(['is_active' => true]);
 
-        Notification::send($user, new AccountActivationNotification());
+        $lang = $user->language ?? 'en';
+
+        Notification::locale($lang)
+                    ->sendNow($user, new AccountActivationNotification());
 
         return response()->noContent();
     }
@@ -90,7 +108,10 @@ class UserController extends Controller
     {
         $user->update(['is_active' => false]);
 
-        Notification::sendNow($user, new AccountDeactivationNotification());
+        $lang = $user->language ?? 'en';
+
+        Notification::locale($lang)
+        ->sendNow($user, new AccountDeactivationNotification());
 
         return response()->noContent();
     }
@@ -118,4 +139,5 @@ class UserController extends Controller
             'data' => $roles,
         ]);
     }
+
 }

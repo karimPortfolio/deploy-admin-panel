@@ -4,7 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\UserRole;
-use App\Notifications\Auth\ResetPasswordNotification;
+use App\Notifications\Auth\PasswordResetNotification;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -81,6 +81,34 @@ class User extends Authenticatable implements HasMedia
         return $this->role === UserRole::ADMIN;
     }
 
+    public function session(): Attribute 
+    {
+        return Attribute::make(
+            get: function () {
+                $session = \DB::table('sessions')->where('user_id', $this->id)->latest('last_activity')->first();
+                return [
+                    'ip_address' => $session?->ip_address,
+                    'user_agent' => $session?->user_agent,
+                    'last_activity' => $session ? \Carbon\Carbon::createFromTimestamp($session->last_activity)->diffForHumans() : null,
+                ];
+            } ,
+        );
+    }
+
+    public function language(): Attribute 
+    {
+        return Attribute::make(
+            get: function () {
+                $preference = $this->preferences()->first();
+                if ($preference && isset($preference->preferences['language'])) {
+                    return $preference->preferences['language'];
+                }
+
+                return null;
+            } ,
+        );
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('user-photo')->singleFile();
@@ -116,7 +144,7 @@ class User extends Authenticatable implements HasMedia
 
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new ResetPasswordNotification($token));
+        $this->notify(new PasswordResetNotification($token));
     }
 
     public static function generateRandomPassword(): string

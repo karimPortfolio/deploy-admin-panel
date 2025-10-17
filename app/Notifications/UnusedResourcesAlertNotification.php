@@ -35,14 +35,14 @@ class UnusedResourcesAlertNotification extends Notification implements ShouldQue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject("Weekly Audit – Review Unused Resources")
-            ->greeting("Hello {$notifiable->name},")
-            ->line("Your weekly analytics report on unused resources is ready.")
-            ->line("This week, a total of {$this->getTotalUnusedResources()} unused resources were identified:")
-            ->line("- {$this->data['unused_security_groups_count']} unused Security Groups found.")
-            ->line("- {$this->data['unused_sshkeys_count']} unused SSH Keys found.")
-            ->action('Check Your Dashboard', url(config("app.url")))
-            ->line("Thank you for using " . config('app.name') . ".");
+            ->subject(__('messages.notifications.unused_resources_alert.mail.subject'))
+            ->greeting(__('messages.notifications.unused_resources_alert.mail.greeting', ['name' => $notifiable->name]))
+            ->line(__('messages.notifications.unused_resources_alert.mail.line1'))
+            ->line(__('messages.notifications.unused_resources_alert.mail.line2', ['totalUnusedResources' => $this->getTotalUnusedResources()]))
+            ->line(__('messages.notifications.unused_resources_alert.mail.securityGroupsLine', ['unusedSecurityGroupsCount' => $this->data['unused_security_groups_count']]))
+            ->line(__('messages.notifications.unused_resources_alert.mail.sshKeysLine', ['unusedSshKeysCount' => $this->data['unused_sshkeys_count']]))
+            ->action(__('messages.notifications.unused_resources_alert.mail.action'), url(config("app.url")))
+            ->line(__('messages.notifications.unused_resources_alert.mail.line3', ['appName' => config('app.name')]));
     }
 
     /**
@@ -53,10 +53,10 @@ class UnusedResourcesAlertNotification extends Notification implements ShouldQue
     public function toArray(object $notifiable): array
     {
         return [
-            "title" => "Unused Resources Detected",
-            "body" => "This week, a total of {$this->getTotalUnusedResources()} unused resources were identified.",
+            "title" => __('messages.notifications.unused_resources_alert.database.title'),
+            "body" => __('messages.notifications.unused_resources_alert.database.body', ['totalUnusedResources' => $this->getTotalUnusedResources()]),
             "actionUrl" => url(config("app.url")),
-            "actionLabel" => "Check Your Dashboard"
+            "actionLabel" => __('messages.notifications.unused_resources_alert.database.actionLabel')
         ];
     }
 

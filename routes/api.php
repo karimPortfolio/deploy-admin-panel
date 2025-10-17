@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\V1\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Api\V1\Admin\SecurityGroupController as AdminSecurityGroupController;
+use App\Http\Controllers\Api\V1\Admin\ServerController as AdminServerController;
+use App\Http\Controllers\Api\V1\Admin\SshKeyController as AdminSshKeyController;
 use App\Http\Controllers\Api\V1\Admin\UserController;
-use App\Http\Controllers\Api\V1\AmiController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\NotificationController;
@@ -10,17 +13,10 @@ use App\Http\Controllers\Api\V1\ServerController;
 use App\Http\Controllers\Api\V1\SshKeyController;
 use App\Http\Controllers\Api\V1\UserPreferenceController;
 use App\Http\Controllers\Api\V1\VpcController;
-use Aws\Middleware;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\NewPasswordController;
-use \App\Http\Controllers\Api\V1\Admin\ServerController as AdminServerController;
-use \App\Http\Controllers\Api\V1\Admin\SecurityGroupController as AdminSecurityGroupController;
-use \App\Http\Controllers\Api\V1\Admin\SshKeyController as AdminSshKeyController;
-use \App\Http\Controllers\Api\V1\Admin\DashboardController as AdminDashboardController;
 
-
-Route::middleware(['auth:sanctum', 'setUserLocale'])
+Route::middleware(['auth:sanctum', 'setUserLocale', 'isActive'])
     ->prefix('v1')
     ->name('api.v1.')
     ->group(function () {
@@ -42,61 +38,61 @@ Route::middleware(['auth:sanctum', 'setUserLocale'])
         // =============== USER ROUTES =============
         Route::middleware('role:user')
             ->group(function () {
-            // =============== DASHBOARD ROUTES
-            Route::get('dashboard/servers-count', [DashboardController::class, 'getTotalServersCount'])->name('dashboard.total-servers');
-            Route::get('dashboard/security-groups-count', [DashboardController::class, 'getTotalSecurityGroupsCount'])->name('dashboard.total-security-groups');
-            Route::get('dashboard/sshkeys-count', [DashboardController::class, 'getTotalSshKeysCount'])->name('dashboard.total-sshkeys');
-            Route::get('dashboard/monthly-servers-total', [DashboardController::class, 'getMonthlyServersTotal'])->name('dashboard.monthly-servers-total');
-            Route::get('dashboard/monthly-security-groups-total', [DashboardController::class, 'getMonthlySecurityGroupsTotal'])->name('dashboard.monthly-security-groups-total');
-            Route::get('dashboard/servers-by-security-groups', [DashboardController::class, 'getTotalServersBySecurityGroups'])->name('dashboard.servers-by-security-groups');
-            Route::get('dashboard/servers-by-status', [DashboardController::class, 'getTotalServersByStatus'])->name('dashboard.servers-by-status');
+                // =============== DASHBOARD ROUTES
+                Route::get('dashboard/servers-count', [DashboardController::class, 'getTotalServersCount'])->name('dashboard.total-servers');
+                Route::get('dashboard/security-groups-count', [DashboardController::class, 'getTotalSecurityGroupsCount'])->name('dashboard.total-security-groups');
+                Route::get('dashboard/sshkeys-count', [DashboardController::class, 'getTotalSshKeysCount'])->name('dashboard.total-sshkeys');
+                Route::get('dashboard/monthly-servers-total', [DashboardController::class, 'getMonthlyServersTotal'])->name('dashboard.monthly-servers-total');
+                Route::get('dashboard/monthly-security-groups-total', [DashboardController::class, 'getMonthlySecurityGroupsTotal'])->name('dashboard.monthly-security-groups-total');
+                Route::get('dashboard/servers-by-security-groups', [DashboardController::class, 'getTotalServersBySecurityGroups'])->name('dashboard.servers-by-security-groups');
+                Route::get('dashboard/servers-by-status', [DashboardController::class, 'getTotalServersByStatus'])->name('dashboard.servers-by-status');
 
-            // =============== SSH KEYS ROUTES
-            Route::apiResource('ssh-keys', SshKeyController::class);
+                // =============== SSH KEYS ROUTES
+                Route::apiResource('ssh-keys', SshKeyController::class);
 
-            // =============== SERVERS ROUTES
-            Route::put('servers/{server}/start', [ServerController::class, 'startServer'])->name('servers.start');
-            Route::put('servers/{server}/stop', [ServerController::class, 'stopServer'])->name('servers.stop');
-            Route::get('servers/instance-types', [ServerController::class, 'getInstanceTypes'])->name('servers.instance-types');
-            Route::get('servers/os-families', [ServerController::class, 'getOsFamilies'])->name('servers.os-families');
-            Route::get('servers/statuses', [ServerController::class, 'getServerStatuses'])->name('servers.statuses');
-            Route::apiResource('servers', ServerController::class);
+                // =============== SERVERS ROUTES
+                Route::put('servers/{server}/start', [ServerController::class, 'startServer'])->name('servers.start');
+                Route::put('servers/{server}/stop', [ServerController::class, 'stopServer'])->name('servers.stop');
+                Route::get('servers/instance-types', [ServerController::class, 'getInstanceTypes'])->name('servers.instance-types');
+                Route::get('servers/os-families', [ServerController::class, 'getOsFamilies'])->name('servers.os-families');
+                Route::get('servers/statuses', [ServerController::class, 'getServerStatuses'])->name('servers.statuses');
+                Route::apiResource('servers', ServerController::class);
 
-            // =============== SECURITY GROUPS ROUTES
-            Route::apiResource('security-groups', SecurityGroupController::class)->except(['update']);
-        });
+                // =============== SECURITY GROUPS ROUTES
+                Route::apiResource('security-groups', SecurityGroupController::class)->except(['update']);
+            });
 
         // =============== ADMIN ROUTES =============
         Route::middleware('role:admin')
             ->prefix('admin')
             ->name('admin.')
             ->group(function () {
-            // =============== USERS ROUTES
-            Route::put('users/{user}/deactivate', [UserController::class, 'deactivateUserAccount'])->name('users.deactivate');
-            Route::put('users/{user}/activate', [UserController::class, 'activateUserAccount'])->name(name: 'users.activate');
-            Route::get('users/roles', [UserController::class, 'getRoles'])->name('users.roles');
-            Route::apiResource('users', UserController::class)->only(['index', 'store', 'show', 'destroy']);
-            // =============== SERVERS ROUTES
-            Route::put('servers/{server}/start', [AdminServerController::class, 'startServer'])->name('servers.start');
-            Route::put('servers/{server}/stop', [AdminServerController::class, 'stopServer'])->name('servers.stop');
-            Route::get('servers/instance-types', [AdminServerController::class, 'getInstanceTypes'])->name('servers.instance-types');
-            Route::get('servers/os-families', [AdminServerController::class, 'getOsFamilies'])->name('servers.os-families');
-            Route::get('servers/statuses', [AdminServerController::class, 'getServerStatuses'])->name('servers.statuses');
-            Route::apiResource('servers', AdminServerController::class)->only(['index', 'show', 'destroy']);
-            // =============== SECURITY GROUPS ROUTES
-            Route::apiResource('security-groups', AdminSecurityGroupController::class)->only(['index', 'show', 'destroy']);
-            // =============== SSH KEYS ROUTES
-            Route::apiResource('ssh-keys', AdminSshKeyController::class)->only(['index', 'show', 'destroy']);
-            // =============== DASHBOARD ROUTES
-            Route::get('dashboard/users-count', [AdminDashboardController::class, 'getTotalUsersCount'])->name('dashboard.total-users');
-            Route::get('dashboard/servers-count', [AdminDashboardController::class, 'getTotalServersCount'])->name('dashboard.total-servers');
-            Route::get('dashboard/security-groups-count', [AdminDashboardController::class, 'getTotalSecurityGroupsCount'])->name('dashboard.total-security-groups');
-            Route::get('dashboard/sshkeys-count', [AdminDashboardController::class, 'getTotalSshKeysCount'])->name('dashboard.total-sshkeys');
-            Route::get('dashboard/monthly-servers-total', [AdminDashboardController::class, 'getMonthlyServersTotal'])->name('dashboard.monthly-servers-total');
-            Route::get('dashboard/monthly-security-groups-total', [AdminDashboardController::class, 'getMonthlySecurityGroupsTotal'])->name('dashboard.monthly-security-groups-total');
-            Route::get('dashboard/servers-by-security-groups', [AdminDashboardController::class, 'getTotalServersBySecurityGroups'])->name('dashboard.servers-by-security-groups');
-            Route::get('dashboard/servers-by-status', [AdminDashboardController::class, 'getTotalServersByStatus'])->name('dashboard.servers-by-status');
-        });
+                // =============== USERS ROUTES
+                Route::put('users/{user}/deactivate', [UserController::class, 'deactivateUserAccount'])->name('users.deactivate');
+                Route::put('users/{user}/activate', [UserController::class, 'activateUserAccount'])->name(name: 'users.activate');
+                Route::get('users/roles', [UserController::class, 'getRoles'])->name('users.roles');
+                Route::apiResource('users', UserController::class)->only(['index', 'store', 'show', 'destroy']);
+                // =============== SERVERS ROUTES
+                Route::put('servers/{server}/start', [AdminServerController::class, 'startServer'])->name('servers.start');
+                Route::put('servers/{server}/stop', [AdminServerController::class, 'stopServer'])->name('servers.stop');
+                Route::get('servers/instance-types', [AdminServerController::class, 'getInstanceTypes'])->name('servers.instance-types');
+                Route::get('servers/os-families', [AdminServerController::class, 'getOsFamilies'])->name('servers.os-families');
+                Route::get('servers/statuses', [AdminServerController::class, 'getServerStatuses'])->name('servers.statuses');
+                Route::apiResource('servers', AdminServerController::class)->only(['index', 'show', 'destroy']);
+                // =============== SECURITY GROUPS ROUTES
+                Route::apiResource('security-groups', AdminSecurityGroupController::class)->only(['index', 'show', 'destroy']);
+                // =============== SSH KEYS ROUTES
+                Route::apiResource('ssh-keys', AdminSshKeyController::class)->only(['index', 'show', 'destroy']);
+                // =============== DASHBOARD ROUTES
+                Route::get('dashboard/users-count', [AdminDashboardController::class, 'getTotalUsersCount'])->name('dashboard.total-users');
+                Route::get('dashboard/servers-count', [AdminDashboardController::class, 'getTotalServersCount'])->name('dashboard.total-servers');
+                Route::get('dashboard/security-groups-count', [AdminDashboardController::class, 'getTotalSecurityGroupsCount'])->name('dashboard.total-security-groups');
+                Route::get('dashboard/sshkeys-count', [AdminDashboardController::class, 'getTotalSshKeysCount'])->name('dashboard.total-sshkeys');
+                Route::get('dashboard/monthly-servers-total', [AdminDashboardController::class, 'getMonthlyServersTotal'])->name('dashboard.monthly-servers-total');
+                Route::get('dashboard/monthly-security-groups-total', [AdminDashboardController::class, 'getMonthlySecurityGroupsTotal'])->name('dashboard.monthly-security-groups-total');
+                Route::get('dashboard/servers-by-security-groups', [AdminDashboardController::class, 'getTotalServersBySecurityGroups'])->name('dashboard.servers-by-security-groups');
+                Route::get('dashboard/servers-by-status', [AdminDashboardController::class, 'getTotalServersByStatus'])->name('dashboard.servers-by-status');
+            });
     });
 
 Route::post('v1/reset-password', [NewPasswordController::class, 'store'])

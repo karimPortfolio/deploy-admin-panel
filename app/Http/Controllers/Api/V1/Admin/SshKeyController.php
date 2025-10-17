@@ -60,10 +60,13 @@ class SshKeyController extends Controller
             ], 422);
         }
         
-        $notifiable = \App\Models\User::find($sshKey->created_by);
         $sshKey->delete();
-
-        Notification::send($notifiable, new ResourceDeletedNotification($sshKey, 'ssh key', 'ssh-keys'));
+        
+        $notifiable = \App\Models\User::find($sshKey->created_by);
+        $lang = $notifiable->language ?? 'en';
+        
+        Notification::locale($lang)
+        ->send($notifiable, new ResourceDeletedNotification($sshKey, 'ssh key', 'ssh-keys'));
 
         return response()->noContent();
     }

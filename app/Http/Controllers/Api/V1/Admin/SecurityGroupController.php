@@ -69,11 +69,13 @@ class SecurityGroupController extends Controller
         }
 
         SecurityGroupService::deleteSecurityGroup($securityGroup->group_id);
-
-        $notifiable = \App\Models\User::find($securityGroup->created_by);
         $securityGroup->delete();
 
-        Notification::send($notifiable, new ResourceDeletedNotification($securityGroup, 'security group', 'security-groups'));
+        $notifiable = \App\Models\User::find($securityGroup->created_by);
+        $lang = $notifiable->language ?? 'en';
+        
+        Notification::locale($lang)
+            ->send($notifiable, new ResourceDeletedNotification($securityGroup, 'security group', 'security-groups'));
 
         return response()->noContent();
     }

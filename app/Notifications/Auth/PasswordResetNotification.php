@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class ResetPasswordNotification extends Notification
+class PasswordResetNotification extends Notification
 {
     use Queueable;
 
@@ -37,10 +37,10 @@ class ResetPasswordNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-             ->subject('Reset Password Notification')
-            ->line('Click the button below to reset your password:')
-            ->action('Reset Password', $this->getResetUrl($notifiable))
-            ->line('If you did not request a password reset, no further action is required.');
+             ->subject(__('messages.notifications.password_reset.mail.subject'))
+            ->line(__('messages.notifications.password_reset.mail.line1'))
+            ->action(__('messages.notifications.password_reset.mail.action'), $this->getResetUrl($notifiable))
+            ->line(__('messages.notifications.password_reset.mail.line2'));
     }
 
     private function getResetUrl(object $notifiable): string
