@@ -1,32 +1,57 @@
 # 🖥️ Futurixtech
 
-A modern, admin-focused dashboard for managing servers, security groups, and SSH keys. The platform helps you stay on top of your cloud resources with a weekly audit, intuitive UI, and automated alerts — all with support for dark/light mode and secure authentication.
+A modern, admin-focused dashboard for managing servers, users, security groups, and SSH keys. The platform helps you stay on top of your cloud resources with application monitoring, weekly audits, intuitive UI, and automated alerts — all with support for dark/light mode, multi-language support, and secure authentication.
+
+---
 
 ## 🚀 Features
 
 - ✅ **Manage Servers**
   - Create, view, edit, and delete server resources
   - Filter and search functionality
-  - Assign security groups and ssh keys to servers
-  - Assign VPC, OS family and instance type to servers.
+  - Assign security groups and SSH keys to servers
+  - Assign VPC, OS family, and instance type to servers
+
 - ✅ **Security Groups**
   - Create, view, edit, and delete security group resources
   - Filter and search functionality
   - Identify unused groups with automated auditing
+
 - ✅ **SSH Key Management**
   - Add and remove SSH keys
   - Filter and search functionality
   - Identify unused keys
+
+- ✅ **User Management**
+  - Create and manage users
+  - Change user status (Active / Inactive)
+  - Delete users
+  - Scoped access control for each authenticated user
+
 - 📊 **Dashboard & Weekly Audit**
   - Visualize resource usage at a glance
   - Automated email & in-app notifications for unused resources
+
+- 🩺 **Application Monitoring**
+  - Real-time metrics and service health overview
+  - Detect performance issues or resource anomalies
+  - Summarized monitoring stats in the dashboard
+
+- 🌍 **Internationalization (i18n)**
+  - Full multilingual support for **English**, **German**, **Spanish**, and **French**
+  - Dynamic language switching across the entire platform
+
 - 🔐 **Authentication & Security**
-  - Login, Forget Password, and Reset Password
+  - Login, Forgot Password, and Reset Password flows
   - Authenticated user scoping for data access
+  - Tokenized and secure password reset
+
 - 👤 **User Profile**
   - Edit personal details and profile photo
+
 - 🌙 **Dark / Light Mode**
   - Toggle seamlessly between light and dark themes
+
 - 🔔 **Email & In-App Notifications**
   - Stay informed with system alerts and updates
 
@@ -39,12 +64,16 @@ A modern, admin-focused dashboard for managing servers, security groups, and SSH
 - **Notifications**: Laravel Notifications (Mail & Database)
 - **Cloud Storage**: AWS S3 for profile image uploads
 - **Job Scheduling**: Laravel Scheduler for weekly audits
+- **Internationalization**: Vue I18n with 4-language support (EN, DE, ES, FR)
+- **Monitoring**: Custom monitoring service integrated into dashboard
 
 ---
 
 ## 📷 Screenshots
 
 
+
+---
 
 ## 📩 Weekly Audit Report
 
@@ -62,6 +91,7 @@ Each week, users receive a professional report highlighting:
 - All user data is scoped to the authenticated user
 - Console commands and background jobs are authenticated properly
 - Password reset flow is tokenized and secure
+- User role and status are enforced through middleware
 
 ---
 
