@@ -1,4 +1,4 @@
-# 🖥️ Cloud Resource Manager
+# 🖥️ Futurixtech
 
 A modern, admin-focused dashboard for managing servers, security groups, and SSH keys. The platform helps you stay on top of your cloud resources with a weekly audit, intuitive UI, and automated alerts — all with support for dark/light mode and secure authentication.
 
@@ -69,8 +69,8 @@ Each week, users receive a professional report highlighting:
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/KarimPortfolio/cloud-resource-manager.git
-   cd cloud-resource-manager
+   git clone https://github.com/KarimPortfolio/deploy-admin-panel.git
+   cd deploy-admin-panel
 
 2. Install backend dependencies:
    composer install

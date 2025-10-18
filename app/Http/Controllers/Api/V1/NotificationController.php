@@ -35,7 +35,7 @@ class NotificationController extends Controller
 
     public function markAsRead(string $id)
     {
-        $notification = auth()->user()->notifications()->find($id);
+        $notification = auth()->user()->notifications()->findOrFail($id);
 
         $notification->update([
             'read_at' => now()
@@ -46,11 +46,7 @@ class NotificationController extends Controller
 
     public function markAllAsRead()
     {
-        auth()->user()->notifications()->each(function ($notification) {
-            $notification->update([
-                'read_at' => now()
-            ]);
-        });
+        auth()->user()->notifications()->update([ 'read_at' => now() ]);
 
         return response()->noContent();
     }
@@ -58,7 +54,7 @@ class NotificationController extends Controller
 
     public function destroy(string $id)
     {
-        $notification = auth()->user()->notifications()->find($id);
+        $notification = auth()->user()->notifications()->findOrFail($id);
         $notification->delete();
 
         return response()->noContent();

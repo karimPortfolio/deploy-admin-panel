@@ -173,11 +173,7 @@ import { useTextTruncate } from "@/composables/useTextTruncate";
 import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
-// const toast = useToast();
-const showConfirmDeleteAllDialog = ref(false);
 const showConfirmDeleteDialog = ref(false);
-
-const showPopup = ref(false);
 
 const $q = useQuasar();
 const { truncate } = useTextTruncate();
@@ -265,39 +261,6 @@ const { loading: markAllAsReadLoading, execute: markAllAsRead } = useFetch({
     },
 });
 
-const confirmDeleteAllDialog = ref(false);
-
-const { execute: deleteAll, loading: deleteAllLoading } = useFetch({
-    config: {
-        url: "notifications/delete-all",
-        method: "DELETE",
-    },
-
-    onSuccess() {
-        $q.notify({
-            type: "positive",
-            message: t('success'),
-            caption: t('notifications.all_deleted_success'),
-            position: "bottom-right",
-            timeout: 3000,
-        });
-
-        fetch();
-    },
-
-    onError(err) {
-        $q.notify({
-            type: "negative",
-            message: t('error'),
-            caption:
-                err.response.data.message ??
-                t('something_went_wrong_error_msg'),
-            closeBtn: true,
-            timeout: 3000,
-        });
-    },
-});
-
 const markingAsRead = ref({});
 
 const { execute: markAsRead } = useFetch({
@@ -312,9 +275,9 @@ const { execute: markAsRead } = useFetch({
     },
 
     onError() {
-        toast.add({
-            message: t('something_went_wrong_error_msg'),
-            title: t('error'),
+        $q.notify({
+            message: t('error'),
+            caption: t('something_went_wrong_error_msg'),
             position: "bottom-right",
             closeable: true,
             type: "error",
@@ -334,7 +297,7 @@ const { execute: fetchUnreceivedNotification } = useFetch({
             response.data.data.unreceived_notifications_count;
     },
 
-    onError() {
+    onError(err) {
         $q.notify({
             type: "negative",
             message: t('error'),
@@ -438,20 +401,6 @@ const handleDelete = async () => {
     }, 1000);
 
     delete destroying.value[itemToDelete.value];
-};
-
-const confirmDeleteAll = () => {
-    showPopup.value = false;
-
-    showConfirmDeleteAllDialog.value = true;
-};
-
-const handleDeleteAll = async () => {
-    await deleteAll();
-
-    setTimeout(() => {
-        confirmDeleteAllDialog.value = false;
-    }, 1000);
 };
 
 onMounted(() => {
