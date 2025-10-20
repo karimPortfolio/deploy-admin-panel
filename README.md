@@ -78,7 +78,7 @@ A modern, admin-focused dashboard for managing servers, users, security groups, 
 
 ## 🎥 Demo
 
-[![Watch the demo](./images/demo-thumbnail.png)](https://console.firebase.google.com/u/0/project/karim-portfolio-bc1e8/storage/karim-portfolio-bc1e8.appspot.com/files)
+[![Watch the demo](https://firebasestorage.googleapis.com/v0/b/karim-portfolio-bc1e8.appspot.com/o/login-page-deploy-project.png?alt=media&token=01a6d032-580d-4a07-a6fe-209bd17cfa5a)](https://firebasestorage.googleapis.com/v0/b/karim-portfolio-bc1e8.appspot.com/o/deploy-admin-panel-project.mp4?alt=media&token=e42c8217-078c-478f-81ab-e967bf190c7b)
 
 ---
 
