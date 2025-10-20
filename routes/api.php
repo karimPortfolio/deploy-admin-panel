@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V1\Admin\UserController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\NotificationController;
+use App\Http\Controllers\Api\V1\RdsDatabaseController;
 use App\Http\Controllers\Api\V1\SecurityGroupController;
 use App\Http\Controllers\Api\V1\ServerController;
 use App\Http\Controllers\Api\V1\SshKeyController;
@@ -60,6 +61,13 @@ Route::middleware(['auth:sanctum', 'setUserLocale', 'isActive'])
 
                 // =============== SECURITY GROUPS ROUTES
                 Route::apiResource('security-groups', SecurityGroupController::class)->except(['update']);
+
+                // =============== RDS DATABASES ROUTES
+                Route::get('rds-databases/statuses', [RdsDatabaseController::class, 'getDatabaseStatuses'])->name('rds-databases.statuses');
+                Route::get('rds-databases/engines', [RdsDatabaseController::class, 'getDatabaseEngines'])->name('rds-databases.engines');
+                Route::get('rds-databases/storage-types', [RdsDatabaseController::class, 'getDatabaseStorageTypes'])->name('rds-databases.storage-types');
+                Route::get('rds-databases/instance-classes', [RdsDatabaseController::class, 'getDatabaseInstanceClasses'])->name('rds-databases.instance-classes');
+                Route::apiResource('rds-databases', RdsDatabaseController::class)->except(['update']);
             });
 
         // =============== ADMIN ROUTES =============
