@@ -131,7 +131,9 @@ return [
         ],
         'associated_servers_msg' => "Diese RDS Datenbank ist mit Servern verknüpft und kann nicht gelöscht werden.",
         'delete_failed_msg' => "Löschen der RDS-Datenbank fehlgeschlagen. Bitte versuchen Sie es später erneut.",
-        'db_name_regex' => 'Der Datenbankname muss mit einem Buchstaben beginnen und darf nur Buchstaben und Zahlen enthalten (keine Leerzeichen oder Sonderzeichen).'
+        'db_name_regex' => 'Der Datenbankname muss mit einem Buchstaben beginnen und darf nur Buchstaben und Zahlen enthalten (keine Leerzeichen oder Sonderzeichen).',
+        'rds_database_id_unique' => 'Diese Datenbank ist bereits mit dem ausgewählten Server verknüpft.',
+        'rds_server_id_unique' => 'Dieser Server ist bereits mit der ausgewählten Datenbank verknüpft.'
     ],
     'notifications' => [
         'new_user' => [

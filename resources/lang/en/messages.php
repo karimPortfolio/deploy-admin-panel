@@ -133,7 +133,9 @@ return [
         ],
         'associated_servers_msg' => "This RDS Database is associated with servers and cannot be deleted.",
         'delete_failed_msg' => "Failed to delete the RDS database. Please try again later.",
-        'db_name_regex' => 'The database name must begin with a letter and contain only letters and numbers (no spaces or special characters).'
+        'db_name_regex' => 'The database name must begin with a letter and contain only letters and numbers (no spaces or special characters).',
+        'rds_database_id_unique' => 'This database is already attached to the selected server.',
+        'rds_server_id_unique' => 'This server is already attached to the selected database.'
     ],
     'notifications' => [
         'new_user' => [

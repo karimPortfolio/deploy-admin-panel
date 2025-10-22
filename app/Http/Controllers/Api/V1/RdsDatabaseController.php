@@ -8,12 +8,14 @@ use App\Enums\DBStatus;
 use App\Enums\StorageType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RdsDatabaseRequest;
+use App\Http\Requests\RdsDatabaseServerAttachmentRequest;
 use App\Http\Resources\RdsDatabaseResource;
 use App\Jobs\CreateRdsDatabaseJob;
 use App\Models\RdsDatabase;
 use App\Services\RdsDatabaseService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -24,14 +26,14 @@ class RdsDatabaseController extends Controller
         $rds_databases = QueryBuilder::for(RdsDatabase::class)
             ->allowedFilters([
                 AllowedFilter::exact('status'),
-                AllowedFilter::exact('security_group_id', 'securityGroup.group_id'),
+                AllowedFilter::exact('vpc_security_group', 'securityGroup.group_id'),
                 AllowedFilter::exact('engine'),
                 AllowedFilter::exact('db_instance_class'),
                 AllowedFilter::exact('storage_type'),
                 AllowedFilter::exact('status'),
                 AllowedFilter::custom('created_at', new \App\Filters\DateFilter()),
             ])
-            ->allowedSorts(['id', 'name', 'instance_id', 'public_ip_address', 'status', 'created_at'])
+            ->allowedSorts(['id', 'db_instance_identifier', 'db_name', 'allocated_storage', 'created_at', 'updated_at'])
             ->with([
                 'securityGroup:id,name,group_id',
             ])
@@ -51,10 +53,10 @@ class RdsDatabaseController extends Controller
     {
         $rdsDatabase->load([
             'securityGroup:id,name,group_id',
-            'server:id,instance_id,name,status,public_ip_address',
+            'servers:id,instance_id,name,status,public_ip_address',
         ]);
 
-        return response()->json($rdsDatabase);
+        return RdsDatabaseResource::make($rdsDatabase);
     }
 
     public function store(RdsDatabaseRequest $request)
@@ -82,6 +84,25 @@ class RdsDatabaseController extends Controller
         CreateRdsDatabaseJob::dispatch($rdsDatabase, $params);
 
         return new RdsDatabaseResource($rdsDatabase);
+    }
+
+    public function attachDatabaseToServer(RdsDatabaseServerAttachmentRequest $request)
+    {
+        $count = $this->getAttachedRdsDatabasesCountByServerId($request['server_id']);
+        $request->validate([
+                'is_primary' => [Rule::requiredIf($count == 0), 'nullable', 'boolean'],
+        ]);
+
+        \DB::table('rds_database_server')->insert([
+            'rds_database_id' => $request['rds_database_id'],
+            'server_id' => $request['server_id'],
+            'is_primary' => $request->input('is_primary', false),
+            'user_id' => $request->user()->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return response()->noContent();
     }
 
     public function destroy(RdsDatabase $rdsDatabase)
@@ -165,5 +186,12 @@ class RdsDatabaseController extends Controller
             'allocated_storage' => $request->input('allocated_storage'),
             'vpc_security_group' => $request->input('vpc_security_group'),
         ];
+    }
+
+    private function getAttachedRdsDatabasesCountByServerId(int $serverId): int
+    {
+        return \DB::table('rds_database_server')
+            ->where('server_id', $serverId)
+            ->count();
     }
 }

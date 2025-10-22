@@ -131,7 +131,9 @@ return [
         ],
         'associated_servers_msg' => "Cette base de données RDS est associée à des serveurs et ne peut pas être supprimée.",
         'delete_failed_msg' => "Échec de la suppression de la base de données RDS. Veuillez réessayer plus tard.",
-        'db_name_regex' => 'Le nom de la base de données doit commencer par une lettre et ne contenir que des lettres et des chiffres (pas d\'espaces ni de caractères spéciaux).'
+        'db_name_regex' => 'Le nom de la base de données doit commencer par une lettre et ne contenir que des lettres et des chiffres (pas d\'espaces ni de caractères spéciaux).',
+        'rds_database_id_unique' => 'Cette base de données est déjà attachée au serveur sélectionné.',
+        'rds_server_id_unique' => 'Ce serveur est déjà attaché à la base de données sélectionnée.'
     ],
     'notifications' => [
         'new_user' => [

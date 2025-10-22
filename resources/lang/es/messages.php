@@ -131,7 +131,9 @@ return [
         ],
         'associated_servers_msg' => "Esta base de datos RDS está asociada con servidores y no puede ser eliminada.",
         'delete_failed_msg' => "Error al eliminar la base de datos RDS. Por favor, inténtelo de nuevo más tarde.",
-        'db_name_regex' => 'El nombre de la base de datos debe comenzar con una letra y contener solo letras y números (sin espacios ni caracteres especiales).'
+        'db_name_regex' => 'El nombre de la base de datos debe comenzar con una letra y contener solo letras y números (sin espacios ni caracteres especiales).',
+        'rds_database_id_unique' => 'Esta base de datos ya está adjunta al servidor seleccionado.',
+        'rds_server_id_unique' => 'Este servidor ya está adjunto a la base de datos seleccionada.'
     ],
     'notifications' => [
         'new_user' => [
