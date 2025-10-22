@@ -33,7 +33,7 @@ class RdsDatabase extends Model
     public function servers()
     {
         return $this->belongsToMany(Server::class, 'rds_database_server')
-            ->withPivot('is_primary', 'created_by')
+            ->withPivot('is_primary', 'user_id')
             ->withTimestamps();
     }
 

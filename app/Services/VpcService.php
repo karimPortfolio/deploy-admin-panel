@@ -190,4 +190,31 @@ class VpcService
             throw new \RuntimeException('Failed to initialize EC2 client: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Get all subnets by VPC ID.
+     *
+     * @param string $vpcId
+     * @return array
+     * @throws \RuntimeException
+     */
+    public static function getSubnetsByVpcId(string $vpcId): array
+    {
+        $ec2Client = app(\Aws\Ec2\Ec2Client::class);
+
+        try {
+            $existing = $ec2Client->describeSubnets([
+                'Filters' => [
+                    [
+                        'Name' => 'vpc-id',
+                        'Values' => [$vpcId],
+                    ],
+                ],
+            ]);
+
+            return $existing->get('Subnets') ?? [];
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Failed to initialize EC2 client: ' . $e->getMessage());
+        }
+    }
 }

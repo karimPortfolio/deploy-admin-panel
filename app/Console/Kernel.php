@@ -12,7 +12,13 @@ class Kernel extends ConsoleKernel
    */
   protected function schedule(Schedule $schedule): void
   {
+    \Log::info('✅ Schedule() method loaded.');
     $schedule->command('app:check-unused-resources')->weeklyOn(4, '11:00');
+    $schedule->command('app:sync-rds-database')->everyFiveMinutes();
+    $schedule->call(function () {
+      \Log::info('🕐 Schedule test ran successfully.');
+    })->everyMinute();
+
   }
 
   /**

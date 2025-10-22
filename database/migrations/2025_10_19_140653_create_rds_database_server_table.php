@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('rds_database_id')->constrained('rds_databases')->onDelete('cascade');
             $table->foreignId('server_id')->constrained('servers')->onDelete('cascade');
             $table->boolean('is_primary')->default(false);
-            $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

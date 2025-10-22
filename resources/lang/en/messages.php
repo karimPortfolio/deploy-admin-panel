@@ -133,6 +133,7 @@ return [
         ],
         'associated_servers_msg' => "This RDS Database is associated with servers and cannot be deleted.",
         'delete_failed_msg' => "Failed to delete the RDS database. Please try again later.",
+        'db_name_regex' => 'The database name must begin with a letter and contain only letters and numbers (no spaces or special characters).'
     ],
     'notifications' => [
         'new_user' => [

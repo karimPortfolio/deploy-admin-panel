@@ -33,15 +33,9 @@ class CreateRdsDatabaseJob implements ShouldQueue
             $createdRdsDatabase = RdsDatabaseService::describeRdsDatabaseByInstanceId($rdsDatabaseResults['DBInstanceIdentifier']);
 
             $this->rdsDatabase->update([
-                'instance_id' => $createdRdsDatabase['DBInstanceIdentifier'] ?? null,
                 'db_instance_arn' => $createdRdsDatabase['DBInstanceArn'] ?? null,
                 'engine_version' => $createdRdsDatabase['EngineVersion'] ?? null,
-                'endpoint_address' => $createdRdsDatabase['Endpoint']['Address'] ?? null,
-                'endpoint_port' => $createdRdsDatabase['Endpoint']['Port'] ?? null,
-                'endpoint_hosted_zone_id' => $createdRdsDatabase['Endpoint']['HostedZoneId'] ?? null,
-                'aviability_zone' => $createdRdsDatabase['AvailabilityZone'] ?? null,
                 'instance_create_time' => $this->getInstanceCreatedTime($createdRdsDatabase),
-                'status' => \App\Enums\DBStatus::tryFrom($createdRdsDatabase['DBInstanceStatus'] ?? 'pending'),
             ]);
         }
         catch (\Exception $e) {
