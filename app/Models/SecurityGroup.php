@@ -28,4 +28,9 @@ class SecurityGroup extends Model
     {
         return $this->belongsTo(User::class, 'created_by');
     }
+
+    public function rdsDatabases()
+    {
+        return $this->hasMany(RdsDatabase::class, 'vpc_security_group', 'group_id');
+    }
 }

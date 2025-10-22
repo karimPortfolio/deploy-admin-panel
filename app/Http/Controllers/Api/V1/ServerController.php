@@ -53,17 +53,7 @@ class ServerController extends Controller
                 });
             })
             ->orderBy('updated_at', 'desc')
-            ->paginate(function ($total) use ($request) {
-                $perPage = $request->integer('per_page', -1);
-
-                if ($perPage === 0) {
-                    $perPage = $total;
-                } elseif ($perPage === -1) {
-                    $perPage = 5;
-                }
-
-                return $perPage;
-            });
+            ->paginate($request->input('per_page', 15));
 
         return ServerResource::collection($servers);
     }
@@ -108,6 +98,7 @@ class ServerController extends Controller
             'sshKey:id,name',
             'securityGroup:id,name,group_id',
             'createdBy:id,name',
+            'rdsDatabases:id,db_instance_identifier,db_name,engine',
         ]);
 
         $statistics = Ec2InstanceService::getInstanceUtilization($server->instance_id);

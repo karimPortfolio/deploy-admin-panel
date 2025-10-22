@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             SecurityGroupSeeder::class,
             ServerSeeder::class,
             UserPreferenceSeeder::class,
+            RdsDatabaseSeeder::class,
         ]);
     }
 }

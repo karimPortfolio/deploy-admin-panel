@@ -24,7 +24,7 @@ class ServerControllerTest extends TestCase
         parent::setUp();
         $this->actingAsUser();
     }
-    public function test_can_list_servers_with_paginatoin()
+    public function test_can_list_servers_with_pagination()
     {
         $server = Server::factory()->create();
 

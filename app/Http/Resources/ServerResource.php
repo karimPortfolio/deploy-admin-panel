@@ -27,6 +27,7 @@ class ServerResource extends JsonResource
             'subnet_id' => $this->whenHas('subnet_id'),
             'ssh_key' => new SshKeyResource($this->whenLoaded('sshKey')),
             'security_group' => new SecurityGroupResource($this->whenLoaded('securityGroup')),
+            'rds_databases' => RdsDatabaseResource::collection($this->whenLoaded('rdsDatabases')),
             'created_by' => new UserResource($this->whenLoaded('createdBy')),
             'created_at' => $this->whenHas('created_at', fn($value) => $value?->diffForHumans()),
         ];

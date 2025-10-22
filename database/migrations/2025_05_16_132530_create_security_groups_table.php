@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('security_groups', function (Blueprint $table) {
             $table->id();
-            $table->string('group_id')->nullable();
+            $table->string('group_id')->unique();
             $table->string('name')->unique();
             $table->string('description')->nullable();
             $table->string('vpc_id')->nullable();
