@@ -28,6 +28,7 @@ class ServerResource extends JsonResource
             'ssh_key' => new SshKeyResource($this->whenLoaded('sshKey')),
             'security_group' => new SecurityGroupResource($this->whenLoaded('securityGroup')),
             'rds_databases' => RdsDatabaseResource::collection($this->whenLoaded('rdsDatabases')),
+            'pivot' => $this->whenLoaded(relationship: 'pivot'),
             'created_by' => new UserResource($this->whenLoaded('createdBy')),
             'created_at' => $this->whenHas('created_at', fn($value) => $value?->diffForHumans()),
         ];

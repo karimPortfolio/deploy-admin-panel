@@ -2,10 +2,12 @@ import { useQuasar } from "quasar";
 import { useFetch } from "./useFetch";
 import { mergeDeep } from "./utils/deep-merge";
 import { toValue } from "vue";
+import { useI18n } from "vue-i18n";
 
 export function useResourceCreate(resource, { onSuccess, onError, onFinally, config } = {}) {
 
   const $q = useQuasar();
+  const { t } = useI18n();
 
   config = mergeDeep({ method: "POST" }, config);
 
@@ -19,8 +21,8 @@ export function useResourceCreate(resource, { onSuccess, onError, onFinally, con
     onSuccess() {
       $q.notify({
         type: "positive",
-        message: "Success",
-        caption: "The resource has been created successfully.",
+        message: t('success'),
+        caption: t('resource_created_success_msg'),
         position: "bottom-right",
         timeout: 3000,
       });
@@ -33,10 +35,10 @@ export function useResourceCreate(resource, { onSuccess, onError, onFinally, con
     onError(err) {
       $q.notify({
         type: "negative",
-        message: "Error",
+        message: t('error'),
         caption:
           err.response?.data?.message ??
-          "Something went wrong. Please try again.",
+          t('something_went_wrong_error_msg'),
         closeBtn: true,
         timeout: 3000,
       });

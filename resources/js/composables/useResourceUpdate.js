@@ -2,9 +2,11 @@ import { toValue } from "vue";
 import { useFetch } from "./useFetch";
 import { mergeDeep } from "./utils/deep-merge";
 import { useQuasar } from "quasar";
+import { useI18n } from "vue-i18n";
 
 export function useResourceUpdate(resource, { onSuccess, onError, onFinally, config } = {}) {
   const $q = useQuasar();
+  const { t } = useI18n();
 
   config = mergeDeep({ method: "PUT" }, config);
 
@@ -18,8 +20,8 @@ export function useResourceUpdate(resource, { onSuccess, onError, onFinally, con
     onSuccess() {
       $q.notify({
         type: "positive",
-        message: "Success",
-        caption: "The resource has been updated successfully.",
+        message: t('success'),
+        caption: t('resource_updated_success_msg'),
         position: "bottom-right",
         timeout: 3000,
       });
@@ -32,10 +34,10 @@ export function useResourceUpdate(resource, { onSuccess, onError, onFinally, con
     onError(err) {
       $q.notify({
         type: "negative",
-        message: "Error",
+        message: t('error'),
         caption:
           err.response.data.message ??
-          "Something went wrong. Please try again.",
+          t('something_went_wrong_error_msg'),
         closeBtn: true,
         timeout: 3000,
       });

@@ -57,7 +57,7 @@
                                 v-for="server in servers"
                                 :key="server.id"
                             >
-                                <router-link :to="{ name: 'admin.servers.show', params: { id: server.id } }">
+                                <router-link :to="{ name: 'servers.show', params: { id: server.id } }">
                                     <q-card
                                         class="w-full flex flex-nowrap gap-2 items-center p-3 border mt-3"
                                     >

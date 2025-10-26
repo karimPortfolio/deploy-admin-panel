@@ -23,6 +23,24 @@ enum DBEngines: string
     public function label(): string
     {
         return match($this) {
+            self::MYSQL => 'MySQL',
+            self::POSTGRES => 'PostgreSQL',
+            self::MARIADB => 'MariaDB',
+            self::AURORA_MYSQL => 'Amazon Aurora MySQL',
+            self::AURORA_POSTGRESQL => 'Amazon Aurora PostgreSQL',
+            self::AURORA => 'Amazon Aurora',
+            self::ORACLE_SE2 => 'Oracle SE2',
+            self::ORACLE_EE => 'Oracle EE',
+            self::SQLSERVER_EX => 'SQL Server EX',
+            self::SQLSERVER_WEB => 'SQL Server WEB',
+            self::SQLSERVER_SE => 'SQL Server SE',
+            self::SQLSERVER_EE => 'SQL Server EE',
+        };
+    }
+
+    public function description(): string
+    {
+        return match($this) {
             self::MYSQL => __('messages.rds_databases.engines.description.mysql'),
             self::POSTGRES => __('messages.rds_databases.engines.description.postgres'),
             self::MARIADB => __('messages.rds_databases.engines.description.mariadb'),
@@ -61,6 +79,7 @@ enum DBEngines: string
         return [
             'value' => $this->value,
             'label' => $this->label(),
+            'description' => $this->description(),
             'icon' => $this->icon(),
         ];
     }

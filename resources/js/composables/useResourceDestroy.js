@@ -1,11 +1,14 @@
 import { ref, toValue } from "vue";
 import { useFetch } from "./useFetch";
 import { useQuasar } from "quasar";
+import { use } from "react";
+import { useI18n } from "vue-i18n";
 
 export function useResourceDestroy(resource) {
   const destroyed = ref(null);
 
   const $q = useQuasar();
+  const { t } = useI18n();
 
   let timeout;
 
@@ -25,8 +28,8 @@ export function useResourceDestroy(resource) {
 
       $q.notify({
         type: "positive",
-        message: "Success",
-        caption: "The resource has been deleted successfully.",
+        message: t('success'),
+        caption: t('resource_deleted_success_msg'),
         position: "bottom-right",
         timeout: 3000,
       });
@@ -39,10 +42,10 @@ export function useResourceDestroy(resource) {
 
       $q.notify({
         type: "negative",
-        message: "Error",
+        message: t('error'),
         caption:
           err.response.data.message ??
-          "Something went wrong. Please try again.",
+          t('something_went_wrong_error_msg'),
         closeBtn: true,
         timeout: 3000,
       });

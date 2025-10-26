@@ -86,7 +86,7 @@
                     </div>
                 </div>
             </q-card-section>
-            <q-card-section>
+            <q-card-section class="p-0"> 
                 <q-inner-loading :showing="loading" class="rounded-lg" >
                     <q-spinner-tail color="primary" size="40px" />
                 </q-inner-loading>
@@ -96,9 +96,7 @@
 </template>
 <script setup>
 import { onMounted } from "vue";
-import PageHeader from "@/components/PageHeader.vue";
 import { useResourceShow } from "@/composables/useResourceShow";
-import { useTextTruncate } from "@/composables/useTextTruncate";
 import { useRoute } from "vue-router";
 
 const { data: server, fetch, loading } = useResourceShow("servers");

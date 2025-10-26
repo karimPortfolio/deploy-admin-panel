@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'days' => ' Tage',
     'servers' => [
         'servers_creation_msg' => "Server-Erstellung läuft. Sie können den Status später überprüfen.",
         'failed_to_start_msg' => "Fehler beim Starten der Instanz.",
@@ -109,18 +110,20 @@ return [
             'standard' => 'Magnetisch (HDD) – Älterer, langsamerer magnetischer Speicher. Günstig, aber nicht für neue Bereitstellungen empfohlen.',
         ],
         'engines' => [
-            'mysql' => "MySQL – Beliebteste Open-Source-relationale Datenbank. Weitreichend unterstützt, einfache Integration. Für kostenloses Kontingent berechtigt.",
-            'postgres' => "PostgreSQL – Erweiterte Open-Source-Datenbank mit starken JSON- und Indizierungsfunktionen. Hochzuverlässig und skalierbar. Für kostenloses Kontingent berechtigt.",
-            'mariadb' => "MariaDB – MySQL-kompatible Engine mit zusätzlichen Leistungsmerkmalen und offener Governance. Für kostenloses Kontingent berechtigt.",
-            'aurora_mysql' => "Amazon Aurora (MySQL-kompatibel) – Hochleistungs-Cluster-MySQL-Engine mit automatischer Skalierung.",
-            'aurora_postgresql' => "Amazon Aurora (PostgreSQL-kompatibel) – Auroras verwaltete PostgreSQL-Alternative.",
-            'aurora' => "Amazon Aurora (veraltetes generisches) – Nur für ältere API-Aufrufe verwendet; bevorzuge aurora-mysql/aurora-postgresql.",
-            'oracle_se2' => "Oracle SE2 (Standard Edition 2) – Kommerzielle Oracle-Datenbank mit aktivierten Grundfunktionen.",
-            'oracle_ee' => "Oracle EE (Enterprise Edition) – Vollständige Oracle-Datenbank, Unternehmensfähigkeiten (Lizenzkosten fallen an).",
-            'sqlserver_ex' => "Microsoft SQL Server Express – Kostenloser Einstiegs-SQL Server, begrenzte Ressourcen.",
-            'sqlserver_web' => "Microsoft SQL Server Web Edition – Optimiert für Web-Arbeitslasten, niedrigere Kosten.",
-            'sqlserver_se' => "Microsoft SQL Server Standard Edition – Ausgewogene Lizenzoption für Produktion.",
-            'sqlserver_ee' => "Microsoft SQL Server Enterprise Edition – Vollständiger Premium-SQL Server-Funktionsumfang.",
+            'description' => [
+                'mysql' => "MySQL – Beliebteste Open-Source-relationale Datenbank. Weitreichend unterstützt, einfache Integration. Für kostenloses Kontingent berechtigt.",
+                'postgres' => "PostgreSQL – Erweiterte Open-Source-Datenbank mit starken JSON- und Indizierungsfunktionen. Hochzuverlässig und skalierbar. Für kostenloses Kontingent berechtigt.",
+                'mariadb' => "MariaDB – MySQL-kompatible Engine mit zusätzlichen Leistungsmerkmalen und offener Governance. Für kostenloses Kontingent berechtigt.",
+                'aurora_mysql' => "Amazon Aurora (MySQL-kompatibel) – Hochleistungs-Cluster-MySQL-Engine mit automatischer Skalierung.",
+                'aurora_postgresql' => "Amazon Aurora (PostgreSQL-kompatibel) – Auroras verwaltete PostgreSQL-Alternative.",
+                'aurora' => "Amazon Aurora (veraltetes generisches) – Nur für ältere API-Aufrufe verwendet; bevorzuge aurora-mysql/aurora-postgresql.",
+                'oracle_se2' => "Oracle SE2 (Standard Edition 2) – Kommerzielle Oracle-Datenbank mit aktivierten Grundfunktionen.",
+                'oracle_ee' => "Oracle EE (Enterprise Edition) – Vollständige Oracle-Datenbank, Unternehmensfähigkeiten (Lizenzkosten fallen an).",
+                'sqlserver_ex' => "Microsoft SQL Server Express – Kostenloser Einstiegs-SQL Server, begrenzte Ressourcen.",
+                'sqlserver_web' => "Microsoft SQL Server Web Edition – Optimiert für Web-Arbeitslasten, niedrigere Kosten.",
+                'sqlserver_se' => "Microsoft SQL Server Standard Edition – Ausgewogene Lizenzoption für Produktion.",
+                'sqlserver_ee' => "Microsoft SQL Server Enterprise Edition – Vollständiger Premium-SQL Server-Funktionsumfang.",
+            ],
         ],
         'status' => [
             'started'    => 'Gestartet',

@@ -1,42 +1,43 @@
 <?php
 
 return [
+    'days' => 'Días',
     'servers' => [
-        'servers_creation_msg' => "Creación de servidor en progreso. Puedes verificar el estado más tarde.",
-        'failed_to_start_msg' => "Error al iniciar la instancia.",
-        'failed_to_stop_msg'  => "Error al detener la instancia.",
-        'failed_to_terminate_msg' => "Error al terminar la instancia.",
+        'servers_creation_msg' => 'Creación de servidor en progreso. Puedes verificar el estado más tarde.',
+        'failed_to_start_msg' => 'Error al iniciar la instancia.',
+        'failed_to_stop_msg' => 'Error al detener la instancia.',
+        'failed_to_terminate_msg' => 'Error al terminar la instancia.',
         'instance_type' => [
             'description' => [
-                'T2Micro'    => 'Elegible para nivel gratuito, propósito general',
-                'T3Micro'    => 'Propósito general, rendimiento escalable',
-                'T3Small'    => 'Propósito general pequeño',
-                'T3Medium'   => 'Propósito general mediano',
-                'C5Large'    => 'Optimizado para cómputo, bueno para cargas de trabajo de alto rendimiento',
-                'C5Xlarge'   => 'Optimizado para cómputo, capacidad extra',
-                'R5Large'    => 'Optimizado para memoria, bueno para aplicaciones intensivas en datos',
-                'R5Xlarge'   => 'Optimizado para memoria, más RAM',
+                'T2Micro' => 'Elegible para nivel gratuito, propósito general',
+                'T3Micro' => 'Propósito general, rendimiento escalable',
+                'T3Small' => 'Propósito general pequeño',
+                'T3Medium' => 'Propósito general mediano',
+                'C5Large' => 'Optimizado para cómputo, bueno para cargas de trabajo de alto rendimiento',
+                'C5Xlarge' => 'Optimizado para cómputo, capacidad extra',
+                'R5Large' => 'Optimizado para memoria, bueno para aplicaciones intensivas en datos',
+                'R5Xlarge' => 'Optimizado para memoria, más RAM',
                 'G4dnXlarge' => 'Instancia GPU, buena para cargas de trabajo de ML o gráficos',
             ],
         ],
         'status' => [
-            'running'    => 'Ejecutándose',
-            'stopped'    => 'Detenido',
+            'running' => 'Ejecutándose',
+            'stopped' => 'Detenido',
             'terminated' => 'Terminado',
-            'pending'    => 'Pendiente',
+            'pending' => 'Pendiente',
         ],
     ],
     'users' => [
         'roles' => [
             'admin' => 'Administrador',
-            'user'  => 'Usuario',
+            'user' => 'Usuario',
         ],
     ],
     'security_groups' => [
-        'associated_servers_msg' => "Este grupo de seguridad está asociado con servidores y no puede ser eliminado.",
+        'associated_servers_msg' => 'Este grupo de seguridad está asociado con servidores y no puede ser eliminado.',
     ],
     'ssh_keys' => [
-        'associated_servers_msg' => "Esta clave SSH está asociada con servidores y no puede ser eliminada.",
+        'associated_servers_msg' => 'Esta clave SSH está asociada con servidores y no puede ser eliminada.',
     ],
     'rds_databases' => [
         'instance_class' => [
@@ -109,31 +110,33 @@ return [
             'standard' => 'Magnético (HDD) – Almacenamiento magnético más antiguo y lento. Económico pero no recomendado para nuevas implementaciones.',
         ],
         'engines' => [
-            'mysql' => "MySQL – Base de datos relacional de código abierto más popular. Ampliamente soportada, fácil integración. Elegible para nivel gratuito.",
-            'postgres' => "PostgreSQL – Base de datos avanzada de código abierto con características sólidas de JSON e indexación. Altamente confiable y escalable. Elegible para nivel gratuito.",
-            'mariadb' => "MariaDB – Motor compatible con MySQL con características adicionales de rendimiento y gobernanza abierta. Elegible para nivel gratuito.",
-            'aurora_mysql' => "Amazon Aurora (compatible con MySQL) – Motor MySQL clusterizado de alto rendimiento con escalado automático.",
-            'aurora_postgresql' => "Amazon Aurora (compatible con PostgreSQL) – Alternativa PostgreSQL administrada de Aurora.",
-            'aurora' => "Amazon Aurora (genérico heredado) – Usado solo para llamadas API antiguas; prefiere aurora-mysql/aurora-postgresql.",
-            'oracle_se2' => "Oracle SE2 (Standard Edition 2) – Base de datos Oracle comercial con características básicas habilitadas.",
-            'oracle_ee' => "Oracle EE (Enterprise Edition) – Base de datos Oracle completa, capacidades empresariales (se aplican costos de licencia).",
-            'sqlserver_ex' => "Microsoft SQL Server Express – SQL Server gratuito de nivel básico, recursos limitados.",
-            'sqlserver_web' => "Microsoft SQL Server Web Edition – Optimizado para cargas de trabajo web, menor costo.",
-            'sqlserver_se' => "Microsoft SQL Server Standard Edition – Opción de licencia equilibrada para producción.",
-            'sqlserver_ee' => "Microsoft SQL Server Enterprise Edition – Conjunto completo de características premium de SQL Server.",
+            'description' => [
+                'mysql' => 'MySQL – Base de datos relacional de código abierto más popular. Ampliamente soportada, fácil integración. Elegible para nivel gratuito.',
+                'postgres' => 'PostgreSQL – Base de datos avanzada de código abierto con características sólidas de JSON e indexación. Altamente confiable y escalable. Elegible para nivel gratuito.',
+                'mariadb' => 'MariaDB – Motor compatible con MySQL con características adicionales de rendimiento y gobernanza abierta. Elegible para nivel gratuito.',
+                'aurora_mysql' => 'Amazon Aurora (compatible con MySQL) – Motor MySQL clusterizado de alto rendimiento con escalado automático.',
+                'aurora_postgresql' => 'Amazon Aurora (compatible con PostgreSQL) – Alternativa PostgreSQL administrada de Aurora.',
+                'aurora' => 'Amazon Aurora (genérico heredado) – Usado solo para llamadas API antiguas; prefiere aurora-mysql/aurora-postgresql.',
+                'oracle_se2' => 'Oracle SE2 (Standard Edition 2) – Base de datos Oracle comercial con características básicas habilitadas.',
+                'oracle_ee' => 'Oracle EE (Enterprise Edition) – Base de datos Oracle completa, capacidades empresariales (se aplican costos de licencia).',
+                'sqlserver_ex' => 'Microsoft SQL Server Express – SQL Server gratuito de nivel básico, recursos limitados.',
+                'sqlserver_web' => 'Microsoft SQL Server Web Edition – Optimizado para cargas de trabajo web, menor costo.',
+                'sqlserver_se' => 'Microsoft SQL Server Standard Edition – Opción de licencia equilibrada para producción.',
+                'sqlserver_ee' => 'Microsoft SQL Server Enterprise Edition – Conjunto completo de características premium de SQL Server.',
+            ],
         ],
         'status' => [
-            'started'     => 'Iniciado',
-            'stopped'     => 'Detenido',
-            'backing_up'  => 'Respaldando',
-            'pending'     => 'Pendiente',
-            'failed'      => 'Fallido',
+            'started' => 'Iniciado',
+            'stopped' => 'Detenido',
+            'backing_up' => 'Respaldando',
+            'pending' => 'Pendiente',
+            'failed' => 'Fallido',
         ],
-        'associated_servers_msg' => "Esta base de datos RDS está asociada con servidores y no puede ser eliminada.",
-        'delete_failed_msg' => "Error al eliminar la base de datos RDS. Por favor, inténtelo de nuevo más tarde.",
+        'associated_servers_msg' => 'Esta base de datos RDS está asociada con servidores y no puede ser eliminada.',
+        'delete_failed_msg' => 'Error al eliminar la base de datos RDS. Por favor, inténtelo de nuevo más tarde.',
         'db_name_regex' => 'El nombre de la base de datos debe comenzar con una letra y contener solo letras y números (sin espacios ni caracteres especiales).',
         'rds_database_id_unique' => 'Esta base de datos ya está adjunta al servidor seleccionado.',
-        'rds_server_id_unique' => 'Este servidor ya está adjunto a la base de datos seleccionada.'
+        'rds_server_id_unique' => 'Este servidor ya está adjunto a la base de datos seleccionada.',
     ],
     'notifications' => [
         'new_user' => [
@@ -144,7 +147,7 @@ return [
                 'line2' => 'Por favor asegúrate de cambiar tu contraseña después de tu primer inicio de sesión.',
                 'action' => 'Iniciar Sesión Ahora',
                 'line3' => '¡Gracias por usar nuestra aplicación!',
-            ]
+            ],
         ],
         'account_activation' => [
             'mail' => [
@@ -158,7 +161,7 @@ return [
                 'title' => 'Cuenta Activada',
                 'body' => 'tu cuenta ha sido activada una vez más por nuestro equipo de Administración.',
                 'actionLabel' => 'Revisa Tu Panel',
-            ]
+            ],
         ],
         'account_deactivation' => [
             'mail' => [
@@ -171,7 +174,7 @@ return [
                 'title' => 'Cuenta Desactivada',
                 'body' => 'tu cuenta ha sido desactivada por nuestro equipo de Administración.',
                 'actionLabel' => 'Contactar Soporte',
-            ]
+            ],
         ],
         'deleted_resource' => [
             'mail' => [
@@ -185,7 +188,7 @@ return [
                 'title' => 'Recurso Eliminado',
                 'body' => 'Tu :resourceType (ID: :resourceId) ha sido eliminado por nuestro equipo de administración.',
                 'actionLabel' => 'Revisa Tu Panel',
-            ]
+            ],
         ],
         'unused_resources_alert' => [
             'mail' => [
@@ -202,7 +205,7 @@ return [
                 'title' => 'Recursos No Utilizados Detectados',
                 'body' => 'Esta semana, se identificaron un total de :totalUnusedResources recursos no utilizados.',
                 'actionLabel' => 'Revisa Tu Panel',
-            ]
+            ],
         ],
         'password_reset' => [
             'mail' => [
@@ -210,10 +213,10 @@ return [
                 'line1' => 'Haz clic en el botón de abajo para restablecer tu contraseña:',
                 'action' => 'Restablecer Contraseña',
                 'line2' => 'Si no solicitaste un restablecimiento de contraseña, no se requiere ninguna acción adicional.',
-            ]
+            ],
         ],
     ],
     'middlewares' => [
         'account_inactive' => 'La cuenta está inactiva. Por favor contacta a soporte.',
-    ]
+    ],
 ];

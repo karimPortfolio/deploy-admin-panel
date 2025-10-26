@@ -86,6 +86,11 @@ const userDrawerItems = computed(() => [
         route: { name: "servers.index" },
     },
     {
+        label: "databases.title",
+        icon: "sym_r_database",
+        route: { name: "databases.index" },
+    },
+    {
         label: "security_groups.title",
         icon: "sym_r_security",
         route: { name: "security-groups" },

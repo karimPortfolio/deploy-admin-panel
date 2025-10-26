@@ -1,9 +1,11 @@
 import { ref, toValue } from "vue";
 import { useFetch } from "./useFetch";
 import { useQuasar } from "quasar";
+import { useI18n } from "vue-i18n";
 
 export function useResourceShow(resource, options = {}) {
     const $q = useQuasar();
+    const { t } = useI18n();
 
     const data = ref(options.data ?? {});
 
@@ -17,15 +19,15 @@ export function useResourceShow(resource, options = {}) {
         },
 
         onError(err) {
-            // $q.notify({
-            //     type: "negative",
-            //     message: "Error",
-            //     caption:
-            //         err.response.data.message ??
-            //         "Something went wrong. Please try again.",
-            //     closeBtn: true,
-            //     timeout: 3000,
-            // });
+            $q.notify({
+                type: "negative",
+                message: t('error'),
+                caption:
+                    err.response.data.message ??
+                    t('something_went_wrong_error_msg'),
+                closeBtn: true,
+                timeout: 3000,
+            });
             if (options.onError) {
                 options.onError(err);
             }

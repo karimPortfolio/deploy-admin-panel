@@ -2,6 +2,7 @@ import { useQuasar } from "quasar";
 import { reactive, ref, toRaw, toValue, watchEffect } from "vue";
 import { useFetch } from "./useFetch";
 import qs from "qs";
+import { useI18n } from "vue-i18n";
 
 export function useResourceIndex(
     resource,
@@ -9,6 +10,7 @@ export function useResourceIndex(
     { onSuccess, onError, onFinally, config } = {}
 ) {
     const $q = useQuasar();
+    const { t } = useI18n();
 
     const options = reactive({
         search: null,
@@ -59,7 +61,7 @@ export function useResourceIndex(
         },
 
         onError(err) {
-            errorsHnadler(err);
+            errorsHandler(err);
 
             if (onError) onError(err);
         },
@@ -111,12 +113,12 @@ export function useResourceIndex(
         });
     }
 
-    const errorsHnadler = (err) => {
+    const errorsHandler = (err) => {
         if (err.response?.status === 401) {
             $q.notify({
                 type: "negative",
-                message: "Unauthorized",
-                caption: "Please log in again.",
+                message: t('unauthorized'),
+                caption: t('unauthorized_error_msg'),
                 closeBtn: true,
                 timeout: 3000,
             });
@@ -127,8 +129,8 @@ export function useResourceIndex(
         if (err.response?.status === 403) {
             $q.notify({
                 type: "negative",
-                message: "Forbidden",
-                caption: "You do not have permission to perform this action.",
+                message: t('forbidden'),
+                caption: t('forbidden_error_msg'),
                 closeBtn: true,
                 timeout: 3000,
             });
@@ -138,10 +140,10 @@ export function useResourceIndex(
 
         $q.notify({
             type: "negative",
-            message: "Error",
+            message: t('error'),
             caption:
                 err.response.data.message ??
-                "Something went wrong. Please try again.",
+                t('something_went_wrong_error_msg'),
             closeBtn: true,
             timeout: 3000,
         });

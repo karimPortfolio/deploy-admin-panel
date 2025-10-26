@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'days' => ' Days',
     'servers' => [
         'servers_creation_msg' => "Server creation in progress. You can check the status later.",
         'failed_to_start_msg' => "Failed to start the instance.",

@@ -50,6 +50,9 @@ class SyncRdsDatabase extends Command
                 }
 
             } catch (\Exception $e) {
+                $rdsDatabase->update([
+                    'status' => DBStatus::FAILED->value,
+                ]);
                 \Log::error('Error syncing RDS database ID '.$rdsDatabase->id.': '.$e->getMessage());
             }
         }

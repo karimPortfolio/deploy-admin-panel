@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'days' => 'Jours',
     'servers' => [
         'servers_creation_msg' => "Création du serveur en cours. Vous pouvez vérifier le statut plus tard.",
         'failed_to_start_msg' => "Échec du démarrage de l'instance.",
@@ -109,18 +110,20 @@ return [
             'standard' => 'Magnétique (HDD) – Stockage magnétique plus ancien et plus lent. Bon marché mais non recommandé pour les nouveaux déploiements.',
         ],
         'engines' => [
-            'mysql' => "MySQL – Base de données relationnelle open source la plus populaire. Largement supportée, intégration facile. Éligible au niveau gratuit.",
-            'postgres' => "PostgreSQL – Base de données avancée open source avec de solides fonctionnalités JSON et d'indexation. Très fiable et évolutive. Éligible au niveau gratuit.",
-            'mariadb' => "MariaDB – Moteur compatible MySQL avec des fonctionnalités supplémentaires de performance et de gouvernance ouverte. Éligible au niveau gratuit.",
-            'aurora_mysql' => "Amazon Aurora (compatible MySQL) – Moteur MySQL clusterisé haute performance avec mise à l'échelle automatique.",
-            'aurora_postgresql' => "Amazon Aurora (compatible PostgreSQL) – Alternative PostgreSQL gérée d'Aurora.",
-            'aurora' => "Amazon Aurora (générique hérité) – Utilisé uniquement pour les anciens appels API ; préférez aurora-mysql/aurora-postgresql.",
-            'oracle_se2' => "Oracle SE2 (Standard Edition 2) – Base de données Oracle commerciale avec fonctionnalités de base activées.",
-            'oracle_ee' => "Oracle EE (Enterprise Edition) – Base de données Oracle complète, capacités d'entreprise (coûts de licence applicables).",
-            'sqlserver_ex' => "Microsoft SQL Server Express – SQL Server gratuit de niveau basique, ressources limitées.",
-            'sqlserver_web' => "Microsoft SQL Server Web Edition – Optimisé pour les charges de travail web, coût réduit.",
-            'sqlserver_se' => "Microsoft SQL Server Standard Edition – Option de licence équilibrée pour la production.",
-            'sqlserver_ee' => "Microsoft SQL Server Enterprise Edition – Ensemble complet de fonctionnalités premium de SQL Server.",
+            'description' => [
+                'mysql' => "MySQL – Base de données relationnelle open source la plus populaire. Largement supportée, intégration facile. Éligible au niveau gratuit.",
+                'postgres' => "PostgreSQL – Base de données avancée open source avec de solides fonctionnalités JSON et d'indexation. Très fiable et évolutive. Éligible au niveau gratuit.",
+                'mariadb' => "MariaDB – Moteur compatible MySQL avec des fonctionnalités supplémentaires de performance et de gouvernance ouverte. Éligible au niveau gratuit.",
+                'aurora_mysql' => "Amazon Aurora (compatible MySQL) – Moteur MySQL clusterisé haute performance avec mise à l'échelle automatique.",
+                'aurora_postgresql' => "Amazon Aurora (compatible PostgreSQL) – Alternative PostgreSQL gérée d'Aurora.",
+                'aurora' => "Amazon Aurora (générique hérité) – Utilisé uniquement pour les anciens appels API ; préférez aurora-mysql/aurora-postgresql.",
+                'oracle_se2' => "Oracle SE2 (Standard Edition 2) – Base de données Oracle commerciale avec fonctionnalités de base activées.",
+                'oracle_ee' => "Oracle EE (Enterprise Edition) – Base de données Oracle complète, capacités d'entreprise (coûts de licence applicables).",
+                'sqlserver_ex' => "Microsoft SQL Server Express – SQL Server gratuit de niveau basique, ressources limitées.",
+                'sqlserver_web' => "Microsoft SQL Server Web Edition – Optimisé pour les charges de travail web, coût réduit.",
+                'sqlserver_se' => "Microsoft SQL Server Standard Edition – Option de licence équilibrée pour la production.",
+                'sqlserver_ee' => "Microsoft SQL Server Enterprise Edition – Ensemble complet de fonctionnalités premium de SQL Server.",
+            ],
         ],
         'status' => [
             'started'    => 'Démarré',

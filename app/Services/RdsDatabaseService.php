@@ -30,7 +30,6 @@ class RdsDatabaseService
                 'MultiAZ' => false,
                 'PubliclyAccessible' => $params['publicly_accessible'],
                 'StorageEncrypted' => $params['storage_encrypted'],
-                'EnableCloudwatchLogsExports' => ['error', 'general', 'slowquery'],
                 'VpcSecurityGroupIds' => [$params['vpc_security_group']],
                 'DBSubnetGroupName' => $subnetGroup[0]['DBSubnetGroupName'] ?? null,
             ]);

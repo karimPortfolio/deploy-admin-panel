@@ -161,7 +161,7 @@
         return;
       }
     }
-  
+
     done(
       () => {
         filteredOptions.value = options.value.filter((option) => {

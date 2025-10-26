@@ -11,7 +11,7 @@
             :id="itemToShow?.id"
         /> -->
 
-       <confirmation-modal
+        <confirmation-modal
             v-model:open="openDeleteConfirmationModal"
             title="servers.delete"
             icon="warning"
@@ -100,7 +100,12 @@
                     </q-td>
                 </template>
                 <template v-slot:body-cell-created_at="props">
-                    <q-td :props="props" :title="props.row.created_by?.name ?? props.row.create_at"> 
+                    <q-td
+                        :props="props"
+                        :title="
+                            props.row.created_by?.name ?? props.row.create_at
+                        "
+                    >
                         {{ props.row.created_at }}
                     </q-td>
                 </template>
@@ -133,7 +138,6 @@ import InstanceTypeColumn from "./table-columns/InstanceTypeColumn.vue";
 import SecurityGroupColumn from "./table-columns/SecurityGroupColumn.vue";
 import InstanceNameColumn from "./table-columns/InstanceNameColumn.vue";
 import { useI18n } from "vue-i18n";
-
 
 const { t } = useI18n();
 
@@ -263,11 +267,15 @@ const itemToChangeStatus = ref(null);
 const newServerStatus = ref(false);
 
 const serverStatusChangeModalTitle = computed(() => {
-    return newServerStatus.value === "start" ? t("servers.start_server") : t("servers.stop_server");
+    return newServerStatus.value === "start"
+        ? t("servers.start_server")
+        : t("servers.stop_server");
 });
 
 const serverStatusChangeActionLabel = computed(() => {
-    return newServerStatus.value === "start" ? t("servers.start") : t("servers.stop");
+    return newServerStatus.value === "start"
+        ? t("servers.start")
+        : t("servers.stop");
 });
 
 const serverStatusChangeLoading = computed(() => {
@@ -301,19 +309,7 @@ const statusChangeConfirmation = (row, status) => {
     openStatusChangeConfirmationModal.value = true;
 };
 
-const handleStatusChange = async () => {
-    if (newServerStatus.value === "start") {
-        await startServer();
-        openStatusChangeConfirmationModal.value = false;
-        newServerStatus.value = null;
-        fetch({
-            filter: search.value,
-            filters: options.filters,
-        });
-        return;
-    }
-
-    await stopServer();
+const statusChanged = () => {
     openStatusChangeConfirmationModal.value = false;
     newServerStatus.value = null;
     fetch({
@@ -321,6 +317,18 @@ const handleStatusChange = async () => {
         filters: options.filters,
     });
 };
+
+const handleStatusChange = async () => {
+    if (newServerStatus.value === "start") {
+        await startServer();
+        statusChanged();
+        return;
+    }
+
+    await stopServer();
+    statusChanged();
+};
+
 
 const handleDelete = async () => {
     await destroy(itemToDelete.value.id);

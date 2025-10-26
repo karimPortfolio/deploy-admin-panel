@@ -53,7 +53,27 @@ const router = createRouter({
                 {
                     path: "ssh-keys",
                     name: "ssh-keys",
+                    meta: { role: "user" },
                     component: () => import("../views/ssh-keys/IndexView.vue"),
+                },
+                {
+                    path: "rds-databases",
+                    component: RouterView,
+                    meta: { role: "user" },
+                    children: [
+                        {
+                            path: "",
+                            name: "databases.index",
+                            component: () =>
+                                import("../views/databases/IndexView.vue"),
+                        },
+                        {
+                            path: ":id",
+                            name: "databases.show",
+                            component: () =>
+                                import("../views/databases/ShowDetailsView.vue"),
+                        },
+                    ],
                 },
                 {
                     path: "profile",
@@ -67,7 +87,7 @@ const router = createRouter({
                 },
 
                 // ADMIN ROUTES
-                adminRoutes
+                adminRoutes,
             ],
         },
 

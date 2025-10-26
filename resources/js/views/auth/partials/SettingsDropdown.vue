@@ -20,8 +20,8 @@
                             flat
                             size="sm"
                             padding="sm"
-                            :icon="$q.dark.isActive ? 'dark_mode' : 'light_mode'"
-                            :label="$q.dark.isActive ? $t('dark') : $t('light')"
+                            :icon="$q.dark.isActive ? 'light_mode' : 'dark_mode'"
+                            :label="$q.dark.isActive ? $t('light') : $t('dark')"
                             @click="handleDarkToggling"
                         />
                     </div>

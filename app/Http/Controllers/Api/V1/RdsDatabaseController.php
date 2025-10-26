@@ -15,7 +15,6 @@ use App\Models\RdsDatabase;
 use App\Services\RdsDatabaseService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -31,20 +30,19 @@ class RdsDatabaseController extends Controller
                 AllowedFilter::exact('db_instance_class'),
                 AllowedFilter::exact('storage_type'),
                 AllowedFilter::exact('status'),
-                AllowedFilter::custom('created_at', new \App\Filters\DateFilter()),
+                AllowedFilter::custom('created_at', new \App\Filters\DateFilter),
             ])
             ->allowedSorts(['id', 'db_instance_identifier', 'db_name', 'allocated_storage', 'created_at', 'updated_at'])
             ->with([
-                'securityGroup:id,name,group_id',
+                'securityGroup:id,name,group_id,vpc_id',
             ])
             ->when($request->input('search'), function ($query) use ($request) {
-                $query->where('db_name', 'like', '%' . $request->input('search') . '%')
-                    ->orWhere('db_instance_identifier', 'like', '%' . $request->input('search') . '%')
-                    ->orWhere('engine', 'like', '%' . $request->input('search') . '%');
+                $query->where('db_name', 'like', '%'.$request->input('search').'%')
+                    ->orWhere('db_instance_identifier', 'like', '%'.$request->input('search').'%')
+                    ->orWhere('engine', 'like', '%'.$request->input('search').'%');
             })
             ->orderBy('updated_at', 'desc')
             ->paginate($request->input('per_page', 15));
-
 
         return RdsDatabaseResource::collection($rds_databases);
     }
@@ -89,20 +87,30 @@ class RdsDatabaseController extends Controller
     public function attachDatabaseToServer(RdsDatabaseServerAttachmentRequest $request)
     {
         $count = $this->getAttachedRdsDatabasesCountByServerId($request['server_id']);
-        $request->validate([
-                'is_primary' => [Rule::requiredIf($count == 0), 'nullable', 'boolean'],
-        ]);
+        $isPrimary = $request->input('is_primary', false);
 
-        \DB::table('rds_database_server')->insert([
-            'rds_database_id' => $request['rds_database_id'],
-            'server_id' => $request['server_id'],
-            'is_primary' => $request->input('is_primary', false),
-            'user_id' => $request->user()->id,
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
+        return \DB::transaction(function () use ($request, $count, $isPrimary) {
+            if ($count > 0 && $isPrimary === true) {
+                \DB::table('rds_database_server')
+                    ->where('server_id', $request->input('server_id'))
+                    ->update(['is_primary' => false]);
+            }
 
-        return response()->noContent();
+            if ($count === 0) {
+                $isPrimary = true;
+            }
+
+            \DB::table('rds_database_server')->insert([
+                'rds_database_id' => $request['rds_database_id'],
+                'server_id' => $request['server_id'],
+                'is_primary' => $isPrimary,
+                'user_id' => $request->user()->id,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+
+            return response()->noContent();
+        });
     }
 
     public function destroy(RdsDatabase $rdsDatabase)
@@ -128,33 +136,52 @@ class RdsDatabaseController extends Controller
     public function getDatabaseEngines()
     {
         $engines = DBEngines::cases();
-        $engines = array_map(fn($engine) => $engine->toArray(), $engines);
+        $engines = array_map(fn ($engine) => $engine->toArray(), $engines);
 
-        return response()->json($engines);
+        return response()->json([
+            'data' => $engines,
+        ]);
     }
 
     public function getDatabaseInstanceClasses()
     {
         $instanceClasses = DBInstanceClass::cases();
-        $instanceClasses = array_map(fn($instanceClass) => $instanceClass->toArray(), $instanceClasses);
+        $instanceClasses = array_map(fn ($instanceClass) => $instanceClass->toArray(), $instanceClasses);
 
-        return response()->json($instanceClasses);
+        return response()->json([
+            'data' => $instanceClasses,
+        ]);
     }
 
     public function getDatabaseStorageTypes()
     {
         $storageTypes = StorageType::cases();
-        $storageTypes = array_map(fn($storageType) => $storageType->toArray(), $storageTypes);
+        $storageTypes = array_map(fn ($storageType) => $storageType->toArray(), $storageTypes);
 
-        return response()->json($storageTypes);
+        return response()->json([
+            'data' => $storageTypes,
+        ]);
     }
 
     public function getDatabaseStatuses()
     {
         $statuses = DBStatus::cases();
-        $statuses = array_map(fn($status) => $status->toArray(), $statuses);
-          
-        return response()->json($statuses);
+        $statuses = array_map(fn ($status) => $status->toArray(), $statuses);
+
+        return response()->json([
+            'data' => $statuses,
+        ]);
+    }
+
+    public function getServers()
+    {
+        $servers = \App\Models\Server::query()
+            ->select('id', 'instance_id', 'name')
+            ->get();
+
+        return response()->json([
+            'data' => $servers,
+        ]);
     }
 
     private function rdsDatabaseAssociated(RdsDatabase $rdsDatabase)
@@ -168,7 +195,6 @@ class RdsDatabaseController extends Controller
         return false;
     }
 
-    
     private function getParamsFromRequest(RdsDatabaseRequest $request): array
     {
         return [

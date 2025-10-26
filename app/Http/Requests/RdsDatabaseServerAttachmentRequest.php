@@ -36,7 +36,15 @@ class RdsDatabaseServerAttachmentRequest extends FormRequest
                 Rule::unique('rds_database_server', 'server_id')->where(function ($query)  {
                 return $query->where('rds_database_id', $this->input('rds_database_id'));
             })],
+            'is_primary' => ['nullable', 'boolean']
         ];
+    }
+
+    public function prepareForValidation(): void
+    {
+        $this->merge([
+            'server_id' => $this->input('server.id'),
+        ]);
     }
 
     public function messages(): array

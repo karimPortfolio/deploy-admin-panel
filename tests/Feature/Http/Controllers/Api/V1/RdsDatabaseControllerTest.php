@@ -140,14 +140,20 @@ class RdsDatabaseControllerTest extends TestCase
     {
         $payload = [
             'db_instance_identifier' => 'test-db-instance',
-            'db_instance_class' => 'db.t3.micro',
-            'engine' => 'mysql',
+            'db_instance_class' => [
+                'value' => 'db.t3.micro',
+            ],
+            'engine' => [
+                'value' => 'mysql',
+            ],
             'db_name' => 'testdatabase',
-            'master_username' => 'admin',
+            'master_username' => 'deployer',
             'master_password' => 'SecurePassword123!',
-            'storage_type' => 'gp2',
+            'storage_type' => [
+                'value' => 'gp2',
+            ],
             'allocated_storage' => 20,
-            'vpc_security_group' => \App\Models\SecurityGroup::factory()->create()->group_id,
+            'vpc_security_group' => \App\Models\SecurityGroup::factory()->create(),
             'backup_retention_period' => 7,
             'publicly_accessible' => false,
             'storage_encrypted' => true,
@@ -189,34 +195,7 @@ class RdsDatabaseControllerTest extends TestCase
             ]);
     }
 
-    public function test_attach_handles_primary_validation()
-    {
-        $rdsDatabase = RdsDatabase::factory()->create();
-        $server = \App\Models\Server::factory()->create();
-
-        $payload = [
-            'rds_database_id' => $rdsDatabase->id,
-            'server_id' => $server->id,
-        ];
-
-        $response = $this->postJson(route('api.v1.rds-databases.attach'), $payload);
-
-        $response->assertStatus(422)
-            ->assertJsonValidationErrors(['is_primary']);
-
-        $payload['is_primary'] = true;
-        $response = $this->postJson(route('api.v1.rds-databases.attach'), $payload);
-        $response->assertNoContent();
-
-        $rdsDatabase2 = RdsDatabase::factory()->create();
-        $payload2 = [
-            'rds_database_id' => $rdsDatabase2->id,
-            'server_id' => $server->id,
-        ];
-
-        $response2 = $this->postJson(route('api.v1.rds-databases.attach'), $payload2);
-        $response2->assertNoContent();
-    }
+   
 
     public function test_attach_fails_when_rds_database_already_attached_to_the_same_server()
     {
@@ -244,6 +223,66 @@ class RdsDatabaseControllerTest extends TestCase
         $response->assertStatus(422);
     }
 
+    public function test_attach_sets_existing_primary_to_false_when_new_primary_is_set()
+    {
+        $rdsDatabase1 = RdsDatabase::factory()->create();
+        $rdsDatabase2 = RdsDatabase::factory()->create();
+        $server = \App\Models\Server::factory()->create();
+        $user = \App\Models\User::factory()->create();
+        
+        \DB::table('rds_database_server')->insert([
+            'rds_database_id' => $rdsDatabase1->id,
+            'server_id' => $server->id,
+            'is_primary' => true,
+            'user_id' => $user->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $payload = [
+            'rds_database_id' => $rdsDatabase2->id,
+            'server' => $server,
+            'is_primary' => true,
+        ];
+
+        $response = $this->postJson(route('api.v1.rds-databases.attach'), $payload);
+
+        $response->assertNoContent();
+
+        $this->assertDatabaseHas('rds_database_server', [
+            'rds_database_id' => $rdsDatabase1->id,
+            'server_id' => $server->id,
+            'is_primary' => false,
+        ]);
+
+        $this->assertDatabaseHas('rds_database_server', [
+            'rds_database_id' => $rdsDatabase2->id,
+            'server_id' => $server->id,
+            'is_primary' => true,
+        ]);
+    }
+
+    public function test_attach_sets_is_primary_true_when_no_existing_attachments()
+    {
+        $rdsDatabase = RdsDatabase::factory()->create();
+        $server = \App\Models\Server::factory()->create();
+
+        $payload = [
+            'rds_database_id' => $rdsDatabase->id,
+            'server' => $server,
+        ];
+
+        $response = $this->postJson(route('api.v1.rds-databases.attach'), $payload);
+
+        $response->assertNoContent();
+
+        $this->assertDatabaseHas('rds_database_server', [
+            'rds_database_id' => $rdsDatabase->id,
+            'server_id' => $server->id,
+            'is_primary' => true,
+        ]);
+    }
+
     public function test_can_attach_rds_database_to_server()
     {
         $rdsDatabase = RdsDatabase::factory()->create();
@@ -251,7 +290,7 @@ class RdsDatabaseControllerTest extends TestCase
 
         $payload = [
             'rds_database_id' => $rdsDatabase->id,
-            'server_id' => $server->id,
+            'server' => $server,
             'is_primary' => true,
         ];
 
@@ -264,6 +303,89 @@ class RdsDatabaseControllerTest extends TestCase
             'server_id' => $server->id,
             'is_primary' => true,
         ]);
+    }
+
+
+    public function test_can_get_database_engines()
+    {
+        $response = $this->getJson(route('api.v1.rds-databases.engines'));
+
+        $response->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'value',
+                        'label',
+                        'icon',
+                        'description',
+                    ],
+                ],
+            ]);
+    }
+
+
+    public function test_can_get_database_instance_classes()
+    {
+        $response = $this->getJson(route('api.v1.rds-databases.instance-classes'));
+
+        $response->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'value',
+                        'description',
+                    ],
+                ],
+            ]);
+    }
+
+    public function test_can_get_database_storage_types()
+    {
+        $response = $this->getJson(route('api.v1.rds-databases.storage-types'));
+
+        $response->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'value',
+                        'description',
+                    ],
+                ],
+            ]);
+    }
+
+    public function test_can_get_database_statuses()
+    {
+        $response = $this->getJson(route('api.v1.rds-databases.statuses'));
+
+        $response->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'value',
+                        'label',
+                        'color'
+                    ],
+                ],
+            ]);
+    }
+
+    public function test_can_get_servers()
+    {
+        $server = \App\Models\Server::factory()->create();
+
+        $response = $this->getJson(route('api.v1.rds-databases.servers'));
+
+        $response->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => [
+                        'id',
+                        'instance_id',
+                        'name',
+                    ],
+                ],
+            ]);
     }
 
 }
