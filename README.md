@@ -78,6 +78,8 @@ A modern, admin-focused dashboard for managing servers, users, security groups, 
 
 ![Preview](https://firebasestorage.googleapis.com/v0/b/karim-portfolio-bc1e8.appspot.com/o/deploy-admin-panel-databases-page.png?alt=media&token=a223df4e-7545-49b9-9482-4341170dda48)
 
+![Preview](https://firebasestorage.googleapis.com/v0/b/karim-portfolio-bc1e8.appspot.com/o/deploy-admin-associations.png?alt=media&token=58d968eb-796e-4670-adcb-20a0f3a71b91)
+
 ---
 
 ## 🎥 Demo
