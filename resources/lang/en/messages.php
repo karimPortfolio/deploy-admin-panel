@@ -136,7 +136,9 @@ return [
         'delete_failed_msg' => "Failed to delete the RDS database. Please try again later.",
         'db_name_regex' => 'The database name must begin with a letter and contain only letters and numbers (no spaces or special characters).',
         'rds_database_id_unique' => 'This database is already attached to the selected server.',
-        'rds_server_id_unique' => 'This server is already attached to the selected database.'
+        'rds_server_id_unique' => 'This server is already attached to the selected database.',
+        'attach_server_not_running_msg' => 'The selected server must be in the Running state to attach a database.',
+        'attach_database_not_started_msg' => 'The selected database must be in the Started state to attach to a server.',
     ],
     'notifications' => [
         'new_user' => [

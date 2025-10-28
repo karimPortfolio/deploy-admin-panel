@@ -64,18 +64,21 @@ const data = ref({
     is_primary: false,
 });
 
-const { create, creating: attaching, validation } = useResourceCreate("rds-databases/attach");
+const { create, creating: attaching, validation } = useResourceCreate("rds-databases/attachments");
 
 const handleCreate = async () => {
     data.value.rds_database_id = props.id;
     await create(data.value);
+
     handleClose();
     emit("attached");
 };
 
 const handleClose = () => {
-    data.value = {};
     validation.value = {};
+    data.value = {
+        is_primary: false,
+    };
     open.value = false;
 };
 </script>

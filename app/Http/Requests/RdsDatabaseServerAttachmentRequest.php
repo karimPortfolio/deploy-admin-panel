@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\RequiredIf;
 
 class RdsDatabaseServerAttachmentRequest extends FormRequest
 {
@@ -24,19 +25,21 @@ class RdsDatabaseServerAttachmentRequest extends FormRequest
     {
         return [
             'rds_database_id' => [
-                'required',
-                'exists:rds_databases,id',
-                Rule::unique('rds_database_server', 'rds_database_id')->where(function ($query)  {
+                Rule::requiredIf($this->method() === 'POST'),
+                Rule::exists('rds_databases', 'id')->where(function ($query) {
+                    return $query->where('created_by', $this->user()->id);
+                }),
+                Rule::unique('rds_database_server', 'rds_database_id')->where(function ($query) {
                     return $query->where('server_id', $this->input('server_id'));
-                })
+                }),
             ],
             'server_id' => [
                 'required',
-                'exists:servers,id', 
-                Rule::unique('rds_database_server', 'server_id')->where(function ($query)  {
-                return $query->where('rds_database_id', $this->input('rds_database_id'));
-            })],
-            'is_primary' => ['nullable', 'boolean']
+                Rule::exists('servers', 'id')->where(function ($query) {
+                    return $query->where('created_by', $this->user()->id);
+                }),
+            ],
+            'is_primary' => [Rule::requiredIf($this->method() === 'PATCH'), 'boolean'],
         ];
     }
 

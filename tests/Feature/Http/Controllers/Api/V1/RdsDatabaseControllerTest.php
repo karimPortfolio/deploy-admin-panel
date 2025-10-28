@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Http\Controllers\Api\V1;
 
+use App\Enums\DBStatus;
+use App\Enums\ServerStatus;
 use App\Models\RdsDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Tests\TestCase;
@@ -186,7 +188,7 @@ class RdsDatabaseControllerTest extends TestCase
 
     public function test_attach_handles_validation_errors()
     {
-        $response = $this->postJson(route('api.v1.rds-databases.attach'), []);
+        $response = $this->postJson(route('api.v1.rds-databases.attachments'), []);
 
         $response->assertStatus(422)
             ->assertJsonValidationErrors([
@@ -218,17 +220,23 @@ class RdsDatabaseControllerTest extends TestCase
             'is_primary' => false,
         ];
 
-        $response = $this->postJson(route('api.v1.rds-databases.attach'), $payload);
+        $response = $this->postJson(route('api.v1.rds-databases.attachments'), $payload);
 
         $response->assertStatus(422);
     }
 
     public function test_attach_sets_existing_primary_to_false_when_new_primary_is_set()
     {
-        $rdsDatabase1 = RdsDatabase::factory()->create();
-        $rdsDatabase2 = RdsDatabase::factory()->create();
-        $server = \App\Models\Server::factory()->create();
         $user = \App\Models\User::factory()->create();
+        $rdsDatabase1 = RdsDatabase::factory()->create([
+            'status' => DBStatus::STARTED
+        ]);
+        $rdsDatabase2 = RdsDatabase::factory()->create([
+            'status' => DBStatus::STARTED
+        ]);
+        $server = \App\Models\Server::factory()->create([
+            'status' => ServerStatus::RUNNING
+        ]);
         
         \DB::table('rds_database_server')->insert([
             'rds_database_id' => $rdsDatabase1->id,
@@ -245,7 +253,7 @@ class RdsDatabaseControllerTest extends TestCase
             'is_primary' => true,
         ];
 
-        $response = $this->postJson(route('api.v1.rds-databases.attach'), $payload);
+        $response = $this->postJson(route('api.v1.rds-databases.attachments'), $payload);
 
         $response->assertNoContent();
 
@@ -264,15 +272,19 @@ class RdsDatabaseControllerTest extends TestCase
 
     public function test_attach_sets_is_primary_true_when_no_existing_attachments()
     {
-        $rdsDatabase = RdsDatabase::factory()->create();
-        $server = \App\Models\Server::factory()->create();
+        $rdsDatabase = RdsDatabase::factory()->create([
+            'status' => DBStatus::STARTED
+        ]);
+        $server = \App\Models\Server::factory()->create([
+            'status' => ServerStatus::RUNNING
+        ]);
 
         $payload = [
             'rds_database_id' => $rdsDatabase->id,
             'server' => $server,
         ];
 
-        $response = $this->postJson(route('api.v1.rds-databases.attach'), $payload);
+        $response = $this->postJson(route('api.v1.rds-databases.attachments'), $payload);
 
         $response->assertNoContent();
 
@@ -285,8 +297,12 @@ class RdsDatabaseControllerTest extends TestCase
 
     public function test_can_attach_rds_database_to_server()
     {
-        $rdsDatabase = RdsDatabase::factory()->create();
-        $server = \App\Models\Server::factory()->create();
+        $rdsDatabase = RdsDatabase::factory()->create([
+            'status' => DBStatus::STARTED
+        ]);
+        $server = \App\Models\Server::factory()->create([
+            'status' => ServerStatus::RUNNING
+        ]);
 
         $payload = [
             'rds_database_id' => $rdsDatabase->id,
@@ -294,7 +310,7 @@ class RdsDatabaseControllerTest extends TestCase
             'is_primary' => true,
         ];
 
-        $response = $this->postJson(route('api.v1.rds-databases.attach'), $payload);
+        $response = $this->postJson(route('api.v1.rds-databases.attachments'), $payload);
 
         $response->assertNoContent();
 
@@ -302,6 +318,237 @@ class RdsDatabaseControllerTest extends TestCase
             'rds_database_id' => $rdsDatabase->id,
             'server_id' => $server->id,
             'is_primary' => true,
+        ]);
+    }
+
+
+    public function test_update_primary_database_server_attachment_handles_validation_errors()
+    {
+        $response = $this->patchJson(route('api.v1.rds-databases.attachments.update', 1), []);
+
+        $response->assertStatus(422)
+            ->assertJsonValidationErrors([
+                'is_primary',
+                'server_id',
+            ]);
+    }
+
+
+    public function test_can_update_primary_database_server_attachment()
+    {
+        $user = \App\Models\User::factory()->create();
+        $rdsDatabase = RdsDatabase::factory()->create([
+            'status' => DBStatus::STARTED,
+            'created_by' => $user->id
+        ]);
+        $server = \App\Models\Server::factory()->create([
+            'status' => ServerStatus::RUNNING,
+            'created_by' => $user->id
+        ]);
+        
+        $attachmentId = \DB::table('rds_database_server')->insertGetId([
+            'rds_database_id' => $rdsDatabase->id,
+            'server_id' => $server->id,
+            'is_primary' => false,
+            'user_id' => $user->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $payload = [
+            'is_primary' => true,
+            'server' => $server,
+        ];
+
+        $this->actingAs($user);
+
+        $response = $this->patchJson(route('api.v1.rds-databases.attachments.update', $attachmentId), $payload);
+
+        $response->assertNoContent();
+
+        $this->assertDatabaseHas('rds_database_server', [
+            'id' => $attachmentId,
+            'is_primary' => true,
+        ]);
+    }
+
+
+    public function test_update_primary_database_server_attachment_sets_other_attachments_to_false()
+    {
+        $user = \App\Models\User::factory()->create();
+        $rdsDatabase = RdsDatabase::factory()->create([
+            'status' => DBStatus::STARTED
+        ]);
+        $server = \App\Models\Server::factory()->create([
+            'status' => ServerStatus::RUNNING,
+             'created_by' => $user->id
+        ]);
+        
+        $attachmentId1 = \DB::table('rds_database_server')->insertGetId([
+            'rds_database_id' => $rdsDatabase->id,
+            'server_id' => $server->id,
+            'is_primary' => true,
+            'user_id' => $user->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $attachmentId2 = \DB::table('rds_database_server')->insertGetId([
+            'rds_database_id' => $rdsDatabase->id,
+            'server_id' => $server->id,
+            'is_primary' => false,
+            'user_id' => $user->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $payload = [
+            'is_primary' => true,
+            'server' => $server,
+        ];
+
+        $this->actingAs($user);
+
+        $response = $this->patchJson(route('api.v1.rds-databases.attachments.update', $attachmentId2), $payload);
+
+        $response->assertNoContent();
+
+        $this->assertDatabaseHas('rds_database_server', [
+            'id' => $attachmentId1,
+            'is_primary' => false,
+        ]);
+
+        $this->assertDatabaseHas('rds_database_server', [
+            'id' => $attachmentId2,
+            'is_primary' => true,
+        ]);
+    }
+
+    
+    public function test_update_primary_database_server_attachment_returns_404_for_non_existent_attachment()
+    {
+        $payload = [
+            'is_primary' => true,
+            'server' => [
+                'id' => \App\Models\Server::factory()->create()->id
+            ],
+        ];
+
+        $response = $this->patchJson(route('api.v1.rds-databases.attachments.update', 9999), $payload);
+
+        $response->assertNotFound();
+    }
+
+
+    public function test_detach_returns_404_for_non_existent_attachment()
+    {
+        $response = $this->deleteJson(route('api.v1.rds-databases.attachments.detach', 9999));
+
+        $response->assertNotFound();
+    }
+
+    public function test_detach_change_the_detached_server_primary_randomly()
+    {
+        $user = \App\Models\User::factory()->create();
+        $rdsDatabase = RdsDatabase::factory()->create([
+            'status' => DBStatus::STARTED
+        ]);
+
+        $rdsDatabase2 = RdsDatabase::factory()->create([
+            'status' => DBStatus::STARTED
+        ]);
+        
+        $server = \App\Models\Server::factory()->create([
+            'status' => ServerStatus::RUNNING,
+             'created_by' => $user->id
+        ]);
+
+        
+        $attachmentId1 = \DB::table('rds_database_server')->insertGetId([
+            'rds_database_id' => $rdsDatabase->id,
+            'server_id' => $server->id,
+            'is_primary' => true,
+            'user_id' => $user->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $attachmentId2 = \DB::table('rds_database_server')->insertGetId([
+            'rds_database_id' => $rdsDatabase2->id,
+            'server_id' => $server->id,
+            'is_primary' => false,
+            'user_id' => $user->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $this->actingAs($user);
+
+        $response = $this->deleteJson(route('api.v1.rds-databases.attachments.detach', $attachmentId1));
+
+        $response->assertNoContent();
+
+        $this->assertDatabaseHas('rds_database_server', [
+            'id' => $attachmentId2,
+            'is_primary' => true,
+        ]);
+    }
+
+    public function test_detach_can_handle_detaching_non_primary_attachment()
+    {
+        $user = \App\Models\User::factory()->create();
+        $rdsDatabase = RdsDatabase::factory()->create([
+            'status' => DBStatus::STARTED
+        ]);
+
+        $server = \App\Models\Server::factory()->create([
+            'status' => ServerStatus::RUNNING,
+             'created_by' => $user->id
+        ]);
+
+        
+        $attachmentId = \DB::table('rds_database_server')->insertGetId([
+            'rds_database_id' => $rdsDatabase->id,
+            'server_id' => $server->id,
+            'is_primary' => false,
+            'user_id' => $user->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $this->actingAs($user);
+
+        $response = $this->deleteJson(route('api.v1.rds-databases.attachments.detach', $attachmentId));
+
+        $response->assertNoContent();
+
+        $this->assertDatabaseMissing('rds_database_server', [
+            'id' => $attachmentId,
+        ]);
+    }
+
+
+    public function test_can_detach_database_from_server()
+    {
+        $rdsDatabase = RdsDatabase::factory()->create();
+        $server = \App\Models\Server::factory()->create();
+        $user = \App\Models\User::factory()->create();
+        
+        $attachmentId = \DB::table('rds_database_server')->insertGetId([
+            'rds_database_id' => $rdsDatabase->id,
+            'server_id' => $server->id,
+            'is_primary' => true,
+            'user_id' => $user->id,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        $response = $this->deleteJson(route('api.v1.rds-databases.attachments.detach', $attachmentId));
+
+        $response->assertNoContent();
+
+        $this->assertDatabaseMissing('rds_database_server', [
+            'id' => $attachmentId,
         ]);
     }
 

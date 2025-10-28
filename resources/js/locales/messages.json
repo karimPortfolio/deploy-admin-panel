@@ -26,7 +26,7 @@
         "edit": "Edit",
         "actions": "Actions",
         "view_details": "View Details",
-        "attach_to_server": "Attach to Server",
+        "attach_to_server": "Associate to Server",
         "are_you_sure": "Are you sure?",
         "yes": "Yes",
         "no": "No",
@@ -173,7 +173,10 @@
             "backup_retention_period_hint": "Specify the number of days to retain backups. Maximum is 35 days.",
             "server": "Server",
             "primary": "Primary",
-            "primary_note": "Primary indicates whether this database is the primary database for the server."
+            "primary_note": "Primary indicates whether this database is the primary database for the server.",
+            "edit_association": "Edit Association",
+            "delete_association": "Delete Association",
+            "make_primary": "Make Primary"
         },
         "ssh_keys": {
             "title": "SSH Keys",
@@ -274,7 +277,7 @@
         "edit": "Editar",
         "actions": "Acciones",
         "view_details": "Ver Detalles",
-        "attach_to_server": "Adjuntar al Servidor",
+        "attach_to_server": "Asociar al Servidor",
         "are_you_sure": "¿Estás seguro?",
         "yes": "Sí",
         "no": "No",
@@ -421,7 +424,10 @@
             "backup_retention_period_hint": "Especifica el número de días para conservar las copias de seguridad. El máximo es de 35 días.",
             "server": "Servidor",
             "primary": "Primario",
-            "primary_note": "Primario indica si esta base de datos es la base de datos primaria para el servidor."
+            "primary_note": "Primario indica si esta base de datos es la base de datos primaria para el servidor.",
+            "edit_association": "Editar Asociación",
+            "delete_association": "Eliminar Asociación",
+            "make_primary": "Hacer Primario"
         },
         "ssh_keys": {
             "title": "Claves SSH",
@@ -522,7 +528,7 @@
         "edit": "Bearbeiten",
         "actions": "Aktionen",
         "view_details": "Details Anzeigen",
-        "attach_to_server": "An Server Anhängen",
+        "attach_to_server": "Mit Server Verbinden",
         "are_you_sure": "Bist du sicher?",
         "yes": "Ja",
         "no": "Nein",
@@ -669,7 +675,10 @@
             "backup_retention_period_hint": "Geben Sie die Anzahl der Tage an, um Backups aufzubewahren. Maximal 35 Tage.",
             "server": "Server",
             "primary": "Primär",
-            "primary_note": "Primär gibt an, ob diese Datenbank die primäre Datenbank für den Server ist."
+            "primary_note": "Primär gibt an, ob diese Datenbank die primäre Datenbank für den Server ist.",
+            "edit_association": "Verknüpfung Bearbeiten",
+            "delete_association": "Verknüpfung Löschen",
+            "make_primary": "Zum Primärmachen"
         },
         "ssh_keys": {
             "title": 	"SSH-Schlüssel",
@@ -770,7 +779,7 @@
         "edit": "Éditer",
         "actions": "Actions",
         "view_details": "Voir les Détails",
-        "attach_to_server": "Attacher au Serveur",
+        "attach_to_server": "Associer au Serveur",
         "are_you_sure": "Êtes-vous sûr?",
         "yes": "Oui",
         "no": "Non",
@@ -917,7 +926,10 @@
             "backup_retention_period_hint": "Spécifiez le nombre de jours pour conserver les sauvegardes. Le maximum est de 35 jours.",
             "server": "Serveur",
             "primary": "Principal",
-            "primary_note": "Principal indique si cette base de données est la base de données principale pour le serveur."
+            "primary_note": "Principal indique si cette base de données est la base de données principale pour le serveur.",
+            "edit_association": "Éditer l'Association",
+            "delete_association": "Supprimer l'Association",
+            "make_primary": "Rendre Principal"
         },
         "ssh_keys": {
             "title": "Clés SSH",

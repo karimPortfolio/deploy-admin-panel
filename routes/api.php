@@ -79,7 +79,9 @@ Route::middleware(['auth:sanctum', 'setUserLocale', 'isActive'])
                     Route::get('storage-types', [RdsDatabaseController::class, 'getDatabaseStorageTypes'])->name('storage-types');
                     Route::get('instance-classes', [RdsDatabaseController::class, 'getDatabaseInstanceClasses'])->name('instance-classes');
                     Route::get('servers', [RdsDatabaseController::class, 'getServers'])->name('servers');
-                    Route::post('attach', [RdsDatabaseController::class, 'attachDatabaseToServer'])->name('attach');
+                    Route::post('attachments', [RdsDatabaseController::class, 'attachDatabaseToServer'])->name('attachments');
+                    Route::patch('attachments/{id}', [RdsDatabaseController::class, 'updatePrimaryDatabaseServerAttachment'])->name('attachments.update');
+                    Route::delete('attachments/{id}', [RdsDatabaseController::class, 'detachDatabaseFromServer'])->name('attachments.detach');
                 });
                 Route::apiResource('rds-databases', RdsDatabaseController::class)->except(['update']);
             });

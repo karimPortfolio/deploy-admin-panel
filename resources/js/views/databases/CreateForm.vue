@@ -276,6 +276,7 @@ const handleClose = () => {
         publicly_accessible: false,
         storage_encrypted: false,
     };
+    
     validation.value = {};
     open.value = false;
 };

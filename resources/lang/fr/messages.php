@@ -136,7 +136,9 @@ return [
         'delete_failed_msg' => "Échec de la suppression de la base de données RDS. Veuillez réessayer plus tard.",
         'db_name_regex' => 'Le nom de la base de données doit commencer par une lettre et ne contenir que des lettres et des chiffres (pas d\'espaces ni de caractères spéciaux).',
         'rds_database_id_unique' => 'Cette base de données est déjà attachée au serveur sélectionné.',
-        'rds_server_id_unique' => 'Ce serveur est déjà attaché à la base de données sélectionnée.'
+        'rds_server_id_unique' => 'Ce serveur est déjà attaché à la base de données sélectionnée.',
+        'attach_server_not_running_msg' => 'Le serveur sélectionné doit être en état Exécution pour attacher une base de données.',
+        'attach_database_not_started_msg' => 'La base de données sélectionnée doit être en état Démarré pour s\'attacher à un serveur.',
     ],
     'notifications' => [
         'new_user' => [

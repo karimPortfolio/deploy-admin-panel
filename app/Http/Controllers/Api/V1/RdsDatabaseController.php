@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V1;
 use App\Enums\DBEngines;
 use App\Enums\DBInstanceClass;
 use App\Enums\DBStatus;
+use App\Enums\ServerStatus;
 use App\Enums\StorageType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RdsDatabaseRequest;
@@ -12,9 +13,11 @@ use App\Http\Requests\RdsDatabaseServerAttachmentRequest;
 use App\Http\Resources\RdsDatabaseResource;
 use App\Jobs\CreateRdsDatabaseJob;
 use App\Models\RdsDatabase;
+use App\Models\Server;
 use App\Services\RdsDatabaseService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Validation\Rule;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
@@ -88,6 +91,22 @@ class RdsDatabaseController extends Controller
     {
         $count = $this->getAttachedRdsDatabasesCountByServerId($request['server_id']);
         $isPrimary = $request->input('is_primary', false);
+        $server = Server::find($request->input('server_id'));
+        $database = RdsDatabase::find($request->input('rds_database_id'));
+
+        if ($server->status !== ServerStatus::RUNNING) {
+            return response()->json([
+                'message' => __('messages.rds_databases.attach_server_not_running_msg'),
+                'errors' => []
+            ], 422);
+        }
+
+        if ($database->status !== DBStatus::STARTED) {
+            return response()->json([
+                'message' => __('messages.rds_databases.attach_database_not_started_msg'),
+                'errors' => []
+            ], 422);
+        }
 
         return \DB::transaction(function () use ($request, $count, $isPrimary) {
             if ($count > 0 && $isPrimary === true) {
@@ -112,6 +131,43 @@ class RdsDatabaseController extends Controller
             return response()->noContent();
         });
     }
+
+    public function updatePrimaryDatabaseServerAttachment(string|int $id, RdsDatabaseServerAttachmentRequest $request)
+    {
+        \DB::table('rds_database_server')
+        ->findOr($id, fn() => abort(404));
+
+        return \DB::transaction(function () use ($request, $id) {
+            \DB::table('rds_database_server')
+                ->where('server_id', $request->input('server_id'))
+                ->where('user_id', $request->user()->id)
+                ->update(['is_primary' => false]);
+
+            \DB::table('rds_database_server')
+                ->where('id', $id)
+                ->where('user_id', $request->user()->id)
+                ->update(['is_primary' => $request->input('is_primary')]);
+
+            return response()->noContent();
+        });
+    }
+
+    public function detachDatabaseFromServer(string|int $id)
+    {
+        $attachment =  \DB::table('rds_database_server')
+            ->findOr( $id, fn() => abort(404));
+
+        if ($attachment->is_primary) {
+            $this->changeTheDetachedServerPrimaryRandomly($attachment->server_id);
+        }
+
+        \DB::table('rds_database_server')
+            ->where('id', $id)
+            ->delete();
+            
+        return response()->noContent();
+    }
+
 
     public function destroy(RdsDatabase $rdsDatabase)
     {
@@ -219,5 +275,21 @@ class RdsDatabaseController extends Controller
         return \DB::table('rds_database_server')
             ->where('server_id', $serverId)
             ->count();
+    }
+
+
+    private function changeTheDetachedServerPrimaryRandomly(int $serverId)
+    {
+        $attachment = \DB::table('rds_database_server')
+            ->where('server_id', $serverId)
+            ->where('is_primary', false)
+            ->inRandomOrder()
+            ->first();
+
+        if ($attachment) {
+            \DB::table('rds_database_server')
+                ->where('id', $attachment->id)
+                ->update(['is_primary' => true]);
+        }
     }
 }

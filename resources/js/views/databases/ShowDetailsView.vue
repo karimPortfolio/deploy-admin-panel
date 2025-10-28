@@ -1,5 +1,29 @@
 <template>
     <q-page class="q-pa-md">
+
+        <!-- ======= INCLUDES ======== -->
+         <confirmation-modal
+            v-model:open="openDeleteConfirmationModal"
+            title="databases.delete_association"
+            icon="warning"
+            color="negative"
+            :loading="destroying"
+            @confirm="handleDelete"
+            @cancel="openDeleteConfirmationModal = false"
+            />
+
+         <confirmation-modal
+            v-model:open="openUpdatePrimaryModal"
+            title="databases.make_primary"
+            icon="info"
+            color="primary"
+            :loading="updating"
+            :actionLabel="$t('databases.make_primary')"
+            @confirm="handleUpdatePrimary"
+            @cancel="openUpdatePrimaryModal = false"
+            />
+
+        <!-- ======================== -->
         <q-card class="p-4">
             <q-card-section class="p-0 flex items-center gap-2 pb-4">
                 <q-icon name="sym_r_database" color="primary" size="sm" />
@@ -157,26 +181,80 @@
             :servers="database?.servers || []"
             :loading="loading"
             class="mt-4"
+            @delete="handleOpenDeleteModal"
+            @update="handleOpenUpdatePrimaryModal"
         />
     </q-page>
 </template>
 <script setup>
-import { onMounted } from "vue";
-import PageHeader from "@/components/PageHeader.vue";
+import { onMounted, ref } from "vue";
 import { useResourceShow } from "@/composables/useResourceShow";
+import { useResourceDestroy } from "@/composables/useResourceDestroy";
+import { useResourceUpdate } from "@/composables/useResourceUpdate";
 import { useTextTruncate } from "@/composables/useTextTruncate";
 import { useRoute } from "vue-router";
 import AttachedServersCard from "./partials/AttachedServersCard.vue";
+import ConfirmationModal from "@/components/modals/ConfirmationModal.vue";
 
 const { data: database, fetch, loading } = useResourceShow("rds-databases");
+
+const {
+    destroy,
+    destroying,
+} = useResourceDestroy("rds-databases/attachments");
+
+const {
+    update,
+    updating,
+} = useResourceUpdate('rds-databases/attachments', {
+    config: {
+        method: 'PATCH'
+    }
+});
 
 const route = useRoute();
 const { truncate } = useTextTruncate();
 
+const databaseId = ref(null);
+const openDeleteConfirmationModal = ref(false);
+const openUpdatePrimaryModal = ref(false);
+
+const itemToDelete = ref(null);
+const itemToUpdate = ref(null);
+const serverData = ref(null);
+
+const handleOpenDeleteModal = (pivot) => {
+    itemToDelete.value = pivot;
+    openDeleteConfirmationModal.value = true;
+};
+
+const handleOpenUpdatePrimaryModal = (pivot, server) => {
+    itemToUpdate.value = pivot;
+    serverData.value = server;
+    openUpdatePrimaryModal.value = true;
+};
+
+const handleDelete = async () => {
+    await destroy(itemToDelete.value.id);
+
+    openDeleteConfirmationModal.value = false;
+    fetch(databaseId.value);
+};
+
+const handleUpdatePrimary = async () => {
+    await update(itemToUpdate.value.id, {
+        is_primary: true,
+        server: serverData.value,
+    });
+
+    openUpdatePrimaryModal.value = false;
+    fetch(databaseId.value);
+};
+
 onMounted(() => {
-    const databaseId = route.params.id;
-    if (databaseId) {
-        fetch(databaseId);
+    databaseId.value = route.params.id;
+    if (databaseId.value) {
+        fetch(databaseId.value);
     }
 
 });

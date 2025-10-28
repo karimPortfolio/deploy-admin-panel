@@ -136,7 +136,9 @@ return [
         'delete_failed_msg' => "Löschen der RDS-Datenbank fehlgeschlagen. Bitte versuchen Sie es später erneut.",
         'db_name_regex' => 'Der Datenbankname muss mit einem Buchstaben beginnen und darf nur Buchstaben und Zahlen enthalten (keine Leerzeichen oder Sonderzeichen).',
         'rds_database_id_unique' => 'Diese Datenbank ist bereits mit dem ausgewählten Server verknüpft.',
-        'rds_server_id_unique' => 'Dieser Server ist bereits mit der ausgewählten Datenbank verknüpft.'
+        'rds_server_id_unique' => 'Dieser Server ist bereits mit der ausgewählten Datenbank verknüpft.',
+        'attach_server_not_running_msg' => 'Der ausgewählte Server muss im Status "Läuft" sein, um eine Datenbank anzuhängen.',
+        'attach_database_not_started_msg' => 'Die ausgewählte Datenbank muss im Status "Gestartet" sein, um an einen Server angehängt zu werden.',
     ],
     'notifications' => [
         'new_user' => [

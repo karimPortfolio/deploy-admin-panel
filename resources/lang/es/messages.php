@@ -137,6 +137,8 @@ return [
         'db_name_regex' => 'El nombre de la base de datos debe comenzar con una letra y contener solo letras y números (sin espacios ni caracteres especiales).',
         'rds_database_id_unique' => 'Esta base de datos ya está adjunta al servidor seleccionado.',
         'rds_server_id_unique' => 'Este servidor ya está adjunto a la base de datos seleccionada.',
+        'attach_server_not_running_msg' => 'El servidor seleccionado debe estar en estado Ejecutándose para adjuntar una base de datos.',
+        'attach_database_not_started_msg' => 'La base de datos seleccionada debe estar en estado Iniciado para adjuntarse a un servidor.',
     ],
     'notifications' => [
         'new_user' => [
