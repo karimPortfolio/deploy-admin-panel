@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\AuthenticatedUserScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,6 +28,12 @@ class RdsDatabase extends Model
         'master_password_encrypted',
     ];
 
+    protected static function booted()
+    {
+        if (!app()->runningInConsole()) {
+            static::addGlobalScope(new AuthenticatedUserScope());
+        }
+    }
 
     public function securityGroup()
     {
