@@ -85,7 +85,13 @@ class User extends Authenticatable implements HasMedia
     {
         return Attribute::make(
             get: function () {
-                $session = \DB::table('sessions')->where('user_id', $this->id)->latest('last_activity')->first();
+                $session = \DB::table('sessions')
+                ->where('user_id', $this->id)
+                ->latest('last_activity')
+                ->first();
+
+                if (!$session) return null;
+                
                 return [
                     'ip_address' => $session?->ip_address,
                     'user_agent' => $session?->user_agent,

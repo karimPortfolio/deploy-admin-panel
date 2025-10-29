@@ -128,6 +128,26 @@
                         </div>
                     </div>
 
+                    <!-- ======= ACTIVITY ======= -->
+                    <q-separator class="mt-2" />
+                    <div class="grid grid-cols-2 justify-between mt-3">
+                        <div class="text-subtitle2">{{ $t("users.activity") }}</div>
+                        <div class="text-gray-700 dark:text-gray-400 flex justify-end">
+                            <q-badge
+                                v-if="user?.session"
+                                text-color="positive"
+                                :label="$t('users.online')"
+                                class="w-fit"
+                            />
+                            <q-badge
+                                v-else
+                                text-color="negative"
+                                :label="$t('users.offline')"
+                                class="w-fit"
+                            />
+                        </div>
+                    </div>
+
                     <!-- ======= CREATION DATE ======= -->
                     <q-separator class="mt-2" />
                     <div class="grid grid-cols-2 justify-between mt-3">

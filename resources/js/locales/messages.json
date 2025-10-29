@@ -208,7 +208,10 @@
             "user": "User",
             "total_servers_created": "Total Servers Created",
             "total_security_groups_created": "Total Security Groups Created",
-            "total_ssh_keys_created": "Total SSH Keys Created"
+            "total_ssh_keys_created": "Total SSH Keys Created",
+            "activity": "Activity",
+            "online": "Online",
+            "offline": "Offline"
         },
         "settings": {
             "title": "Settings",
@@ -463,7 +466,10 @@
             "user": "Usuario",
             "total_servers_created": "Total de Servidores Creados",
             "total_security_groups_created": "Total de Grupos de Seguridad Creados",
-            "total_ssh_keys_created": "Total de Claves SSH Creadas"
+            "total_ssh_keys_created": "Total de Claves SSH Creadas",
+            "activity": "Actividad",
+            "online": "En Línea",
+            "offline": "Desconectado"
         },
         "settings": {
             "title": "Configuraciones",
@@ -718,7 +724,10 @@
             "user": 	"Benutzer",
             "total_servers_created": 	"Gesamtanzahl der erstellten Server",
             "total_security_groups_created": 	"Gesamtanzahl der erstellten Sicherheitsgruppen",
-            "total_ssh_keys_created": 	"Gesamtanzahl der erstellten SSH-Schlüssel"
+            "total_ssh_keys_created": 	"Gesamtanzahl der erstellten SSH-Schlüssel",
+            "activity": 	"Aktivität",
+            "online": "Online",
+            "offline": "Offline"
         },
         "settings": {
             "title": 	"Einstellungen",
@@ -973,7 +982,10 @@
             "user": "Utilisateur",
             "total_servers_created": "Total des Serveurs Créés",
             "total_security_groups_created": "Total des Groupes de Sécurité Créés",
-            "total_ssh_keys_created": "Total des Clés SSH Créées"
+            "total_ssh_keys_created": "Total des Clés SSH Créées",
+            "activity": "Activité",
+            "online": "En Ligne",
+            "offline": "Hors Ligne"
         },
         "settings": {
             "title": "Paramètres",

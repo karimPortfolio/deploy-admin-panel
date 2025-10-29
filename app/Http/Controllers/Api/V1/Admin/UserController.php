@@ -47,9 +47,6 @@ class UserController extends Controller
                 return $perPage;
             });
 
-        $users->map(function ($user) {
-            $user->append('session');
-        });
 
         return UserResource::collection($users);
     }
@@ -82,11 +79,14 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        $user->loadCount([
+        $user
+        ->loadCount([
             'servers',
             'sshKeys',
             'securityGroups',
-        ])->load('media');
+        ])
+        ->load('media')
+        ->append('session');
 
         return new UserResource($user);
     }
