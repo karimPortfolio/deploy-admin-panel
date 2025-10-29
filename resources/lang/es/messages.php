@@ -139,6 +139,8 @@ return [
         'rds_server_id_unique' => 'Este servidor ya está adjunto a la base de datos seleccionada.',
         'attach_server_not_running_msg' => 'El servidor seleccionado debe estar en estado Ejecutándose para adjuntar una base de datos.',
         'attach_database_not_started_msg' => 'La base de datos seleccionada debe estar en estado Iniciado para adjuntarse a un servidor.',
+        'association' => 'Asociación',
+        'title' => 'Base de datos RDS',
     ],
     'notifications' => [
         'new_user' => [

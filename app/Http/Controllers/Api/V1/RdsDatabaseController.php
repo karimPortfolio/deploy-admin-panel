@@ -35,7 +35,7 @@ class RdsDatabaseController extends Controller
                 AllowedFilter::exact('status'),
                 AllowedFilter::custom('created_at', new \App\Filters\DateFilter),
             ])
-            ->allowedSorts(['id', 'db_instance_identifier', 'db_name', 'allocated_storage', 'created_at', 'updated_at'])
+            ->allowedSorts(['id', 'allocated_storage', 'created_at'])
             ->with([
                 'securityGroup:id,name,group_id,vpc_id',
             ])

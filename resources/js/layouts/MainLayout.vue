@@ -120,6 +120,11 @@ const adminDrawerItems = computed(() => [
         route: { name: "admin.servers.index" },
     },
     {
+        label: "databases.title",
+        icon: "sym_r_database",
+        route: { name: "admin.databases.index" },
+    },
+    {
         label: "security_groups.title",
         icon: "sym_r_security",
         route: { name: "admin.security-groups" },

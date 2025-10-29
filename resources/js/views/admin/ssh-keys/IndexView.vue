@@ -20,7 +20,7 @@
         <!-- ===== PAGE CONTENT === -->
         <page-header
             title="ssh_keys.title"
-            subtitle="ssh_keys.subtitle"
+            subtitle="ssh_keys.admin_subtitle"
             icon="key"
         />
 

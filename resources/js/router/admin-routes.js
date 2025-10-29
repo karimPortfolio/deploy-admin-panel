@@ -36,6 +36,24 @@ export default {
             ],
         },
         {
+            path: "rds-databases",
+            component: RouterView,
+            children: [
+                {
+                    path: "",
+                    name: "admin.databases.index",
+                    component: () =>
+                        import("../views/admin/databases/IndexView.vue"),
+                },
+                {
+                    path: ":id",
+                    name: "admin.databases.show",
+                    component: () =>
+                        import("../views/admin/databases/ShowDetailsView.vue"),
+                },
+            ],
+        },
+        {
             path: "security-groups",
             name: "admin.security-groups",
             component: () =>

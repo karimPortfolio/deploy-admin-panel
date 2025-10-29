@@ -139,6 +139,8 @@ return [
         'rds_server_id_unique' => 'This server is already attached to the selected database.',
         'attach_server_not_running_msg' => 'The selected server must be in the Running state to attach a database.',
         'attach_database_not_started_msg' => 'The selected database must be in the Started state to attach to a server.',
+        'association' => 'Association',
+        'title' => 'RDS Database',
     ],
     'notifications' => [
         'new_user' => [

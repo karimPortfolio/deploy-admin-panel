@@ -99,6 +99,7 @@
         "servers": {
             "title": "Servers",
             "subtitle": "Manage your servers.",
+            "admin_subtitle": "Manage users servers.",
             "create": "Create Server",
             "edit": "Edit Server",
             "delete": "Delete Server",
@@ -124,6 +125,7 @@
         "security_groups": {
             "title": "Security Groups",
             "subtitle": "Manage your security groups.",
+            "admin_subtitle": "Manage users security groups.",
             "create": "Create Security Group",
             "edit": "Edit Security Group",
             "delete": "Delete Security Group",
@@ -134,6 +136,7 @@
         "databases":{
             "title": "Databases",
             "subtitle": "Manage your RDS databases.",
+            "admin_subtitle": "Manage users RDS databases.",
             "create": "Create Database",
             "edit": "Edit Database",
             "delete": "Delete Database",
@@ -181,6 +184,7 @@
         "ssh_keys": {
             "title": "SSH Keys",
             "subtitle": "Manage your SSH keys.",
+            "admin_subtitle": "Manage users SSH keys.",
             "create": "Create SSH Key",
             "edit": "Edit SSH Key",
             "delete": "Delete SSH Key",
@@ -350,6 +354,7 @@
         "servers": {
             "title": "Servidores",
             "subtitle": "Administra tus servidores.",
+            "admin_subtitle": "Administra los servidores de los usuarios.",
             "create": "Crear Servidor",
             "edit": "Editar Servidor",
             "delete": "Eliminar Servidor",
@@ -375,6 +380,7 @@
         "security_groups": {
             "title": "Grupos de Seguridad",
             "subtitle": "Administra tus grupos de seguridad.",
+            "admin_subtitle": "Administra los grupos de seguridad de los usuarios.",
             "create": "Crear Grupo de Seguridad",
             "edit": "Editar Grupo de Seguridad",
             "delete": "Eliminar Grupo de Seguridad",
@@ -385,6 +391,7 @@
         "databases":{
             "title": "Bases de Datos",
             "subtitle": "Administra tus bases de datos RDS.",
+            "admin_subtitle": "Administra las bases de datos RDS de los usuarios.",
             "create": "Crear Base de Datos",
             "edit": "Editar Base de Datos",
             "delete": "Eliminar Base de Datos",
@@ -432,6 +439,7 @@
         "ssh_keys": {
             "title": "Claves SSH",
             "subtitle": "Administra tus claves SSH.",
+            "admin_subtitle": "Administra las claves SSH de los usuarios.",
             "create": "Crear Clave SSH",
             "edit": "Editar Clave SSH",
             "delete": "Eliminar Clave SSH",
@@ -601,6 +609,7 @@
         "servers": {
             "title": 	"Server",
             "subtitle": 	"Verwalten Sie Ihre Server.",
+            "admin_subtitle": 	"Verwalten Sie die Server der Benutzer.",
             "create": 	"Server Erstellen",
             "edit": 	"Server Bearbeiten",
             "delete": 	"Server Löschen",
@@ -626,6 +635,7 @@
         "security_groups": {
             "title": 	"Sicherheitsgruppen",
             "subtitle": 	"Verwalten Sie Ihre Sicherheitsgruppen.",
+            "admin_subtitle": 	"Verwalten Sie die Sicherheitsgruppen der Benutzer.",
             "create": 	"Sicherheitsgruppe Erstellen",
             "edit": 	"Sicherheitsgruppe Bearbeiten",
             "delete": 	"Sicherheitsgruppe Löschen",
@@ -636,6 +646,7 @@
         "databases":{
             "title": 	"Datenbanken",
             "subtitle": 	"Verwalten Sie Ihre RDS Datenbanken.",
+            "admin_subtitle": 	"Verwalten Sie die RDS Datenbanken der Benutzer.",
             "create": 	"Datenbank Erstellen",
             "edit": 	"Datenbank Bearbeiten",
             "delete": 	"Datenbank Löschen",
@@ -683,6 +694,7 @@
         "ssh_keys": {
             "title": 	"SSH-Schlüssel",
             "subtitle": 	"Verwalten Sie Ihre SSH-Schlüssel.",
+            "admin_subtitle": 	"Verwalten Sie die SSH-Schlüssel der Benutzer.",
             "create": 	"SSH-Schlüssel Erstellen",
             "edit": 	"SSH-Schlüssel Bearbeiten",
             "delete": 	"SSH-Schlüssel Löschen",
@@ -852,6 +864,7 @@
         "servers": {
             "title": "Serveurs",
             "subtitle": "Gérez vos serveurs.",
+            "admin_subtitle": "Gérez les serveurs des utilisateurs.",
             "create": "Créer un Serveur",
             "edit": "Éditer le Serveur",
             "delete": "Supprimer le Serveur",
@@ -877,6 +890,7 @@
         "security_groups": {
             "title": "Groupes de Sécurité",
             "subtitle": "Gérez vos groupes de sécurité.",
+            "admin_subtitle": "Gérez les groupes de sécurité des utilisateurs.",
             "create": "Créer un Groupe de Sécurité",
             "edit": "Éditer le Groupe de Sécurité",
             "delete": "Supprimer le Groupe de Sécurité",
@@ -887,6 +901,7 @@
         "databases":{
             "title": "Bases de Données",
             "subtitle": "Gérez vos bases de données RDS.",
+            "admin_subtitle": "Gérez les bases de données RDS des utilisateurs.",
             "create": "Créer une Base de Données",
             "edit": "Éditer la Base de Données",
             "delete": "Supprimer la Base de Données",
@@ -934,6 +949,7 @@
         "ssh_keys": {
             "title": "Clés SSH",
             "subtitle": "Gérez vos clés SSH.",
+            "admin_subtitle": "Gérez les clés SSH des utilisateurs.",
             "create": "Créer une Clé SSH",
             "edit": "Éditer la Clé SSH",
             "delete": "Supprimer la Clé SSH",

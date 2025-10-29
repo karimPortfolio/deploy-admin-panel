@@ -69,10 +69,10 @@ class RdsDatabaseControllerTest extends TestCase
 
     public function test_can_sort_rds_databases()
     {
-        $server1 = RdsDatabase::factory()->create(['db_name' => 'aaa']);
-        $server2 = RdsDatabase::factory()->create(['db_name' => 'bbb']);
+        $server1 = RdsDatabase::factory()->create(['allocated_storage' => 20]);
+        $server2 = RdsDatabase::factory()->create(['allocated_storage' => 40]);
 
-        $response = $this->getJson(route('api.v1.rds-databases.index', ['sort' => 'db_name']));
+        $response = $this->getJson(route('api.v1.rds-databases.index', ['sort' => 'allocated_storage']));
 
         $response->assertOk()
             ->assertJsonPath('data.0.id', $server1->id)

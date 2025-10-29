@@ -35,6 +35,7 @@ class RdsDatabaseResource extends JsonResource
             'latest_restorable_time' => $this->whenHas('latest_restorable_time', fn () => $this->latest_restorable_time?->toDateTimeString()),
             'security_group' => new SecurityGroupResource($this->whenLoaded('securityGroup')),
             'servers' => ServerResource::collection($this->whenLoaded('servers')),
+            'created_by' => new UserResource($this->whenLoaded('createdBy')),
             'created_at' => $this->whenHas('created_at', fn () => $this->created_at->diffForHumans()),
         ];
     }

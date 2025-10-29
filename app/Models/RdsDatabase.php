@@ -51,4 +51,9 @@ class RdsDatabase extends Model
     {
         return $this->hasMany(RdsDatabaseSnapshot::class, 'db_instance_identifier', 'db_instance_identifier');
     }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
 }

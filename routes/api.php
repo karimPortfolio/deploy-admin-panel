@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V1\Admin\DashboardController as AdminDashboardContr
 use App\Http\Controllers\Api\V1\Admin\SecurityGroupController as AdminSecurityGroupController;
 use App\Http\Controllers\Api\V1\Admin\ServerController as AdminServerController;
 use App\Http\Controllers\Api\V1\Admin\SshKeyController as AdminSshKeyController;
+use App\Http\Controllers\Api\V1\Admin\RdsDatabaseController as AdminRdsDatabaseController;
 use App\Http\Controllers\Api\V1\Admin\UserController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DashboardController;
@@ -126,6 +127,18 @@ Route::middleware(['auth:sanctum', 'setUserLocale', 'isActive'])
                     Route::get('servers-by-security-groups', [AdminDashboardController::class, 'getTotalServersBySecurityGroups'])->name('servers-by-security-groups');
                     Route::get('servers-by-status', [AdminDashboardController::class, 'getTotalServersByStatus'])->name('servers-by-status');
                 });
+
+                // =============== RDS DATABASES ROUTES
+                Route::prefix('rds-databases')
+                ->name('rds-databases.')
+                ->group(function () {
+                    Route::get('statuses', [AdminRdsDatabaseController::class, 'getDatabaseStatuses'])->name('statuses');
+                    Route::get('engines', [AdminRdsDatabaseController::class, 'getDatabaseEngines'])->name('engines');
+                    Route::get('storage-types', [AdminRdsDatabaseController::class, 'getDatabaseStorageTypes'])->name('storage-types');
+                    Route::get('instance-classes', [AdminRdsDatabaseController::class, 'getDatabaseInstanceClasses'])->name('instance-classes');
+                    Route::get('servers', [AdminRdsDatabaseController::class, 'getServers'])->name('servers');
+                });
+                Route::apiResource('rds-databases', AdminRdsDatabaseController::class)->except(['update', 'store']);
             });
     });
 

@@ -139,6 +139,8 @@ return [
         'rds_server_id_unique' => 'Dieser Server ist bereits mit der ausgewählten Datenbank verknüpft.',
         'attach_server_not_running_msg' => 'Der ausgewählte Server muss im Status "Läuft" sein, um eine Datenbank anzuhängen.',
         'attach_database_not_started_msg' => 'Die ausgewählte Datenbank muss im Status "Gestartet" sein, um an einen Server angehängt zu werden.',
+        'association' => 'Zuordnung',
+        'title' => 'RDS-Datenbank',
     ],
     'notifications' => [
         'new_user' => [

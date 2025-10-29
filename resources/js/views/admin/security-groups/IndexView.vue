@@ -20,7 +20,7 @@
         <!-- ======= MAIN CONTENT ======== -->
         <page-header
             title="security_groups.title"
-            subtitle="security_groups.subtitle"
+            subtitle="security_groups.admin_subtitle"
             icon="security"
         />
 

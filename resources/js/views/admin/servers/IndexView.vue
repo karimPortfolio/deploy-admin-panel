@@ -31,7 +31,7 @@
         <!-- ======= PAGE CONTENT ======== -->
         <page-header
             title="servers.title"
-            subtitle="servers.subtitle"
+            subtitle="servers.admin_subtitle"
             icon="sym_r_host"
         />
 
