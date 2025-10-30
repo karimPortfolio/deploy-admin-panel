@@ -61,6 +61,7 @@ import { useAuthStore } from "@/stores/auth";
 import AuthPageHeader from "./partials/AuthPageHeader.vue";
 import i18n from "../../plugins/i18n";
 import { useI18n } from "vue-i18n";
+import { useMemoize } from "@vueuse/core";
 
 const credentials = ref({});
 const loading = ref(false);
@@ -86,7 +87,7 @@ const handleForgotPassword = async () => {
     }
 };
 
-const handleDarkMode = () => {
+const handleDarkMode = useMemoize(() => {
     const theme = localStorage.getItem("dark");
     if (theme === "auto") {
         $q.dark.set(theme);
@@ -95,12 +96,12 @@ const handleDarkMode = () => {
 
     const darkMode = JSON.parse(theme) ?? "auto";
     $q.dark.set(darkMode);
-}
+});
 
-const handleInternationalization = () => {
+const handleInternationalization = useMemoize(() => {
     const language = localStorage.getItem("language") ?? "en";
     i18n.global.locale.value = language;
-};
+});
 
 watch(
     () => authStore.errorMessages,

@@ -107,6 +107,7 @@ onMounted(() => {
         name: user.name,
         email: user.email,
         company_name: user.company_name,
+        photo: user.photo
      };
 });
 </script>

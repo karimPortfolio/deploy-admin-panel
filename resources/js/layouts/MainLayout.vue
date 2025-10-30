@@ -63,6 +63,7 @@ import langDe from "quasar/lang/de";
 import langFr from "quasar/lang/fr";
 import langEs from "quasar/lang/es";
 import { useI18n } from "vue-i18n";
+import { useMemoize } from "@vueuse/core";
 
 const drawer = ref(true);
 
@@ -169,7 +170,7 @@ const userPreferences = computed(() => {
     return [];
 });
 
-const setDarkModePreference = () => {
+const setDarkModePreference = useMemoize(() => {
     if (userPreferences.value && userPreferences.value.length) {
         const userThemePreference =
             userPreferences.value[0]?.preferences?.theme ?? "auto";
@@ -179,9 +180,9 @@ const setDarkModePreference = () => {
 
     const savedTheme = localStorage.getItem("dark") ?? "auto";
     localStorage.setItem("dark", savedTheme);
-};
+});
 
-const handleDarkMode = () => {
+const handleDarkMode = useMemoize(() => {
     const userThemePreference = localStorage.getItem("dark");
     if (userThemePreference === "auto") {
         $q.dark.set(userThemePreference);
@@ -190,15 +191,15 @@ const handleDarkMode = () => {
 
     const darkMode = JSON.parse(userThemePreference) ?? "auto";
     $q.dark.set(darkMode);
-};
+});
 
-const handleInternationalization = () => {
+const handleInternationalization = useMemoize(() => {
     const userLang = userPreferences.value[0]?.preferences?.language ?? localStorage.getItem("language");
     if (userLang) {
         i18n.global.locale.value = userLang;
         $q.lang.set(quasarLangs[userLang]);
     }
-};
+});
 
 onMounted(() => {
     user.value = authStore.user;

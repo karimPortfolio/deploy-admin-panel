@@ -111,6 +111,7 @@ import SettingsDropdown from "./partials/SettingsDropdown.vue";
 import AuthPageHeader from "./partials/AuthPageHeader.vue";
 import { useI18n } from "vue-i18n";
 import i18n from "../../plugins/i18n";
+import { useMemoize } from "@vueuse/core";
 
 const credentials = ref({});
 const loading = ref(false);
@@ -140,15 +141,21 @@ const handleResetPassword = async () => {
     }
 };
 
-const handleDarkMode = () => {
-    const userPereference = localStorage.getItem("dark");
-    $q.dark.set(JSON.parse(userPereference) || 'auto');
-}
+const handleDarkMode = useMemoize(() => {
+    const theme = localStorage.getItem("dark");
+    if (theme === "auto") {
+        $q.dark.set(theme);
+        return;
+    }
 
-const handleInternationalization = () => {
+    const darkMode = JSON.parse(theme) ?? "auto";
+    $q.dark.set(darkMode);
+});
+
+const handleInternationalization = useMemoize(() => {
     const language = localStorage.getItem("language") ?? "en";
     i18n.global.locale.value = language;
-};
+});
 
 watch(
     () => authStore.errorMessages,

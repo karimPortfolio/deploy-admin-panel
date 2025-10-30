@@ -13,7 +13,7 @@
                             {{ $t('profile.photo.subtitle') }}
                         </div>
                     </div>
-                    <div class="mt-5 sm:mt-0 col-span-2 flex gap-5 sm:gap-10 items-center">
+                    <div class="mt-5 sm:mt-0 col-span-2 flex gap-5 sm:gap-10 items-center"> 
                         <q-avatar v-if="uploadedPhoto" class="w-20 h-20">
                             <q-img
                                 :src="uploadedPhoto"
