@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\DashboardController;
 use App\Http\Controllers\Api\V1\NotificationController;
 use App\Http\Controllers\Api\V1\RdsDatabaseController;
+use App\Http\Controllers\Api\V1\RdsDatabaseSnapshotController;
 use App\Http\Controllers\Api\V1\SecurityGroupController;
 use App\Http\Controllers\Api\V1\ServerController;
 use App\Http\Controllers\Api\V1\SshKeyController;
@@ -85,6 +86,9 @@ Route::middleware(['auth:sanctum', 'setUserLocale', 'isActive'])
                     Route::delete('attachments/{id}', [RdsDatabaseController::class, 'detachDatabaseFromServer'])->name('attachments.detach');
                 });
                 Route::apiResource('rds-databases', RdsDatabaseController::class)->except(['update']);
+
+                // ====================== RDS DATABASE SNAPSHOTS ROUTES
+                Route::apiResource('rds-database-snapshots', RdsDatabaseSnapshotController::class)->except(['update']);
             });
 
         // =============== ADMIN ROUTES =============

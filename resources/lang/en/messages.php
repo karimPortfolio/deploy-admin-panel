@@ -132,6 +132,18 @@ return [
             'pending'    => 'Pending',
             'failed'      => 'Failed',
         ],
+        'snapshots' => [
+            'create_initiated_msg' => 'RDS database snapshot creation initiated.',
+            'delete_failed_msg' => 'Failed to delete the RDS database snapshot. Please try again later.',
+            'status' => [
+                'started'    => 'Started',
+                'creating'   => 'Creating',
+                'copying'   => 'Copying',
+                'pending'    => 'Pending',
+                'deleting'  => 'Deleting',
+                'failed'      => 'Failed',
+            ],
+        ],
         'associated_servers_msg' => "This RDS Database is associated with servers and cannot be deleted.",
         'delete_failed_msg' => "Failed to delete the RDS database. Please try again later.",
         'db_name_regex' => 'The database name must begin with a letter and contain only letters and numbers (no spaces or special characters).',

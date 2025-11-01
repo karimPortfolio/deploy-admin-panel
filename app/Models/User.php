@@ -120,7 +120,6 @@ class User extends Authenticatable implements HasMedia
         $this->addMediaCollection('user-photo')->singleFile();
     }
 
-    // In User.php (or the notifiable model)
     public function preferredNotificationChannels(): array
     {
         $preferences = $this->preferences[0]->preferences['notification'] ?? null;

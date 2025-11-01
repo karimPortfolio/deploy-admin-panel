@@ -10,3 +10,4 @@ Artisan::command('inspire', function () {
 
 Schedule::command('app:check-unused-resources')->weeklyOn(4, '11:00');
 Schedule::command('app:sync-rds-database')->everyFiveMinutes();
+Schedule::command('app:sync-rds-db-snapshot')->everyFiveMinutes();

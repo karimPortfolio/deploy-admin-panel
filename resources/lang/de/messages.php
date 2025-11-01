@@ -132,6 +132,18 @@ return [
             'pending'    => 'Ausstehend',
             'failed'      => 'Fehlgeschlagen',
         ],
+        'snapshots' => [
+            'create_initiated_msg' => 'Erstellung des RDS-Datenbanksnapshots eingeleitet.',
+            'delete_failed_msg' => 'Löschen des RDS-Datenbanksnapshots fehlgeschlagen. Bitte versuchen Sie es später erneut.',
+            'status' => [
+                'started'    => 'Gestartet',
+                'creating'   => 'Wird erstellt',
+                'copying'   => 'Wird kopiert',
+                'pending'    => 'Ausstehend',
+                'deleting'  => 'Wird gelöscht',
+                'failed'      => 'Fehlgeschlagen',
+            ],
+        ],
         'associated_servers_msg' => "Diese RDS Datenbank ist mit Servern verknüpft und kann nicht gelöscht werden.",
         'delete_failed_msg' => "Löschen der RDS-Datenbank fehlgeschlagen. Bitte versuchen Sie es später erneut.",
         'db_name_regex' => 'Der Datenbankname muss mit einem Buchstaben beginnen und darf nur Buchstaben und Zahlen enthalten (keine Leerzeichen oder Sonderzeichen).',

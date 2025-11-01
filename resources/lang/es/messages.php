@@ -132,6 +132,18 @@ return [
             'pending' => 'Pendiente',
             'failed' => 'Fallido',
         ],
+        'snapshots' => [
+            'create_initiated_msg' => 'Creación de snapshot de base de datos RDS iniciada.',
+            'delete_failed_msg' => 'Error al eliminar el snapshot de base de datos RDS. Por favor, inténtelo de nuevo más tarde.',
+            'status' => [
+                'started'    => 'Iniciado',
+                'creating'  => 'Creando',
+                'copying'   => 'Copiando',
+                'pending'    => 'Pendiente',
+                'deleting'  => 'Eliminando',
+                'failed'      => 'Fallido',
+            ],
+        ],
         'associated_servers_msg' => 'Esta base de datos RDS está asociada con servidores y no puede ser eliminada.',
         'delete_failed_msg' => 'Error al eliminar la base de datos RDS. Por favor, inténtelo de nuevo más tarde.',
         'db_name_regex' => 'El nombre de la base de datos debe comenzar con una letra y contener solo letras y números (sin espacios ni caracteres especiales).',

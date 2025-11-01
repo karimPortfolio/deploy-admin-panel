@@ -66,6 +66,7 @@ class RdsDatabaseService
 
             if (! empty($result['DBInstances']) && count($result['DBInstances']) > 0) {
                 $result['DBInstances'][0]['DBInstanceStatus'] = self::getRdsDatabaseStatus($result['DBInstances'][0]['DBInstanceStatus']);
+
                 return $result['DBInstances'][0];
             }
 
@@ -139,7 +140,7 @@ class RdsDatabaseService
                         'DBSubnetGroupName' => $params['existing_subnet_group_name'],
                     ]);
 
-                    if (!empty($result['DBSubnetGroups'])) {
+                    if (! empty($result['DBSubnetGroups'])) {
                         // info($result->toArray());
                         return $result->toArray() ?? [];
                     }
@@ -186,6 +187,7 @@ class RdsDatabaseService
         };
     }
 
+    
     /**
      * Get subnet group for RDS database based on security group ID.
      */
@@ -193,6 +195,24 @@ class RdsDatabaseService
     {
         $securityGroup = SecurityGroup::where('group_id', $securityGroupId)->first();
         $vpcSubnets = VpcService::getSubnetsByVpcId($securityGroup->vpc_id);
+
+        $maxAttempts = 5;
+        $attempts = 0;
+
+        while (count($vpcSubnets) < 2 && $attempts < $maxAttempts) {
+            $attempts++;
+            $newSubnet = VpcService::createSubnet($securityGroup->vpc_id);
+
+            if (! empty($newSubnet)) {
+                $vpcSubnets[] = $newSubnet;
+            }
+
+            $vpcSubnets = VpcService::getSubnetsByVpcId($securityGroup->vpc_id);
+        }
+
+        if (count($vpcSubnets) < 2) {
+            throw new \Exception('Unable to create sufficient subnets for RDS database. At least 2 subnets are required.');
+        }
 
         $params = [
             'db_subnet_group_name' => 'default-db-subnet-group',
@@ -203,7 +223,7 @@ class RdsDatabaseService
 
         $vpcSubnetGroup = self::getOrCreateRdsDatabaseSubnetGroup($params);
 
-        if (!empty($vpcSubnetGroup['DBSubnetGroups'])) {
+        if (! empty($vpcSubnetGroup['DBSubnetGroups'])) {
             return $vpcSubnetGroup['DBSubnetGroups'];
         }
 

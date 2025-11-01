@@ -217,4 +217,28 @@ class VpcService
             throw new \RuntimeException('Failed to initialize EC2 client: ' . $e->getMessage());
         }
     }
+
+    /**
+     * Create a subnet in a specified VPC.
+     *
+     * @param string $vpcId
+     * @param string|null $cidrBlock
+     * @return array
+     * @throws \RuntimeException
+     */
+    public static function createSubnet(string $vpcId, string|null $cidrBlock=null): array
+    {
+        $ec2Client = app(\Aws\Ec2\Ec2Client::class);
+
+        try {
+            $result = $ec2Client->createSubnet([
+                'VpcId' => $vpcId,
+                'CidrBlock' => $cidrBlock ?? '10.0.1.0/24',
+            ]);
+
+            return $result->get('Subnet');
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Failed to create subnet: ' . $e->getMessage());
+        }
+    }
 }
