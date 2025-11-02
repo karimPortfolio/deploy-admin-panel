@@ -45,10 +45,13 @@ class SyncRdsDatabaseSnapshot extends Command
                         'percent_progress' => 100,
                     ]);
 
-                    $snapshot->rdsDatabase->update([
-                        'latest_restorable_time' => $snapshotDetails['SnapshotCreateTime'] ?? now(),
-                        'status' => DBStatus::STARTED->value,
-                    ]);
+                    if ($snapshot->rdsDatabase)
+                    {
+                        $snapshot->rdsDatabase->update([
+                            'latest_restorable_time' => $snapshotDetails['SnapshotCreateTime'] ?? now(),
+                            'status' => DBStatus::STARTED->value,
+                        ]);
+                    }
                 }
 
             } catch (\Exception $e) {
@@ -64,8 +67,8 @@ class SyncRdsDatabaseSnapshot extends Command
 
     private function getTheCreatingSnaphots()
     {
-        return RdsDatabaseSnapshot::where('status', DBSnapshotStatus::CREATING)
-        ->load('rdsDatabase')
+        return RdsDatabaseSnapshot::where('status', DBSnapshotStatus::CREATING->value)
+        ->with('rdsDatabase')
         ->get();
     }
 }

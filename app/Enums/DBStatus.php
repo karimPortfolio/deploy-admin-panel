@@ -27,7 +27,7 @@ enum DBStatus: string
         return match($this) {
             self::STARTED   => 'positive',
             self::STOPPED   => 'negative',
-            self::BACKING_UP   => 'info',
+            self::BACKING_UP   => 'blue-grey',
             self::PENDING   => 'primary',
             self::FAILED => 'warning',
         };
@@ -40,7 +40,7 @@ enum DBStatus: string
             self::STOPPED   => '#C10015',
             self::FAILED => '#F2C037',
             self::PENDING   => '#1976d2',
-            self::BACKING_UP   => '#2185D0',
+            self::BACKING_UP   => '#607d8b',
         };
     }
 

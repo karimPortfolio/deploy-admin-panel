@@ -23,6 +23,6 @@ class RdsDatabaseSnapshot extends Model
 
     public function rdsDatabase()
     {
-        return $this->belongsTo(RdsDatabase::class, 'db_instance_identifier', 'db_instance_identifier');
+        return $this->belongsTo(RdsDatabase::class, 'rds_database_id', 'id');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Enums\DBSnapshotStatus;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\RdsDatabaseSnapshotRequest;
 use App\Http\Resources\RdsDatabaseSnapshotResource;
 use App\Jobs\CreateRdsDatabaseSnapshotJob;
 use App\Models\RdsDatabaseSnapshot;
@@ -45,12 +46,8 @@ class RdsDatabaseSnapshotController extends Controller
         return new RdsDatabaseSnapshotResource($rdsDatabaseSnapshot);
     }
 
-    public function store(Request $request)
+    public function store(RdsDatabaseSnapshotRequest $request)
     {
-        $request->validate([
-            'db_instance_identifier' => 'required|string|exists:rds_databases,db_instance_identifier',
-            'rds_database_id' => 'required|integer|exists:rds_databases,id',
-        ]);
         
         $dbInstanceIdentifier = $request->input('db_instance_identifier');
         $dbSnapshotIdentifier =  $dbInstanceIdentifier. '-snapshot-' . time();
