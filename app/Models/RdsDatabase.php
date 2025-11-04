@@ -49,7 +49,7 @@ class RdsDatabase extends Model
 
     public function snapshots()
     {
-        return $this->hasMany(RdsDatabaseSnapshot::class, 'db_instance_identifier', 'db_instance_identifier');
+        return $this->hasMany(RdsDatabaseSnapshot::class, 'rds_database_id', 'id');
     }
 
     public function createdBy()

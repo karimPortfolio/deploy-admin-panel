@@ -1,6 +1,6 @@
 <template>
     <q-card class="p-4">
-        <q-card-section class="p-0 flex items-center gap-2 pb-4">
+        <q-card-section class="p-0 flex items-center gap-2 pb-0">
             <q-icon name="sym_r_link" color="primary" size="sm" />
             <h4 class="font-meduim text-lg">
                 {{ $t("databases.attached_servers") }}
@@ -13,7 +13,7 @@
                 >
                     <template v-for="server in servers" :key="server.id">
                         <q-card
-                            class="w-full flex flex-nowrap gap-2 items-center p-3 border mt-3"
+                            class="w-full flex flex-nowrap gap-3 items-center p-3 border mt-3"
                         >
                             <q-card-section class="p-0">
                                 <div class="p-2 w-fit rounded-md bg-primary-50">
@@ -114,7 +114,7 @@
             </q-card-section>
         </template>
         <template v-else>
-            <q-card-section class="pt-2 px-2">
+            <q-card-section class="pt-3 px-2">
                 <warning-alert message="no_data_available_msg" />
             </q-card-section>
         </template>

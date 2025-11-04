@@ -135,6 +135,7 @@ return [
         'snapshots' => [
             'create_initiated_msg' => 'RDS database snapshot creation initiated.',
             'delete_failed_msg' => 'Failed to delete the RDS database snapshot. Please try again later.',
+            'delete_not_allowed_msg' => 'Snapshot deletion is not allowed in its current status.',
             'status' => [
                 'started'    => 'Started',
                 'creating'   => 'Creating',

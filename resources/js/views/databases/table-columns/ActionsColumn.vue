@@ -49,6 +49,28 @@
                     </q-item-section>
                 </q-item>
 
+
+                <!-- ============================ -->
+                <!-- ============= CREATE SNAPSHOT ========= -->
+                <!-- ============================ -->
+                <q-item
+                    clickable
+                    v-close-popup
+                    class="text-gray-600 dark:text-gray-200 rounded-md"
+                    @click="handleCreateSnapshot(row)"
+                >
+                    <q-item-section>
+                        <q-item-label class="flex-nowrap">
+                            <q-icon
+                                name="sym_r_backup"
+                                size="xs"
+                                class="me-1"
+                            />
+                            {{ $t("databases.create_snapshot") }}
+                        </q-item-label>
+                    </q-item-section>
+                </q-item>
+
                 <q-separator class="q-my-xs" />
 
                 <!-- ============================ -->
@@ -83,7 +105,7 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(["delete","attach"]);
+const emit = defineEmits(["delete","attach","create-snapshot"]);
 
 const handleDelete = (row) => {
     emit("delete", row);
@@ -91,6 +113,10 @@ const handleDelete = (row) => {
 
 const handleAttach = (row) => {
     emit("attach", row);
+};
+
+const handleCreateSnapshot = (row) => {
+    emit("create-snapshot", row);
 };
 
 </script>

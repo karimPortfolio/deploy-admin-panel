@@ -21,6 +21,17 @@
             @confirm="handleDelete"
             @cancel="openDeleteConfirmationModal = false"
         />
+
+        <confirmation-modal
+            v-model:open="openCreateSnapshotConfirmationModal"
+            title="databases.create_snapshot_modal_title"
+            icon="info"
+            color="primary"
+            :loading="creating"
+            :actionLabel="$t('databases.create_snapshot')"
+            @confirm="handleCreateSnapshot"
+            @cancel="openCreateSnapshotConfirmationModal = false"
+        />
         
 
         <!-- ===== PAGE CONTENT === -->
@@ -99,6 +110,7 @@
                             :row="props.row"
                             @delete="handleDeleteConfirmation"
                             @attach="handleAttachToServer"
+                            @create-snapshot="handleCreateSnapshotConfirmation"
                         />
                     </q-td>
                 </template>
@@ -117,6 +129,7 @@
 import PageHeader from "@/components/PageHeader.vue";
 import { useResourceIndex } from "@/composables/useResourceIndex";
 import { useResourceDestroy } from "@/composables/useResourceDestroy";
+import { useResourceCreate } from "@/composables/useResourceCreate";
 import FilterPanel from "@/components/FilterPanel.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import SecurityGroupColumn from "./table-columns/SecurityGroupColumn.vue";
@@ -139,6 +152,7 @@ const {
 } = useResourceIndex("rds-databases");
 
 const { destroy, destroyed, destroying } = useResourceDestroy("rds-databases");
+const { create, creating, validation } = useResourceCreate("rds-database-snapshots");
 
 const { t } = useI18n();
 
@@ -193,9 +207,11 @@ const search = ref("");
 const openCreateModal = ref(false);
 const openDeleteConfirmationModal = ref(false);
 const openAttachModal = ref(false);
+const openCreateSnapshotConfirmationModal = ref(false);
 
 const itemToDelete = ref(null);
 const itemToAttach = ref(null);
+const itemToCreateSnapshot = ref(null);
 
 const onFiltersUpdate = ({ search, filters }) => {
     fetch({
@@ -229,7 +245,6 @@ const handleDeleteConfirmation = (row) => {
     openDeleteConfirmationModal.value = true;
 };
 
-
 const handleDelete = async () => {
     await destroy(itemToDelete.value.id);
 
@@ -256,6 +271,27 @@ const handleAttached = () => {
         filter: search.value,
         filters: options.filters,
     });
+};
+
+const handleCreateSnapshotConfirmation = (row) => {
+    itemToCreateSnapshot.value = row;
+
+    openCreateSnapshotConfirmationModal.value = true;
+};
+
+const handleCreateSnapshot = async () => {
+    await create({
+        rds_database_id: itemToCreateSnapshot.value.id,
+        db_instance_identifier: itemToCreateSnapshot.value.db_instance_identifier,
+    });
+
+    if (!validation.value?.errors) {
+        openCreateSnapshotConfirmationModal.value = false;
+        fetch({
+            filter: search.value,
+            filters: options.filters,
+        });
+    }
 };
 
 </script>

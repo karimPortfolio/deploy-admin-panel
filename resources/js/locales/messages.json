@@ -141,6 +141,8 @@
             "edit": "Edit Database",
             "delete": "Delete Database",
             "attached_servers": "Attached Servers",
+            "create_snapshot": "Backup",
+            "create_snapshot_modal_title": "Create Database Backup",
             "monthly_total": "Databases Monthly Total",
             "database_id": "Database ID",
             "database_details": "Database Details",
@@ -179,7 +181,10 @@
             "primary_note": "Primary indicates whether this database is the primary database for the server.",
             "edit_association": "Edit Association",
             "delete_association": "Delete Association",
-            "make_primary": "Make Primary"
+            "make_primary": "Make Primary",
+            "latest_snapshots":"Latest Backups",
+            "manual_snapshot":"Manual Backup",
+            "automatic_snapshot":"Automatic Backup"
         },
         "ssh_keys": {
             "title": "SSH Keys",
@@ -399,6 +404,8 @@
             "edit": "Editar Base de Datos",
             "delete": "Eliminar Base de Datos",
             "attached_servers": "Servidores Adjuntos",
+            "create_snapshot": "Respaldar",
+            "create_snapshot_modal_title": "Crear Respaldo de Base de Datos",
             "monthly_total": "Total Mensual de Bases de Datos",
             "database_id": "ID de la Base de Datos",
             "database_details": "Detalles de la Base de Datos",
@@ -437,7 +444,10 @@
             "primary_note": "Primario indica si esta base de datos es la base de datos primaria para el servidor.",
             "edit_association": "Editar Asociación",
             "delete_association": "Eliminar Asociación",
-            "make_primary": "Hacer Primario"
+            "make_primary": "Hacer Primario",
+            "latest_snapshots":"Últimos Respaldos",
+            "manual_snapshot":"Respaldo Manual",
+            "automatic_snapshot":"Respaldo Automático"
         },
         "ssh_keys": {
             "title": "Claves SSH",
@@ -657,6 +667,8 @@
             "edit": 	"Datenbank Bearbeiten",
             "delete": 	"Datenbank Löschen",
             "attached_servers": 	"Angehängte Server",
+            "create_snapshot": 	"Sichern",
+            "create_snapshot_modal_title": 	"Datenbanksicherung Erstellen",
             "monthly_total": 	"Datenbanken Monatliche Gesamtanzahl",
             "database_id": 	"Datenbank-ID",
             "database_details": 	"Datenbankdetails",
@@ -695,7 +707,10 @@
             "primary_note": "Primär gibt an, ob diese Datenbank die primäre Datenbank für den Server ist.",
             "edit_association": "Verknüpfung Bearbeiten",
             "delete_association": "Verknüpfung Löschen",
-            "make_primary": "Zum Primärmachen"
+            "make_primary": "Zum Primärmachen",
+            "latest_snapshots":"Neueste Backups",
+            "manual_snapshot":"Manuelles Backup",
+            "automatic_snapshot":"Automatisches Backup"
         },
         "ssh_keys": {
             "title": 	"SSH-Schlüssel",
@@ -915,6 +930,8 @@
             "edit": "Éditer la Base de Données",
             "delete": "Supprimer la Base de Données",
             "attached_servers": "Serveurs Attachés",
+            "create_snapshot": "Sauvegarder",
+            "create_snapshot_modal_title": "Créer une Sauvegarde de Base de Données",
             "monthly_total": "Total Mensuel des Bases de Données",
             "database_id": "ID de la Base de Données",
             "database_details": "Détails de la Base de Données",
@@ -953,7 +970,10 @@
             "primary_note": "Principal indique si cette base de données est la base de données principale pour le serveur.",
             "edit_association": "Éditer l'Association",
             "delete_association": "Supprimer l'Association",
-            "make_primary": "Rendre Principal"
+            "make_primary": "Rendre Principal",
+            "latest_snapshots":"Dernières Sauvegardes",
+            "manual_snapshot":"Sauvegarde Manuelle",
+            "automatic_snapshot":"Sauvegarde Automatique"
         },
         "ssh_keys": {
             "title": "Clés SSH",

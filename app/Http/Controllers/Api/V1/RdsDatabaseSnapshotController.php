@@ -71,10 +71,19 @@ class RdsDatabaseSnapshotController extends Controller
 
     public function destroy(RdsDatabaseSnapshot $rdsDatabaseSnapshot)
     {
+        if (!in_array($rdsDatabaseSnapshot->status->value, [
+            DBSnapshotStatus::STARTED->value,
+            DBSnapshotStatus::FAILED->value,
+        ])) {
+            return response()->json([
+                'message' => __('messages.rds_databases.snapshots.delete_not_allowed_msg'),
+            ], 400);
+        }
+
         $service = app(\App\Services\RdsDatabaseSnapshotsService::class);
         $result = $service->deleteSnapshot($rdsDatabaseSnapshot->snapshot_identifier);
 
-        if ($result['Status'] !== DBSnapshotStatus::DELETING->value) {
+        if ($result['Status'] !== 'deleted') {
             return response()->json([
                 'message' => __('messages.rds_databases.snapshots.delete_failed_msg'),
             ], 500);

@@ -135,6 +135,7 @@ return [
         'snapshots' => [
             'create_initiated_msg' => "La création du snapshot de la base de données RDS a été initiée.",
             'delete_failed_msg' => "Échec de la suppression de la base de données RDS. Veuillez réessayer plus tard.",
+            'delete_not_allowed_msg' => "La suppression du snapshot n'est pas autorisée dans son état actuel.",
             'status' => [
                 'started'   => 'Démarré',
                 'creating'  => 'Création',

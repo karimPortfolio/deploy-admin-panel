@@ -184,6 +184,12 @@
             @delete="handleOpenDeleteModal"
             @update="handleOpenUpdatePrimaryModal"
         />
+
+        <latest-snapshots-card
+            :snapshots="database?.snapshots || []"
+            :loading="loading"
+            class="mt-4"
+        />
     </q-page>
 </template>
 <script setup>
@@ -195,6 +201,7 @@ import { useTextTruncate } from "@/composables/useTextTruncate";
 import { useRoute } from "vue-router";
 import AttachedServersCard from "./partials/AttachedServersCard.vue";
 import ConfirmationModal from "@/components/modals/ConfirmationModal.vue";
+import LatestSnapshotsCard from "./partials/LatestSnapshotsCard.vue";
 
 const { data: database, fetch, loading } = useResourceShow("rds-databases");
 

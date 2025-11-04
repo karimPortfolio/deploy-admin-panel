@@ -135,6 +135,7 @@ return [
         'snapshots' => [
             'create_initiated_msg' => 'Erstellung des RDS-Datenbanksnapshots eingeleitet.',
             'delete_failed_msg' => 'Löschen des RDS-Datenbanksnapshots fehlgeschlagen. Bitte versuchen Sie es später erneut.',
+            'delete_not_allowed_msg' => 'Das Löschen des Snapshots ist im aktuellen Status nicht erlaubt.',
             'status' => [
                 'started'    => 'Gestartet',
                 'creating'   => 'Wird erstellt',

@@ -135,6 +135,7 @@ return [
         'snapshots' => [
             'create_initiated_msg' => 'Creación de snapshot de base de datos RDS iniciada.',
             'delete_failed_msg' => 'Error al eliminar el snapshot de base de datos RDS. Por favor, inténtelo de nuevo más tarde.',
+            'delete_not_allowed_msg' => 'La eliminación del snapshot no está permitida en su estado actual.',
             'status' => [
                 'started'    => 'Iniciado',
                 'creating'  => 'Creando',
