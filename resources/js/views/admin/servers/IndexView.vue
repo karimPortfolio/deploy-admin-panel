@@ -126,15 +126,17 @@ import { useResourceIndex } from "@/composables/useResourceIndex";
 import { useResourceDestroy } from "@/composables/useResourceDestroy";
 import { useResourceUpdate } from "@/composables/useResourceUpdate";
 import { useTextTruncate } from "@/composables/useTextTruncate";
+import { usePollingInterval } from "@/composables/usePollingInterval";
 import SearchBar from "@/components/SearchBar.vue";
 import FilterPanel from "@/components/FilterPanel.vue";
 import ConfirmationModal from "@/components/modals/ConfirmationModal.vue";
 import ActionsColumn from "./table-columns/ActionsColumn.vue";
-import { computed, onMounted, ref } from "vue";
+import { computed, onBeforeMount, onBeforeUnmount, onMounted, ref } from "vue";
 import InstanceTypeColumn from "./table-columns/InstanceTypeColumn.vue";
 import SecurityGroupColumn from "./table-columns/SecurityGroupColumn.vue";
 import InstanceNameColumn from "./table-columns/InstanceNameColumn.vue";
 import { useI18n } from "vue-i18n";
+import { useDebounceFn } from "@vueuse/core";
 
 
 const { t } = useI18n();
@@ -256,6 +258,12 @@ const { update: stopServer, updating: stopping } = useResourceUpdate(
 );
 
 const { truncate } = useTextTruncate();
+const { start, stop } = usePollingInterval(()  => {
+    fetch({
+        filter: search.value,
+        filters: options.filters,
+    });
+}, 20000);
 
 const openCreateServerModal = ref(false);
 const openDeleteConfirmationModal = ref(false);
@@ -337,12 +345,12 @@ const handleDelete = async () => {
 };
 
 
+
 onMounted(() => {
-    // setInterval(() => {
-    //     fetch({
-    //         filter: search.value,
-    //         filters: options.filters,
-    //     });
-    // }, 10000);
+    useDebounceFn(start, 3000)();
+});
+
+onBeforeUnmount(() => {
+    stop();
 });
 </script>

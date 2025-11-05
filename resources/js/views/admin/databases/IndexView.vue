@@ -118,16 +118,18 @@ import PageHeader from "@/components/PageHeader.vue";
 import { useResourceIndex } from "@/composables/useResourceIndex";
 import { useResourceDestroy } from "@/composables/useResourceDestroy";
 import { useTextTruncate } from "@/composables/useTextTruncate";
+import { usePollingInterval } from "@/composables/usePollingInterval";
 import FilterPanel from "@/components/FilterPanel.vue";
 import SearchBar from "@/components/SearchBar.vue";
 import SecurityGroupColumn from "./table-columns/SecurityGroupColumn.vue";
-import { computed, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import DBNameColumn from "./table-columns/DBNameColumn.vue";
 import EngineColumn from "./table-columns/EngineColumn.vue";
 import StorageColumn from "./table-columns/StorageColumn.vue";
 import ActionsColumn from "./table-columns/ActionsColumn.vue";
 import ConfirmationModal from "@/components/modals/ConfirmationModal.vue";
+import { useDebounceFn } from "@vueuse/core";
 
 const {
     data: rdsDatabases,
@@ -141,6 +143,15 @@ const { destroy, destroyed, destroying } = useResourceDestroy("admin/rds-databas
 
 const { t } = useI18n();
 const { truncate } = useTextTruncate();
+const {
+    start,
+    stop,
+} = usePollingInterval(() => {
+    fetch({
+        filter: search.value,
+        filters: options.filters,
+    });
+}, 20000);
 
 const columns = computed(() => [
     { name: "id", label: t("id"), field: "id", sortable: true, align: "left" },
@@ -226,5 +237,13 @@ const handleDelete = async () => {
         });
     }
 };
+
+onMounted(() => {
+    useDebounceFn(start, 3000)();
+});
+
+onBeforeUnmount(() => {
+    stop();
+});
 
 </script>
