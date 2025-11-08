@@ -1,7 +1,6 @@
 import { ref, toValue } from "vue";
 import { useFetch } from "./useFetch";
 import { useQuasar } from "quasar";
-import { use } from "react";
 import { useI18n } from "vue-i18n";
 
 export function useResourceDestroy(resource) {
