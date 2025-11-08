@@ -19,6 +19,7 @@ export default defineConfig({
         quasar({
             autoImportComponentCase: "combined",
             sassVariables: fileURLToPath(new URL("./resources/scss/quasar-variables.scss", import.meta.url)),
+            buildDirectory: 'build',
         }),
         tailwindcss(),
     ],
