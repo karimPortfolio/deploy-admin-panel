@@ -1,0 +1,1 @@
+import{v as n}from"./app-CVo2F_W3.js";function i(r,u,{onStart:e,onStop:t}={}){const l=n(null);return{start:()=>{if(l.value===null){if(e){e();return}l.value=setInterval(r,u)}},stop:()=>{if(l.value!==null){if(t){t();return}clearInterval(l.value),l.value=null}},timerId:l}}export{i as u};
