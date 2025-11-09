@@ -31,11 +31,4 @@ export default defineConfig({
         },
     },
 
-    // server: {
-    //     port: 4000,
-    //     cors: {
-    //         origin: "http://deploy-admin-panel.test",
-    //         credentials: true,
-    //     },
-    // },
 });
