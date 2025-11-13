@@ -50,4 +50,9 @@ class Server extends Model
             ->withTimestamps();
     }
 
+    public function keyPair()
+    {
+        return $this->belongsTo(ServerKey::class, 'key_id');
+    }
+
 }

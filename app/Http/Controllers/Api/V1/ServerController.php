@@ -70,6 +70,7 @@ class ServerController extends Controller
             'name' => $request->validated('name'),
             'vpc_id' => $request->validated('vpc_id'),
             'group_id' => $securityGroup->group_id,
+            'created_by' => auth()->id()
         ];
 
         $server = Server::create([

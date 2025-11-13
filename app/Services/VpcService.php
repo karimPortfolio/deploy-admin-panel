@@ -6,8 +6,6 @@ class VpcService
 {
     /**
      * get a VPC by Tags or create a new one if it doesn't exist.
-     *
-     * @return array
      */
     public static function getOrCreateVpc(): array
     {
@@ -22,11 +20,11 @@ class VpcService
 
             $response = $ec2Client->describeVpcs([
                 'Filters' => [
-                    ['Name' => 'tag:DefaultReplacement', 'Values' => ['true']]
-                ]
+                    ['Name' => 'tag:DefaultReplacement', 'Values' => ['true']],
+                ],
             ]);
 
-            if (!empty($response['Vpcs'])) {
+            if (! empty($response['Vpcs'])) {
                 return $response['Vpcs'][0];
             }
 
@@ -44,7 +42,7 @@ class VpcService
 
             $vpcId = $result['Vpc']['VpcId'];
 
-            //waiting for the VPC until be available
+            // waiting for the VPC until be available
             $ec2Client->waitUntil('VpcAvailable', [
                 'VpcIds' => [$vpcId],
             ]);
@@ -53,15 +51,12 @@ class VpcService
                 'VpcId' => $vpcId,
             ];
         } catch (\Aws\Exception\AwsException $e) {
-            throw new \RuntimeException('Failed to create VPC: ' . $e->getMessage());
+            throw new \RuntimeException('Failed to create VPC: '.$e->getMessage());
         }
     }
 
     /**
      * Delete an AWS VPC.
-     *
-     * @param string $vpcId
-     * @return void
      */
     public static function deleteVpc(string $vpcId): void
     {
@@ -72,16 +67,12 @@ class VpcService
                 'VpcId' => $vpcId,
             ]);
         } catch (\Aws\Exception\AwsException $e) {
-            throw new \RuntimeException('Failed to delete VPC: ' . $e->getMessage());
+            throw new \RuntimeException('Failed to delete VPC: '.$e->getMessage());
         }
     }
 
-
     /**
      * Get the details of an AWS VPC.
-     *
-     * @param string $vpcId
-     * @return array
      */
     public static function getVpcDetails(string $vpcId): array
     {
@@ -94,14 +85,12 @@ class VpcService
 
             return $result['Vpcs'][0];
         } catch (\Aws\Exception\AwsException $e) {
-            throw new \RuntimeException('Failed to get VPC details: ' . $e->getMessage());
+            throw new \RuntimeException('Failed to get VPC details: '.$e->getMessage());
         }
     }
 
     /**
      * List all AWS VPCs.
-     *
-     * @return array
      */
     public static function listVpcs(): array
     {
@@ -112,15 +101,12 @@ class VpcService
 
             return $result['Vpcs'];
         } catch (\Aws\Exception\AwsException $e) {
-            throw new \RuntimeException('Failed to list VPCs: ' . $e->getMessage());
+            throw new \RuntimeException('Failed to list VPCs: '.$e->getMessage());
         }
     }
 
-
     /**
      * Get the default VPC.
-     *
-     * @return array
      */
     public static function getDefaultVpc(): array
     {
@@ -136,22 +122,18 @@ class VpcService
                     [
                         'Name' => 'tag:DefaultReplacement',
                         'Values' => ['true'],
-                    ]
+                    ],
                 ],
             ]);
 
             return $result['Vpcs'][0] ?? [];
         } catch (\Aws\Exception\AwsException $e) {
-            throw new \RuntimeException('Failed to get default VPC: ' . $e->getMessage());
+            throw new \RuntimeException('Failed to get default VPC: '.$e->getMessage());
         }
     }
 
-
     /**
      * Get or create a subnet by VPC ID.
-     *
-     * @param string $vpcId
-     * @return array
      */
     public static function getOrCreateSubnetByVpcId(string $vpcId): array
     {
@@ -169,7 +151,7 @@ class VpcService
 
             $subnets = $existing->get('Subnets');
 
-            if (!empty($subnets)) {
+            if (! empty($subnets)) {
                 return $subnets[0];
             }
 
@@ -178,24 +160,22 @@ class VpcService
                 'CidrBlock' => '10.0.1.0/24',
             ]);
 
+            $subnetId = $result['Subnet']['SubnetId'];
+
             $ec2Client->modifySubnetAttribute([
-                'SubnetId' => $result->get('Subnet')['SubnetId'],
-                'MapPublicIpOnLaunch' => [
-                    'Value' => true,
-                ],
+                'SubnetId' => $subnetId,
+                'MapPublicIpOnLaunch' => ['Value' => true],
             ]);
 
             return $result->get('Subnet');
         } catch (\Exception $e) {
-            throw new \RuntimeException('Failed to initialize EC2 client: ' . $e->getMessage());
+            throw new \RuntimeException('Failed to initialize EC2 client: '.$e->getMessage());
         }
     }
 
     /**
      * Get all subnets by VPC ID.
      *
-     * @param string $vpcId
-     * @return array
      * @throws \RuntimeException
      */
     public static function getSubnetsByVpcId(string $vpcId): array
@@ -214,19 +194,16 @@ class VpcService
 
             return $existing->get('Subnets') ?? [];
         } catch (\Exception $e) {
-            throw new \RuntimeException('Failed to initialize EC2 client: ' . $e->getMessage());
+            throw new \RuntimeException('Failed to initialize EC2 client: '.$e->getMessage());
         }
     }
 
     /**
      * Create a subnet in a specified VPC.
      *
-     * @param string $vpcId
-     * @param string|null $cidrBlock
-     * @return array
      * @throws \RuntimeException
      */
-    public static function createSubnet(string $vpcId, string|null $cidrBlock=null): array
+    public static function createSubnet(string $vpcId, ?string $cidrBlock = null): array
     {
         $ec2Client = app(\Aws\Ec2\Ec2Client::class);
 
@@ -238,7 +215,7 @@ class VpcService
 
             return $result->get('Subnet');
         } catch (\Exception $e) {
-            throw new \RuntimeException('Failed to create subnet: ' . $e->getMessage());
+            throw new \RuntimeException('Failed to create subnet: '.$e->getMessage());
         }
     }
 }

@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('public_ip_address')->nullable();
             $table->foreignId('ssh_key_id')->nullable()->constrained();
             $table->foreignId('security_group_id')->nullable()->constrained('security_groups');
+            $table->foreignId('key_id')->nullable()->constrained('server_keys');
             $table->string('vpc_id')->nullable();
             $table->string('subnet_id')->nullable();
             $table->string('os_family');

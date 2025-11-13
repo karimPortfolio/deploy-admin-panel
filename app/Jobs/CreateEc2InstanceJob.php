@@ -3,12 +3,14 @@
 namespace App\Jobs;
 
 use App\Models\Server;
+use App\Models\ServerKey;
 use App\Services\Ec2InstanceService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Crypt;
 
 class CreateEc2InstanceJob implements ShouldQueue
 {
@@ -28,17 +30,23 @@ class CreateEc2InstanceJob implements ShouldQueue
     public function handle(): void
     {
         try {
+            $keyPair = Ec2InstanceService::createKeyPair($this->params['name']);
+            $this->params['key_name'] = $keyPair['KeyName'];
             $newEc2Instance = Ec2InstanceService::createInstance($this->params);
-            $ec2Instance = Ec2InstanceService::describeInstanceByInstanceId($newEc2Instance['InstanceId']);
+
+            $newKeyPair = ServerKey::create([
+                'key_name' => $keyPair['KeyName'],
+                'key_content' => Crypt::encryptString($keyPair['KeyMaterial']),
+                'created_by' => $this->params['created_by'] 
+            ]);
 
             $this->server->update([
                 'instance_id' => $newEc2Instance['InstanceId'],
                 'image_id' => $newEc2Instance['ImageId'],
-                'status' => $ec2Instance['State']['Name'],//this one waits until the instance is running
                 'private_ip_address' => $newEc2Instance['PrivateIpAddress'],
-                'public_ip_address' => $ec2Instance['PublicIpAddress'],//this one waites until the ip public address is assigned
                 'vpc_id' => $newEc2Instance['VpcId'],
                 'subnet_id' => $newEc2Instance['SubnetId'],
+                'key_id' => $newKeyPair->id
             ]);
         }
         catch (\Exception $e) {

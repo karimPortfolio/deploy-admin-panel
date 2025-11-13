@@ -37,6 +37,8 @@ class Ec2InstanceService
                 'MaxCount' => 1,
                 'SecurityGroupIds' => array($params['group_id']),
                 'SubnetId' => $subnet['SubnetId'],
+                'KeyName' => $params['key_name'],
+                'AssociatePublicIpAddress' => true,
                 'TagSpecifications' => [
                     [
                         'ResourceType' => 'instance',
@@ -58,6 +60,11 @@ class Ec2InstanceService
                 ],
             ]);
 
+            if (!isset($result['Instances']) || !is_array($result['Instances']))
+            {
+                return [];
+            }
+
             return [
                 'InstanceId' => $result['Instances'][0]['InstanceId'],
                 'PublicIpAddress' => $result['Instances'][0]['PublicIpAddress'] ?? null,
@@ -72,6 +79,30 @@ class Ec2InstanceService
             ];
         } catch (\Aws\Exception\AwsException $e) {
             throw new \RuntimeException('Failed to create EC2 instance: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Create an EC2 instance.
+     *
+     * @param string $name
+     * @return \Aws\Result|array
+     * @throws \Aws\Exception\AwsException
+     */
+    public static function createKeyPair(string $name): \Aws\Result|array
+    {
+        $ec2Client = app(Ec2Client::class);
+        try
+        {
+            $keyPair = $ec2Client->createKeyPair([
+                'KeyName' => $name . '-key-' . \Str::random(6)
+            ]);
+
+            return $keyPair ?? [];
+        }
+        catch(\Aws\Exception\AwsException $e)
+        {
+            throw new \RuntimeException('Failed to create key pair: ' . $e->getMessage());
         }
     }
 
