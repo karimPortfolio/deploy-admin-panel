@@ -2,8 +2,8 @@
     <q-card class="shadow-none">
         <q-card-section class="flex items-center justify-between">
             <div class="flex items-center gap-2">
-                <q-icon name="sym_r_host" color="primary" size="sm" />
-                <div class="font-medium" :title="$t('servers.monthly_total')" >{{ truncate($t("servers.monthly_total"), 25) }}</div>
+                <q-icon name="sym_r_database" color="warning" size="sm" />
+                <div class="font-medium" :title="$t('databases.monthly_total')" >{{ truncate($t("databases.monthly_total") ,25) }}</div>
             </div>
             <div>
                 <q-select
@@ -41,7 +41,7 @@ const currentYear = new Date().getFullYear();
 const selectedYear = ref(currentYear);
 
 const { data, fetch, loading } = useResourceIndex(
-    "dashboard/monthly-servers-total"
+    "dashboard/monthly-rds-databases-total"
 );
 
 const { truncate } = useTextTruncate();
@@ -128,8 +128,8 @@ const series = computed(() => {
 
     return [
         {
-            name: t("servers.title"),
-            color: "#1b75bb",
+            name: t("databases.title"),
+            color: "#ffdf20",
             data: values,
         },
     ];

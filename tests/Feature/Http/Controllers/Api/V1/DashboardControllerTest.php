@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Http\Controllers\Api\V1;
 
+use App\Models\RdsDatabase;
 use App\Models\SecurityGroup;
 use App\Models\Server;
 use App\Models\SshKey;
@@ -60,6 +61,19 @@ class DashboardControllerTest extends TestCase
             );
     }
 
+    public function test_it_can_get_total_rds_databases_count()
+    {
+        RdsDatabase::factory()->count(5)->create();
+
+        $response = $this->getJson(route('api.v1.dashboard.total-rds-databases'));
+
+        $response->assertOk()
+            ->assertJson(fn (AssertableJson $json) =>
+                $json->where('data.total', 5)
+                    ->etc()
+            );
+    }
+
     public function test_it_can_get_monthly_servers_total()
     {
         $year = date('Y');
@@ -82,7 +96,7 @@ class DashboardControllerTest extends TestCase
 
     public function test_it_returns_zero_monthly_servers_total_for_year_with_no_data()
     {
-        $year = date('Y') - 1; // Previous year with no data
+        $year = date('Y') - 1; 
 
         $response = $this->getJson(route('api.v1.dashboard.monthly-servers-total', ['filter.year' => $year]));
 
@@ -116,9 +130,43 @@ class DashboardControllerTest extends TestCase
 
     public function test_it_returns_zero_monthly_security_groups_total_for_year_with_no_data()
     {
-        $year = date('Y') - 1; // Previous year with no data
+        $year = date('Y') - 1; 
 
         $response = $this->getJson(route('api.v1.dashboard.monthly-security-groups-total', ['filter.year' => $year]));
+
+        $response->assertOk()
+            ->assertJson(fn (AssertableJson $json) =>
+                $json->where('data', fn ($data) =>
+                    count($data) === 12 && collect($data)->every(fn ($monthData) => $monthData['total'] === 0)
+                )->etc()
+            );
+    }
+
+    public function test_it_can_get_monthly_rds_databases_total()
+    {
+        $year = date('Y');
+        RdsDatabase::factory()->create(['created_at' => "$year-01-15"]);
+        RdsDatabase::factory()->create(['created_at' => "$year-01-20"]);
+        RdsDatabase::factory()->create(['created_at' => "$year-02-10"]);
+        RdsDatabase::factory()->create(['created_at' => "$year-03-05"]);
+        RdsDatabase::factory()->create(['created_at' => "$year-03-25"]);
+        RdsDatabase::factory()->create(['created_at' => "$year-03-30"]);
+
+        $response = $this->getJson(route('api.v1.dashboard.monthly-rds-databases-total', ['filter.year' => $year]));
+
+        $response->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => ['month', 'total']
+                ]
+            ]);
+    }
+
+    public function test_it_returns_zero_monthly_rds_databases_total_for_year_with_no_data()
+    {
+        $year = date('Y') - 1; 
+
+        $response = $this->getJson(route('api.v1.dashboard.monthly-rds-databases-total', ['filter.year' => $year]));
 
         $response->assertOk()
             ->assertJson(fn (AssertableJson $json) =>

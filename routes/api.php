@@ -48,8 +48,10 @@ Route::middleware(['auth:sanctum', 'setUserLocale', 'isActive'])
                     Route::get('servers-count', [DashboardController::class, 'getTotalServersCount'])->name('total-servers');
                     Route::get('security-groups-count', [DashboardController::class, 'getTotalSecurityGroupsCount'])->name('total-security-groups');
                     Route::get('sshkeys-count', [DashboardController::class, 'getTotalSshKeysCount'])->name('total-sshkeys');
+                    Route::get('rds-databases-count', [DashboardController::class, 'getTotalRdsDatabasesCount'])->name('total-rds-databases');
                     Route::get('monthly-servers-total', [DashboardController::class, 'getMonthlyServersTotal'])->name('monthly-servers-total');
                     Route::get('monthly-security-groups-total', [DashboardController::class, 'getMonthlySecurityGroupsTotal'])->name('monthly-security-groups-total');
+                    Route::get('monthly-rds-databases-total', [DashboardController::class, 'getMonthlyRdsDatabasesTotal'])->name('monthly-rds-databases-total');
                     Route::get('servers-by-security-groups', [DashboardController::class, 'getTotalServersBySecurityGroups'])->name('servers-by-security-groups');
                     Route::get('servers-by-status', [DashboardController::class, 'getTotalServersByStatus'])->name('servers-by-status');
                 });

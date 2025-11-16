@@ -3,7 +3,7 @@
         <q-card-section class="flex items-center justify-between">
             <div class="flex items-center gap-2">
                 <q-icon name="sym_r_security" color="green" size="sm" />
-                <div class="font-medium" :title="$t('security_groups.monthly_total')" >{{ truncate($t("security_groups.monthly_total") ,40) }}</div>
+                <div class="font-medium" :title="$t('security_groups.monthly_total')" >{{ truncate($t("security_groups.monthly_total") ,25) }}</div>
             </div>
             <div>
                 <q-select
