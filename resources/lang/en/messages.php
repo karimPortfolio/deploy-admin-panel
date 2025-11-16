@@ -2,6 +2,7 @@
 
 return [
     'days' => ' Days',
+    'monitoring_msg' => 'The support for other languages in monitoring metrics will be added soon.',
     'servers' => [
         'servers_creation_msg' => "Server creation in progress. You can check the status later.",
         'failed_to_start_msg' => "Failed to start the instance.",

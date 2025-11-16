@@ -1,11 +1,11 @@
 <template>
     <q-card class="shadow-none flex items-center gap-0 ps-3">
-        <q-card-section>
+        <q-card-section class="p-0">
             <div class="bg-primary-100 rounded-full w-fit p-4">
                 <q-icon name="sym_r_host" size="sm" color="primary" />
             </div>
         </q-card-section>
-        <q-card-section>
+        <q-card-section class="p-0 ps-3">
             <div class="font-bold text-xl">{{ data?.total }}</div>
             <div class="text-gray-500 dark:text-gray-400">{{ $t("servers.title") }}</div>
         </q-card-section>

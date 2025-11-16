@@ -2,6 +2,7 @@
 
 return [
     'days' => 'Jours',
+    'monitoring_msg' => "La prise en charge d'autres langues dans les métriques de surveillance sera ajoutée prochainement.",
     'servers' => [
         'servers_creation_msg' => "Création du serveur en cours. Vous pouvez vérifier le statut plus tard.",
         'failed_to_start_msg' => "Échec du démarrage de l'instance.",

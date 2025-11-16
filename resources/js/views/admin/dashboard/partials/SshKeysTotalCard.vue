@@ -1,11 +1,11 @@
 <template>
-    <q-card class="shadow-none flex items-center gap-0 ps-3">
-        <q-card-section>
+    <q-card class="shadow-none flex items-center gap-0 ps-3 py-3">
+        <q-card-section class="p-0">
             <div class="bg-purple-100 rounded-full w-fit p-4">
                 <q-icon name="sym_r_security" size="sm" color="purple" />
             </div>
         </q-card-section>
-        <q-card-section>
+        <q-card-section class="p-0 ps-3">
             <div class="font-bold text-xl">{{ data?.total }}</div>
             <div class="text-gray-500 dark:text-gray-400">{{ truncate($t("ssh_keys.title"), 15) }}</div>
         </q-card-section>

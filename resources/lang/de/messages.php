@@ -2,6 +2,7 @@
 
 return [
     'days' => ' Tage',
+    'monitoring_msg' => 'Die Unterstützung für weitere Sprachen in den Überwachungsmetriken wird in Kürze hinzugefügt.',
     'servers' => [
         'servers_creation_msg' => "Server-Erstellung läuft. Sie können den Status später überprüfen.",
         'failed_to_start_msg' => "Fehler beim Starten der Instanz.",

@@ -16,6 +16,9 @@
     <livewire:pulse.slow-jobs cols="6" />
 
     <livewire:pulse.slow-outgoing-requests cols="6" />
+    <div class="text-gray-600 dark:text-gray-400 col-span-full" >
+        N.B: {{ __('messages.monitoring_msg') }}
+    </div>
 </x-pulse>
 @persist('css')
 <style>

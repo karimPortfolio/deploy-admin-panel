@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1\Admin;
 
 use App\Enums\ServerStatus;
 use App\Http\Controllers\Controller;
+use App\Models\RdsDatabase;
 use App\Models\SecurityGroup;
 use App\Models\Server;
 use App\Models\SshKey;
@@ -58,6 +59,17 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function getTotalRdsDatabasesCount()
+    {
+        $rdsDatabasesCount = RdsDatabase::query()->count(); 
+
+        return response()->json([
+            'data' => [
+                'total' => $rdsDatabasesCount
+            ]
+        ]);
+    }
+
     public function getMonthlyServersTotal(Request $request)
     {
         $year = $request->input('filter.year') ?? date('Y');
@@ -99,6 +111,31 @@ class DashboardController extends Controller
             $data[] = [
                 'month' => Carbon::createFromFormat('m', $i)->format('M'),
                 'total' => $securityGroups->get($i)->count ?? 0,
+            ];
+        }
+
+        return response()->json([
+            'data' => $data
+        ]);
+    }
+
+
+    public function getMonthlyRdsDatabasesTotal(Request $request)
+    {
+        $year = $request->input('filter.year') ?? date('Y');
+        $rdsDatabases = RdsDatabase::query()
+            ->select(\DB::raw($this->monthQuery()), \DB::raw("COUNT(*) as count"))
+            ->whereYear("created_at", $year)
+            ->groupBy('month')
+            ->get()
+            ->keyBy('month');
+
+        $data = [];
+
+        for ($i = 1; $i <= 12; $i++) {
+            $data[] = [
+                'month' => Carbon::createFromFormat('m', $i)->format('M'),
+                'total' => $rdsDatabases->get($i)->count ?? 0,
             ];
         }
 

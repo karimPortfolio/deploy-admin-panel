@@ -1,24 +1,26 @@
 <template>
     <q-card class="shadow-none flex items-center gap-0 ps-3">
         <q-card-section class="p-0">
-            <div class="bg-yellow-100 rounded-full w-fit p-4">
-                <q-icon name="sym_r_group" size="sm" color="warning" />
+            <div class="bg-cyan-100 rounded-full w-fit p-4">
+                <q-icon name="sym_r_database" size="sm" color="cyan-7" />
             </div>
         </q-card-section>
         <q-card-section class="p-0 ps-3">
             <div class="font-bold text-xl">{{ data?.total }}</div>
-            <div class="text-gray-500 dark:text-gray-400">{{ $t("users.title") }}</div>
+            <div class="text-gray-500 dark:text-gray-400">{{ truncate($t("databases.title"), 15) }}</div>
         </q-card-section>
         <q-inner-loading :showing="loading">
-            <q-spinner-tail color="warning" size="40px" />
+            <q-spinner-tail color="primary" size="40px" />
         </q-inner-loading>
     </q-card>
 </template>
 <script setup>
 import { useResourceIndex } from "@/composables/useResourceIndex";
 import { onMounted } from "vue";
+import { useTextTruncate } from "@/composables/useTextTruncate";
 
-const { data, fetch, loading } = useResourceIndex("admin/dashboard/users-count");
+const { data, fetch, loading } = useResourceIndex("admin/dashboard/rds-databases-count");
+const { truncate } = useTextTruncate();
 
 onMounted(() => fetch());
 </script>

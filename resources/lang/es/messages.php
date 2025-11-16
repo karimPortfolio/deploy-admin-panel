@@ -2,6 +2,7 @@
 
 return [
     'days' => 'Días',
+    'monitoring_msg' => 'El soporte para otros idiomas en las métricas de monitoreo se agregará pronto.',
     'servers' => [
         'servers_creation_msg' => 'Creación de servidor en progreso. Puedes verificar el estado más tarde.',
         'failed_to_start_msg' => 'Error al iniciar la instancia.',

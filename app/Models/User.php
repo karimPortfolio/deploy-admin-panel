@@ -76,6 +76,11 @@ class User extends Authenticatable implements HasMedia
         return $this->hasMany(\App\Models\SecurityGroup::class, 'created_by');
     }
 
+    public function rdsDatabases()
+    {
+        return $this->hasMany(\App\Models\RdsDatabase::class, 'created_by');
+    }
+
     public function isAdmin(): bool
     {
         return $this->role === UserRole::ADMIN;

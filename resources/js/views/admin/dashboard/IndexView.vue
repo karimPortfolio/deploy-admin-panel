@@ -1,21 +1,17 @@
 <template>
    <q-page class="q-pa-md">
-    <!-- <page-header
-      title="Dashboard"
-      subtitle="Welcome to your dashboard"
-      icon="dashboard"
-    /> -->
-
     <div>
-      <div class="grid lg:grid-cols-4 gap-4" >
+      <div class="grid md:grid-cols-3 lg:grid-cols-5 gap-4" >
         <servers-total-card />
         <users-total-card />
         <security-group-total-card />
         <ssh-keys-total-card />
+        <databases-total-card />
       </div>
-      <div class="grid lg:grid-cols-2 gap-4 mt-4" >
+      <div class="grid lg:grid-cols-3 gap-4 mt-4" >
         <monthly-servers-total-chart-card />
         <monthly-security-group-total-chart-card />
+        <monthly-databases-total-chart-card />
       </div>
       <div class="grid lg:grid-cols-2 gap-4 mt-4" >
         <total-servers-by-status-chart-card />
@@ -34,4 +30,6 @@ import MonthlySecurityGroupTotalChartCard from './partials/MonthlySecurityGroupT
 import TotalServersByStatusChartCard from './partials/TotalServersByStatusChartCard.vue';
 import TotalServersBySecurityGroupsChartCard from './partials/TotalServersBySecurityGroupsChartCard.vue';
 import UsersTotalCard from './partials/UsersTotalCard.vue';
+import DatabasesTotalCard from './partials/DatabasesTotalCard.vue';
+import MonthlyDatabasesTotalChartCard from './partials/MonthlyDatabasesTotalChartCard.vue';
 </script>

@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers\Api\V1\Admin;
 use App\Enums\InstanceType;
 use App\Enums\OsFamily;
 use App\Enums\ServerStatus;
+use App\Models\RdsDatabase;
 use App\Models\SecurityGroup;
 use App\Models\Server;
 use App\Models\SshKey;
@@ -82,6 +83,18 @@ class DashboardControllerTest extends TestCase
             );
     }
 
+    public function test_can_get_total_rds_databases_count()
+    {
+        RdsDatabase::factory()->count(5)->create();
+        $response = $this->getJson(route('api.v1.admin.dashboard.total-rds-databases'));
+
+        $response->assertOk()
+            ->assertJson(fn (AssertableJson $json) =>
+                $json->where('data.total', 5)
+                    ->etc()
+            );
+    }
+
 
     public function test_can_get_monthly_servers_total()
     {
@@ -134,6 +147,32 @@ class DashboardControllerTest extends TestCase
         );
 
         $response = $this->getJson(route('api.v1.admin.dashboard.monthly-security-groups-total', [
+            'filter' => [
+                'year' => now()->year,
+            ]
+        ]));
+
+        $response->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    '*' => ['month', 'total']
+                ]
+            ]);
+    }
+
+
+    public function test_can_get_monthly_rds_databases_total()
+    {
+
+        RdsDatabase::factory()->count(4)->make([
+            'created_at' => now()->subMonths(3),
+        ])->toArray();
+
+        RdsDatabase::factory()->count(2)->make([
+            'created_at' => now()->subMonths(1),
+        ])->toArray();
+
+        $response = $this->getJson(route('api.v1.admin.dashboard.monthly-rds-databases-total', [
             'filter' => [
                 'year' => now()->year,
             ]
