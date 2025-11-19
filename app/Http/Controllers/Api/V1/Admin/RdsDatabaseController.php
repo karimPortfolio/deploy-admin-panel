@@ -54,6 +54,11 @@ class RdsDatabaseController extends Controller
             'securityGroup:id,name,group_id',
             'servers:id,instance_id,name,status,public_ip_address',
             'createdBy:id,name',
+            'snapshots' => function ($q) {
+                $q->select('id', 'snapshot_identifier', 'rds_database_id', 'status', 'snapshot_type','created_at')
+                ->orderBy('updated_at', 'desc')
+                ->limit(3);
+            }
         ]);
 
         return RdsDatabaseResource::make($rdsDatabase);

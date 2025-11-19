@@ -73,8 +73,13 @@ class ServerController extends Controller
             'securityGroup:id,name,group_id',
             'createdBy:id,name',
         ]);
+
+        $statistics = Ec2InstanceService::getInstanceUtilization($server->instance_id);
         
-        return new ServerResource($server);
+        return (new ServerResource($server))
+        ->additional([
+            'statistics' => $statistics,
+        ]);
     }
 
     public function startServer(Server $server)

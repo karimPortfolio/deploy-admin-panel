@@ -1,6 +1,30 @@
 <template>
     <q-page class="q-pa-md">
-        <!-- <apexchart width="500" type="bar" :options="options" :series="series"></apexchart> -->
+        <!-- ========= SERVER MONITORING ======= -->
+         <q-card class="p-4 pb-0 mb-4">
+            <q-card-section class="p-0 flex items-center gap-2 pb-5">
+                <q-icon name="sym_r_bar_chart" color="primary" size="sm" />
+                <h4 class="font-meduim text-lg">{{ $t("servers.server_monitoring") }}</h4>
+            </q-card-section>
+            <q-card-section v-if="statistics.cpu_utilization" class="p-0 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <server-cpu-usage-chart
+                    :cpu-usage-data="statistics?.cpu_utilization ?? []"
+                />
+                <server-disk-read-ops-chart
+                    :diskReadOpsData="statistics?.disk_read_ops ?? []"
+                />
+                <server-disk-write-ops-chart
+                    :diskWriteOpsData="statistics?.disk_write_ops ?? []"
+                />
+            </q-card-section>
+            <q-card-section class="p-0"> 
+                <q-inner-loading :showing="!statistics.cpu_utilization" class="rounded-lg" >
+                    <q-spinner-tail color="primary" size="40px" />
+                </q-inner-loading>
+            </q-card-section>
+        </q-card> 
+
+        <!-- ========= SERVER DETAILS ======= -->
         <q-card class="p-4">
             <q-card-section class="p-0 flex items-center gap-2 pb-4">
                 <q-icon name="sym_r_host" color="primary" size="sm" />
@@ -95,12 +119,26 @@
     </q-page>
 </template>
 <script setup>
-import { onMounted } from "vue";
-import PageHeader from "@/components/PageHeader.vue";
+import { onMounted, ref } from "vue";
 import { useResourceShow } from "@/composables/useResourceShow";
 import { useRoute } from "vue-router";
+import ServerCpuUsageChart from "./show-details-partials/ServerCpuUsageChart.vue";
+import ServerDiskReadOpsChart from "./show-details-partials/ServerDiskReadOpsChart.vue";
+import ServerDiskWriteOpsChart from "./show-details-partials/ServerDiskWriteOpsChart.vue";
 
-const { data: server, fetch, loading } = useResourceShow("admin/servers");
+const statistics = ref({
+    cpu_utilization: [],
+    disk_read_ops: [],
+    disk_write_ops: [],
+});
+
+const { data: server, fetch, loading } = useResourceShow("admin/servers", {
+    onSuccess: (data) => {
+        if (data.data && data.data.statistics) {
+            statistics.value = data.data.statistics;
+        }
+    }
+});
 
 const route = useRoute();
 

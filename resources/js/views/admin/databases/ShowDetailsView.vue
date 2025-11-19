@@ -191,6 +191,12 @@
             :loading="loading"
             class="mt-4"
         />
+
+        <latest-snapshots-card
+            :snapshots="database?.snapshots || []"
+            :loading="loading"
+            class="mt-4"
+        />
     </q-page>
 </template>
 <script setup>
@@ -199,6 +205,7 @@ import { useResourceShow } from "@/composables/useResourceShow";
 import { useTextTruncate } from "@/composables/useTextTruncate";
 import { useRoute } from "vue-router";
 import AttachedServersCard from "./partials/AttachedServersCard.vue";
+import LatestSnapshotsCard from "./partials/LatestSnapshotsCard.vue";
 
 const {
     data: database,
