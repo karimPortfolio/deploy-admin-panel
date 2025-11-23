@@ -19,47 +19,55 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(Ec2Client::class, function ($app) {
-            return new Ec2Client([
-                'region' => config("aws.region"),
+            $options = [
+                'region' => config('aws.region', 'us-east-1'),
                 'version' => 'latest',
-                'credentials' => [
-                    'key' => config('aws.key'),
-                    'secret' => config('aws.secret'),
-                ],
-            ]);
+            ];
+    
+            if ($key = config('aws.key')) {
+                $secret = config('aws.secret');
+                if ($secret) {
+                    $options['credentials'] = [
+                        'key' => $key,
+                        'secret' => $secret,
+                    ];
+                }
+            }
+    
+            return new Ec2Client($options);
         });
 
         $this->app->singleton(SsmClient::class, function ($app) {
-            return new SsmClient([
-                'region' => config('aws.region'),
+            $options = [
+                'region' => config('aws.region', 'us-east-1'),
                 'version' => 'latest',
-                'credentials' => [
-                    'key' => config('aws.key'),
-                    'secret' => config('aws.secret'),
-                ],
-            ]);
+            ];
+            if ($key = config('aws.key') && $secret = config('aws.secret')) {
+                $options['credentials'] = ['key' => config('aws.key'), 'secret' => config('aws.secret')];
+            }
+            return new SsmClient($options);
         });
 
         $this->app->singleton(CloudWatchClient::class, function ($app) {
-            return new CloudWatchClient([
-                'region' => config('aws.region'),
+            $options = [
+                'region' => config('aws.region', 'us-east-1'),
                 'version' => 'latest',
-                'credentials' => [
-                    'key' => config('aws.key'),
-                    'secret' => config('aws.secret'),
-                ],
-            ]);
+            ];
+            if (config('aws.key') && config('aws.secret')) {
+                $options['credentials'] = ['key' => config('aws.key'), 'secret' => config('aws.secret')];
+            }
+            return new CloudWatchClient($options);
         });
 
         $this->app->singleton(RdsClient::class, function ($app) {
-            return new RdsClient([
-                'region' => config('aws.region'),
+            $options = [
+                'region' => config('aws.region', 'us-east-1'),
                 'version' => 'latest',
-                'credentials' => [
-                    'key' => config('aws.key'),
-                    'secret' => config('aws.secret'),
-                ],
-            ]);
+            ];
+            if (config('aws.key') && config('aws.secret')) {
+                $options['credentials'] = ['key' => config('aws.key'), 'secret' => config('aws.secret')];
+            }
+            return new RdsClient($options);
         });
     }
 
