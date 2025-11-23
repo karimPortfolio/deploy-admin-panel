@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Enums\DBSnapshotStatus;
+use App\Services\AWS\RdsDatabaseSnapshotsService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
@@ -16,20 +17,18 @@ class CreateRdsDatabaseSnapshotJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(protected array $params)
-    {
-        //
-    }
+    public function __construct(
+        protected array $params,
+    ) {}
 
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(RdsDatabaseSnapshotsService $awsRdsSnapshotsService): void
     {
         try
         {
-            $rdsSnapshotsService = app(\App\Services\RdsDatabaseSnapshotsService::class);
-            $results = $rdsSnapshotsService->createSnapshot($this->params);
+            $results = $awsRdsSnapshotsService->createSnapshot($this->params);
 
             \App\Models\RdsDatabaseSnapshot::create([
                 'snapshot_identifier' => $results['DBSnapshotIdentifier'] ?? '',

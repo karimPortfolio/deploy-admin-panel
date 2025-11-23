@@ -14,62 +14,34 @@ use Spatie\QueryBuilder\QueryBuilder;
 
 class SecurityGroupController extends Controller
 {
+    public function __construct(
+        private SecurityGroupService $securityGroupService
+    ) {}
+
     public function index(Request $request)
     {
-        $securityGroups = QueryBuilder::for(SecurityGroup::class)
-            ->allowedFilters([
-                AllowedFilter::exact('vpc_id'),
-                AllowedFilter::custom('created_at', new \App\Filters\DateFilter()),
-            ])
-            ->allowedSorts(['id', 'name', 'description', 'vpc_id', 'group_id', 'created_at', 'updated_at'])
-            ->withCount('servers')
-            ->with([
-                'createdBy:id,name',
-            ])
-            ->when($request->input('search'), function ($query) use ($request) {
-                $search = $request->input('search');
-                $query->where(function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%")
-                        ->orWhere('description', 'like', "%{$search}%")
-                        ->orWhere('group_id', 'like', "%{$search}%");
-                });
-            })
-            ->orderBy('updated_at', 'desc')
-            ->paginate(function ($total) use ($request) {
-                $perPage = $request->integer('per_page', -1);
-
-                if ($perPage === 0) {
-                    $perPage = $total;
-                } elseif ($perPage === -1) {
-                    $perPage = 10;
-                }
-
-                return $perPage;
-            });
+        $securityGroups = $this->securityGroupService->listSecurityGroups($request);
 
         return SecurityGroupResource::collection($securityGroups);
     }
 
     public function show(SecurityGroup $securityGroup)
     {
-        $securityGroup->load([
-            'servers:id,name,instance_id,status,security_group_id',
-            'createdBy:id,name',
-        ]);
+        $securityGroup = $this->securityGroupService->getSecurityGroup($securityGroup);
 
         return new SecurityGroupResource($securityGroup);
     }
 
     public function destroy(SecurityGroup $securityGroup)
-    {
-        if ($this->securityGroupAssociated($securityGroup)) {
+    {        
+        $isAssociated = $this->securityGroupService->securityGroupAssociated($securityGroup);
+        if ($isAssociated) {
             return response()->json([
                 'message' => __('messages.security_groups.associated_servers_msg'),
             ], 422);
         }
-
-        SecurityGroupService::deleteSecurityGroup($securityGroup->group_id);
-        $securityGroup->delete();
+        
+        $this->securityGroupService->delete($securityGroup);
 
         $notifiable = \App\Models\User::find($securityGroup->created_by);
         $lang = $notifiable->language ?? 'en';
@@ -78,16 +50,5 @@ class SecurityGroupController extends Controller
             ->send($notifiable, new ResourceDeletedNotification($securityGroup, 'security group', 'security-groups'));
 
         return response()->noContent();
-    }
-
-    private function securityGroupAssociated(SecurityGroup $securityGroup)
-    {
-        $associatedServers = $securityGroup->servers;
-
-        if ($associatedServers->count() > 0) {
-            return true;
-        }
-
-        return false;
     }
 }

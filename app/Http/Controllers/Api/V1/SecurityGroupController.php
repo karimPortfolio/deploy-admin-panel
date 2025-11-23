@@ -8,114 +8,47 @@ use App\Http\Resources\SecurityGroupResource;
 use App\Models\SecurityGroup;
 use App\Services\SecurityGroupService;
 use Illuminate\Http\Request;
-use Spatie\QueryBuilder\AllowedFilter;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class SecurityGroupController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function __construct(
+        private SecurityGroupService $securityGroupService
+    ) {}
+    
     public function index(Request $request)
     {
-        $securityGroups = QueryBuilder::for(SecurityGroup::class)
-            ->allowedFilters([
-                AllowedFilter::exact('vpc_id'),
-                AllowedFilter::custom('created_at', new \App\Filters\DateFilter()),
-            ])
-            ->allowedSorts(['id', 'name', 'description', 'vpc_id', 'group_id', 'created_at', 'updated_at'])
-            ->withCount('servers')
-            ->with([
-                'createdBy:id,name',
-            ])
-            ->when($request->input('search'), function ($query) use ($request) {
-                $search = $request->input('search');
-                $query->where(function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%")
-                        ->orWhere('description', 'like', "%{$search}%")
-                        ->orWhere('group_id', 'like', "%{$search}%");
-                });
-            })
-            ->orderBy('updated_at', 'desc')
-            ->paginate(function ($total) use ($request) {
-                $perPage = $request->integer('per_page', -1);
-
-                if ($perPage === 0) {
-                    $perPage = $total;
-                } elseif ($perPage === -1) {
-                    $perPage = 10;
-                }
-
-                return $perPage;
-            });
+        $securityGroups = $this->securityGroupService->listSecurityGroups($request);
 
         return SecurityGroupResource::collection($securityGroups);
     }
 
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(SecurityGroupRequest $request)
     {
-        $name = $request->validated('name');
-        $description = $request->validated('description');
-
-        return \DB::transaction(function () use ($name, $description) {
-            $securityGroup = SecurityGroupService::createSecurityGroup($name, $description);
-
-            $securityGroup = SecurityGroup::create([
-                'group_id' => $securityGroup['GroupId'],
-                'name' => $name,
-                'description' => $description,
-                'vpc_id' => $securityGroup['vpc_id'],
-                'created_by' => auth()->id()
-            ]);
-
-            return new SecurityGroupResource($securityGroup);
-        });
-
+        $securityGroup = $this->securityGroupService->create($request);
+        
+        return new SecurityGroupResource($securityGroup);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(SecurityGroup $securityGroup)
     {
-        $securityGroup->load([
-            'servers:id,name,instance_id,status,security_group_id',
-            'createdBy:id,name',
-        ]);
+        $securityGroup = $this->securityGroupService->getSecurityGroup($securityGroup);
 
         return new SecurityGroupResource($securityGroup);
     }
 
-
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(SecurityGroup $securityGroup)
     {
-        if ($this->securityGroupAssociated($securityGroup)) {
+        $isAssociated = $this->securityGroupService->securityGroupAssociated($securityGroup);
+        
+        if ($isAssociated) {
             return response()->json([
                 'message' => __('messages.security_groups.associated_servers_msg'),
             ], 422);
         }
 
-        SecurityGroupService::deleteSecurityGroup($securityGroup->group_id);
-        $securityGroup->delete();
+        $this->securityGroupService->delete($securityGroup);
 
         return response()->noContent();
     }
 
-    private function securityGroupAssociated(SecurityGroup $securityGroup)
-    {
-        $associatedServers = $securityGroup->servers;
-
-        if ($associatedServers->count() > 0) {
-            return true;
-        }
-
-        return false;
-    }
 }

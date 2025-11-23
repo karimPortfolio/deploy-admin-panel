@@ -8,98 +8,52 @@ use App\Http\Resources\SshKeyResource;
 use App\Models\SshKey;
 use App\Services\SshKeyService;
 use Illuminate\Http\Request;
-use Spatie\QueryBuilder\QueryBuilder;
 
 class SshKeyController extends Controller
 {
+
+     public function __construct(
+        private SshKeyService $sshKeyService
+     ) {}
+
     public function index(Request $request)
     {
-        $sshKeys = QueryBuilder::for(SshKey::class)
-            ->allowedFilters([
-                'name',
-                'created_at',
-            ])
-            ->allowedSorts(['name', 'created_at', 'id'])
-            ->withCount('servers')
-            ->with([
-                'createdBy:id,name',
-            ])
-            ->when($request->input('search'), function ($query) use ($request) {
-                $search = $request->input('search');
-                $query->where('name', 'like', "%{$search}%")
-                    ->orWhere('public_key', 'like', "%{$search}%");
-            })
-            ->orderBy('updated_at', 'desc')
-            ->paginate(function ($total) use ($request) {
-                $perPage = $request->integer('per_page', -1);
-
-                if ($perPage === 0) {
-                    $perPage = $total;
-                } elseif ($perPage === -1) {
-                    $perPage = 10;
-                }
-
-                return $perPage;
-            });
+        $sshKeys = $this->sshKeyService->listSshKeys($request);
 
         return SshKeyResource::collection($sshKeys);
     }
 
     public function store(SshKeyRequest $request)
     {
-        return \DB::transaction(function () use ($request) {
-            // create the ssh  public and private keys
-            $keys = SshKeyService::createSshKey($request->validated('name'));
-
-            // store the ssh key
-            $newSshKey = SshKey::create([
-                'name' => $request->validated('name'),
-                'public_key' => $keys['public_key'],
-                'private_key' => $keys['private_key'],
-                'created_by' => auth()->id(),
-            ]);
-
-            return new SshKeyResource($newSshKey);
-        });
+        $newSshKey = $this->sshKeyService->create($request);
+        return new SshKeyResource($newSshKey);
     }
 
     public function show(SshKey $sshKey)
     {
-        $sshKey->load(['servers:id,instance_id,status,ssh_key_id', 'createdBy:id,name']);
+        $newSshKey = $this->sshKeyService->getSshKey($sshKey);
 
         return new SshKeyResource($sshKey);
     }
 
     public function update(SshKeyRequest $request, SshKey $sshKey)
     {
-        $sshKey->update([
-            'name' => $request->validated('name'),
-        ]);
+        $sshKey = $this->sshKeyService->update($request, $sshKey);
 
         return new SshKeyResource($sshKey);
     }
 
     public function destroy(SshKey $sshKey)
     {
-        if ($this->sshKeyAssociated($sshKey)) {
+        $isAssociated = $this->sshKeyService->sshKeyAssociated($sshKey);
+        if ($isAssociated) {
             return response()->json([
                 'message' => __('messages.ssh_keys.associated_servers_msg'),
             ], 422);
         }
 
-        $sshKey->delete();
-
+        $this->sshKeyService->delete($sshKey);
+        
         return response()->noContent();
-    }
-
-    private function sshKeyAssociated(SshKey $sshKey)
-    {
-        $associatedServers = $sshKey->servers;
-
-        if ($associatedServers->count() > 0) {
-            return true;
-        }
-
-        return false;
     }
 }

@@ -8,23 +8,21 @@ use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
+    public function __construct(
+        private \App\Services\NotificationService $notificationService
+    ) {}
+
+    
     public function index(Request $request)
     {
-        $notifications = auth()->user()
-            ->notifications()
-            ->paginate($request->input('per_page') ?: 10);
-
-        $this->markNotificationsAsReceived();
+        $notifications = $this->notificationService->listNotifications($request);
 
         return NotificationResource::collection($notifications);
     }
 
     public function unreceivedNotifications()
     {
-        $notifications = auth()->user()
-            ->notifications()
-            ->whereNull('received_at')
-            ->count();
+        $notifications = $this->notificationService->getUnreceivedNotificationsCount();
 
         return response()->json([
             'data' => [
@@ -35,18 +33,14 @@ class NotificationController extends Controller
 
     public function markAsRead(string $id)
     {
-        $notification = auth()->user()->notifications()->findOrFail($id);
-
-        $notification->update([
-            'read_at' => now()
-        ]);
+        $this->notificationService->markAsRead($id);
 
         return response()->noContent();
     }
 
     public function markAllAsRead()
     {
-        auth()->user()->notifications()->update([ 'read_at' => now() ]);
+        $this->notificationService->markAllAsRead();
 
         return response()->noContent();
     }
@@ -54,19 +48,8 @@ class NotificationController extends Controller
 
     public function destroy(string $id)
     {
-        $notification = auth()->user()->notifications()->findOrFail($id);
-        $notification->delete();
+        $this->notificationService->deleteNotification($id);
 
         return response()->noContent();
-    }
-
-    protected function markNotificationsAsReceived()
-    {
-        auth()->user()
-            ->notifications()
-            ->whereNull('received_at')
-            ->update([
-                'received_at' => now()
-            ]);
     }
 }

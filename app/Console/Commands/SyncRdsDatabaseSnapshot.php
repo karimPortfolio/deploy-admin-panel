@@ -6,7 +6,7 @@ use App\Enums\DBSnapshotStatus;
 use App\Enums\DBStatus;
 use App\Models\RdsDatabaseSnapshot;
 use App\Services\RdsDatabaseService;
-use App\Services\RdsDatabaseSnapshotsService;
+use App\Services\AWS\RdsDatabaseSnapshotsService;
 use Illuminate\Console\Command;
 
 class SyncRdsDatabaseSnapshot extends Command
@@ -25,6 +25,13 @@ class SyncRdsDatabaseSnapshot extends Command
      */
     protected $description = 'Check status of creating RDS databases snapshots and update them if ready';
 
+    public function __construct(
+        private RdsDatabaseSnapshotsService $awsRdsDatabaseSnapshotsService
+    )
+    {
+        parent::__construct();
+    }
+
     /**
      * Execute the console command.
      */
@@ -35,8 +42,7 @@ class SyncRdsDatabaseSnapshot extends Command
 
         foreach ($creatingSnapshots as $snapshot) {
             try {
-                $service = app(RdsDatabaseSnapshotsService::class);
-                $snapshotDetails = $service->getSnapshotByIdentifier($snapshot->snapshot_identifier);
+                $snapshotDetails = $this->awsRdsDatabaseSnapshotsService ->getSnapshotByIdentifier($snapshot->snapshot_identifier);
 
                 if (!empty($snapshotDetails['Status']) && $snapshotDetails['Status'] === 'available') {
                     $snapshot->update([

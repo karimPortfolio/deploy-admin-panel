@@ -8,14 +8,11 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    public function __construct(
+        private \App\Services\AuthService $authService
+    ) {}
     public function me(Request $request)
-    {
-        $user = auth()->user();
-        
-        $user->load('preferences');
-        $user->loadMedia("profile-picture");
-        $user->getFirstMedia("profile-picture");
-        
-        return UserResource::make($user);
+    {   
+        return UserResource::make($this->authService->authUser());
     }
 }

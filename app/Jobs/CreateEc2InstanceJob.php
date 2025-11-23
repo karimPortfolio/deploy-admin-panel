@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Server;
 use App\Models\ServerKey;
-use App\Services\Ec2InstanceService;
+use App\Services\AWS\Ec2InstanceService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Foundation\Queue\Queueable;
@@ -19,20 +19,20 @@ class CreateEc2InstanceJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(protected Server $server, protected array $params)
-    {
-        //
-    }
+    public function __construct(
+        protected Server $server, 
+        protected array $params,
+    ){}
 
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(Ec2InstanceService $awsEc2InstanceService): void
     {
         try {
-            $keyPair = Ec2InstanceService::createKeyPair($this->params['name']);
+            $keyPair = $awsEc2InstanceService->createKeyPair($this->params['name']);
             $this->params['key_name'] = $keyPair['KeyName'];
-            $newEc2Instance = Ec2InstanceService::createInstance($this->params);
+            $newEc2Instance = $awsEc2InstanceService->createInstance($this->params);
 
             $newKeyPair = ServerKey::create([
                 'key_name' => $keyPair['KeyName'],

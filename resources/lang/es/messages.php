@@ -3,6 +3,7 @@
 return [
     'days' => 'Días',
     'monitoring_msg' => 'El soporte para otros idiomas en las métricas de monitoreo se agregará pronto.',
+    'unexpected_error' => 'Ocurrió un error inesperado. Por favor, inténtalo de nuevo más tarde.',
     'servers' => [
         'servers_creation_msg' => 'Creación de servidor en progreso. Puedes verificar el estado más tarde.',
         'failed_to_start_msg' => 'Error al iniciar la instancia.',
@@ -27,6 +28,7 @@ return [
             'terminated' => 'Terminado',
             'pending' => 'Pendiente',
         ],
+        'not_found' => 'Servidor no encontrado.',
     ],
     'users' => [
         'roles' => [
@@ -155,6 +157,8 @@ return [
         'attach_database_not_started_msg' => 'La base de datos seleccionada debe estar en estado Iniciado para adjuntarse a un servidor.',
         'association' => 'Asociación',
         'title' => 'Base de datos RDS',
+        'not_found' => 'Base de datos RDS no encontrada.',
+        'attachment_not_found' => 'Adjunto de base de datos no encontrado.',
     ],
     'notifications' => [
         'new_user' => [

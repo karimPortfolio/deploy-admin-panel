@@ -1,10 +1,14 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\AWS;
 
 
 class RdsDatabaseSnapshotsService
 {
+
+    public function __construct(
+        private \Aws\Rds\RdsClient $rdsClient
+    ) {}
 
     /**
      * Create a snapshot of an RDS database.
@@ -13,12 +17,10 @@ class RdsDatabaseSnapshotsService
      * @return array
      * @throws \Aws\Exception\AwsException
      */
-    public static function createSnapshot(array $params): array
+    public function createSnapshot(array $params): array
     {
-        $rdsClient = app(\Aws\Rds\RdsClient::class);
-
         try {
-            $result = $rdsClient->createDBSnapshot([
+            $result = $this->rdsClient->createDBSnapshot([
                 'DBInstanceIdentifier' => $params['DBInstanceIdentifier'],
                 'DBSnapshotIdentifier' => $params['DBSnapshotIdentifier'],
             ]);
@@ -45,12 +47,10 @@ class RdsDatabaseSnapshotsService
      * @return array
      * @throws \Aws\Exception\AwsException
      */
-    public static function getSnapshotsByInstanceIdentifier(string $dbInstanceIdentifier): array
+    public function getSnapshotsByInstanceIdentifier(string $dbInstanceIdentifier): array
     {
-        $rdsClient = app(\Aws\Rds\RdsClient::class);
-
         try {
-            $result = $rdsClient->describeDBSnapshots([
+            $result = $this->rdsClient->describeDBSnapshots([
                 'DBInstanceIdentifier' => $dbInstanceIdentifier,
             ]);
 
@@ -70,12 +70,10 @@ class RdsDatabaseSnapshotsService
      * @return array
      * @throws \Aws\Exception\AwsException
      */
-    public static function getSnapshotByIdentifier(string $dbSnapshotIdentifier): array
+    public function getSnapshotByIdentifier(string $dbSnapshotIdentifier): array
     {
-        $rdsClient = app(\Aws\Rds\RdsClient::class);
-
         try {
-            $result = $rdsClient->describeDBSnapshots([
+            $result = $this->rdsClient->describeDBSnapshots([
                 'DBSnapshotIdentifier' => $dbSnapshotIdentifier,
             ]);
 
@@ -99,12 +97,10 @@ class RdsDatabaseSnapshotsService
      * @return array
      * @throws \Aws\Exception\AwsException
      */
-    public static function deleteSnapshot(string $dbSnapshotIdentifier): array
+    public function deleteSnapshot(string $dbSnapshotIdentifier): array
     {
-        $rdsClient = app(\Aws\Rds\RdsClient::class);
-
         try {
-            $results = $rdsClient->deleteDBSnapshot([
+            $results = $this->rdsClient->deleteDBSnapshot([
                 'DBSnapshotIdentifier' => $dbSnapshotIdentifier,
             ]);
 

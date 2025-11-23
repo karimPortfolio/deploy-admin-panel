@@ -224,4 +224,37 @@ class ServerControllerTest extends TestCase
         $response->assertNotFound();
     }
 
+    public function test_can_get_instance_types()
+    {
+        $response = $this->getJson(route('api.v1.servers.instance-types'));
+
+        $response->assertOk()
+            ->assertJsonStructure(['data'])
+            ->assertJson(fn (AssertableJson $json) =>
+                $json->has('data')
+            );
+    }
+
+    public function test_can_get_os_families()
+    {
+        $response = $this->getJson(route('api.v1.servers.os-families'));
+
+        $response->assertOk()
+            ->assertJsonStructure(['data'])
+            ->assertJson(fn (AssertableJson $json) =>
+                $json->has('data')
+            );
+    }
+
+    public function test_can_get_server_statuses()
+    {
+        $response = $this->getJson(route('api.v1.servers.statuses'));
+
+        $response->assertOk()
+            ->assertJsonStructure(['data'])
+            ->assertJson(fn (AssertableJson $json) =>
+                $json->has('data')
+            );
+    }
+
 }

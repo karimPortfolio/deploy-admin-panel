@@ -3,6 +3,7 @@
 return [
     'days' => 'Jours',
     'monitoring_msg' => "La prise en charge d'autres langues dans les métriques de surveillance sera ajoutée prochainement.",
+    'unexpected_error' => "Une erreur inattendue s'est produite. Veuillez réessayer plus tard.",
     'servers' => [
         'servers_creation_msg' => "Création du serveur en cours. Vous pouvez vérifier le statut plus tard.",
         'failed_to_start_msg' => "Échec du démarrage de l'instance.",
@@ -27,6 +28,7 @@ return [
             'terminated' => 'Terminé',
             'pending'    => 'En attente',
         ],
+        'not_found' => 'Serveur introuvable.',
     ],
     'users' => [
         'roles' => [
@@ -155,6 +157,8 @@ return [
         'attach_database_not_started_msg' => 'La base de données sélectionnée doit être en état Démarré pour s\'attacher à un serveur.',
         'association' => 'Association',
         'title' => 'Base de données RDS',
+        'not_found' => 'Base de données RDS introuvable.',
+        'attachment_not_found' => 'Association de base de données introuvable.',
     ],
     'notifications' => [
         'new_user' => [

@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Enums\ServerStatus;
 use App\Models\Server;
-use App\Services\Ec2InstanceService;
+use App\Services\AWS\Ec2InstanceService;
 use Illuminate\Console\Command;
 
 class SyncServer extends Command
@@ -23,6 +23,13 @@ class SyncServer extends Command
      */
     protected $description = 'Check status of creating Servers and update them if ready';
 
+    public function __construct(
+        private Ec2InstanceService $awsEc2InstanceService
+    )
+    {
+        parent::__construct();
+    }
+
     /**
      * Execute the console command.
      */
@@ -36,7 +43,8 @@ class SyncServer extends Command
                 
                 if (!$server->instance_id) continue;
 
-                $serverDetails = Ec2InstanceService::describeInstanceByInstanceId($server->instance_id);
+                $serverDetails = $this->awsEc2InstanceService
+                                      ->describeInstanceByInstanceId($server->instance_id);
 
                 if (!empty($serverDetails['State'])) {
                     $server->update([

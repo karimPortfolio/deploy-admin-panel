@@ -3,7 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\RdsDatabase;
-use App\Services\RdsDatabaseService;
+use App\Services\AWS\RdsDatabaseService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -17,20 +17,20 @@ class CreateRdsDatabaseJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct(protected RdsDatabase $rdsDatabase, protected array $params)
-    {
-        //
-    }
+    public function __construct(
+        protected RdsDatabase $rdsDatabase,
+        protected array $params,
+    ) {}
 
     /**
      * Execute the job.
      */
-    public function handle(): void
+    public function handle(RdsDatabaseService $awsRdsDatabaseService): void
     {
         try
         {
-            $rdsDatabaseResults = RdsDatabaseService::createRdsDatabase($this->params);
-            $createdRdsDatabase = RdsDatabaseService::describeRdsDatabaseByInstanceId($rdsDatabaseResults['DBInstanceIdentifier']);
+            $rdsDatabaseResults = $awsRdsDatabaseService->createRdsDatabase($this->params);
+            $createdRdsDatabase = $awsRdsDatabaseService->describeRdsDatabaseByInstanceId($rdsDatabaseResults['DBInstanceIdentifier']);
 
             $this->rdsDatabase->update([
                 'db_instance_arn' => $createdRdsDatabase['DBInstanceArn'] ?? null,

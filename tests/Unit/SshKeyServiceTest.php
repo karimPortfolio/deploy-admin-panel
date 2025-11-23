@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Services\SshKeyService;
+use App\Services\AWS\SshKeyService;
 use Tests\TestCase;
 
 
@@ -16,7 +16,8 @@ class SshKeyServiceTest extends TestCase
         }
 
         $name = 'test_key';
-        $result = SshKeyService::createSshKey($name);
+        $sshKeyService = new SshKeyService();
+        $result = $sshKeyService->createSshKey($name);
 
         $this->assertIsArray($result);
         $this->assertArrayHasKey('public_key', $result);

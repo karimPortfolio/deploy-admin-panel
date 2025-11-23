@@ -1,13 +1,17 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\AWS;
 
-use Aws\Ec2\Ec2Client;
-use Aws\CloudWatch\CloudWatchClient;
 use Carbon\Carbon;
 
 class Ec2InstanceService
 {
+    public function __construct(
+        private readonly \Aws\Ec2\Ec2Client $ec2Client,
+        private readonly AmazonMachineImageService $amazonMachineImageService,
+        private readonly VpcService $vpcService,
+        private readonly \Aws\CloudWatch\CloudWatchClient $cloudWatchClient
+    ) {}
 
     /**
      * Create an EC2 instance.
@@ -15,22 +19,20 @@ class Ec2InstanceService
      * @param array $params
      * @return array
      */
-    public static function createInstance($params)
+    public function createInstance($params)
     {
-        $ec2Client = app(Ec2Client::class);
-
-        $imageId = AmazonMachineImageService::getAmiByOsFamily($params['os_family']);
+        $imageId = $this->amazonMachineImageService->getAmiByOsFamily($params['os_family']);
         if (!$imageId) {
             throw new \RuntimeException('No AMI found for the specified OS family: ' . $params['os_family']);
         }
 
-        $subnet = VpcService::getOrCreateSubnetByVpcId($params['vpc_id']);
+        $subnet = $this->vpcService->getOrCreateSubnetByVpcId($params['vpc_id']);
         if (!$subnet || !isset($subnet['SubnetId'])) {
             throw new \RuntimeException('No subnet found for the specified VPC ID: ' . $params['vpc_id']);
         }
 
         try {
-            $result = $ec2Client->runInstances([
+            $result = $this->ec2Client->runInstances([
                 'ImageId' => $imageId,
                 'InstanceType' => $params['instance_type']->value,
                 'MinCount' => 1,
@@ -52,7 +54,7 @@ class Ec2InstanceService
                 ],
             ]);
 
-            $ec2Client->waitUntil('InstanceRunning', [
+            $this->ec2Client->waitUntil('InstanceRunning', [
                 'InstanceIds' => [$result['Instances'][0]['InstanceId']],
                 'WaiterConfig' => [
                     'Delay' => 10,
@@ -89,12 +91,11 @@ class Ec2InstanceService
      * @return \Aws\Result|array
      * @throws \Aws\Exception\AwsException
      */
-    public static function createKeyPair(string $name): \Aws\Result|array
+    public function createKeyPair(string $name): \Aws\Result|array
     {
-        $ec2Client = app(Ec2Client::class);
         try
         {
-            $keyPair = $ec2Client->createKeyPair([
+            $keyPair = $this->ec2Client->createKeyPair([
                 'KeyName' => $name . '-key-' . \Str::random(6)
             ]);
 
@@ -112,12 +113,10 @@ class Ec2InstanceService
      * @param string $instanceId
      * @return \Aws\Result
      */
-    public static function startInstance($instanceId)
+    public function startInstance($instanceId)
     {
-        $ec2Client = app(Ec2Client::class);
-
         try {
-            return $ec2Client->startInstances([
+            return $this->ec2Client->startInstances([
                 'InstanceIds' => [$instanceId],
             ]);
         } catch (\Aws\Exception\AwsException $e) {
@@ -132,12 +131,10 @@ class Ec2InstanceService
      * @param string $instanceId
      * @return \Aws\Result
      */
-    public static function stopInstance($instanceId)
+    public function stopInstance($instanceId)
     {
-        $ec2Client = app(Ec2Client::class);
-
         try {
-            return $ec2Client->stopInstances([
+            return $this->ec2Client->stopInstances([
                 'InstanceIds' => [$instanceId],
             ]);
         } catch (\Aws\Exception\AwsException $e) {
@@ -152,12 +149,10 @@ class Ec2InstanceService
      * @param string $instanceId
      * @return \Aws\Result
      */
-    public static function terminateInstance($instanceId)
+    public function terminateInstance($instanceId)
     {
-        $ec2Client = app(Ec2Client::class);
-
         try {
-            return $ec2Client->terminateInstances([
+            return $this->ec2Client->terminateInstances([
                 'InstanceIds' => [$instanceId],
             ]);
         } catch (\Aws\Exception\AwsException $e) {
@@ -171,12 +166,10 @@ class Ec2InstanceService
      * @param string $instanceId
      * @return \Aws\Result
      */
-    public static function describeInstanceByInstanceId(string $instanceId)
+    public function describeInstanceByInstanceId(string $instanceId)
     {
-        $ec2Client = app(Ec2Client::class);
-
         try {
-            $ec2Instances = $ec2Client->describeInstances([
+            $ec2Instances = $this->ec2Client->describeInstances([
                 'InstanceIds' => [$instanceId],
             ]);
 
@@ -195,11 +188,11 @@ class Ec2InstanceService
      * @param string $instanceId
      * @return array
      */
-    public static function getInstanceUtilization(string $instanceId)
+    public function getInstanceUtilization(string $instanceId)
     {
-        $cpuUtilization = static::getMetricStatisticsByMetricName('CPUUtilization', $instanceId);
-        $diskReadOps = static::getMetricStatisticsByMetricName('DiskReadOps', $instanceId);
-        $diskWriteOps = static::getMetricStatisticsByMetricName('DiskWriteOps', $instanceId);
+        $cpuUtilization = $this->getMetricStatisticsByMetricName('CPUUtilization', $instanceId);
+        $diskReadOps = $this->getMetricStatisticsByMetricName('DiskReadOps', $instanceId);
+        $diskWriteOps = $this->getMetricStatisticsByMetricName('DiskWriteOps', $instanceId);
 
         return [
             'cpu_utilization' => $cpuUtilization,
@@ -215,12 +208,10 @@ class Ec2InstanceService
      * @param string $instanceId
      * @return array
      */
-    private static function getMetricStatisticsByMetricName(string $metricName, string $instanceId)
+    private function getMetricStatisticsByMetricName(string $metricName, string $instanceId)
     {
-        $cloudWatchClient = app(CloudWatchClient::class);
-
         try {
-            $metrics = $cloudWatchClient->getMetricStatistics([
+            $metrics = $this->cloudWatchClient->getMetricStatistics([
                 'Namespace' => 'AWS/EC2',
                 'MetricName' => $metricName,
                 'Dimensions' => [

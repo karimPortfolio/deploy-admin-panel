@@ -3,6 +3,7 @@
 return [
     'days' => ' Tage',
     'monitoring_msg' => 'Die Unterstützung für weitere Sprachen in den Überwachungsmetriken wird in Kürze hinzugefügt.',
+    'unexpected_error' => 'Es ist ein unerwarteter Fehler aufgetreten. Bitte versuchen Sie es später erneut.',
     'servers' => [
         'servers_creation_msg' => "Server-Erstellung läuft. Sie können den Status später überprüfen.",
         'failed_to_start_msg' => "Fehler beim Starten der Instanz.",
@@ -27,6 +28,7 @@ return [
             'terminated' => 'Beendet',
             'pending'    => 'Ausstehend',
         ],
+        'not_found' => 'Server nicht gefunden.',
     ],
     'users' => [
         'roles' => [
@@ -155,6 +157,8 @@ return [
         'attach_database_not_started_msg' => 'Die ausgewählte Datenbank muss im Status "Gestartet" sein, um an einen Server angehängt zu werden.',
         'association' => 'Zuordnung',
         'title' => 'RDS-Datenbank',
+        'not_found' => 'RDS-Datenbank nicht gefunden.',
+        'attachment_not_found' => 'Datenbankzuordnung nicht gefunden.',
     ],
     'notifications' => [
         'new_user' => [

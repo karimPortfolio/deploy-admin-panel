@@ -3,6 +3,7 @@
 return [
     'days' => ' Days',
     'monitoring_msg' => 'The support for other languages in monitoring metrics will be added soon.',
+    'unexpected_error' => 'An unexpected error occurred. Please try again later.',
     'servers' => [
         'servers_creation_msg' => "Server creation in progress. You can check the status later.",
         'failed_to_start_msg' => "Failed to start the instance.",
@@ -27,6 +28,7 @@ return [
             'terminated' => 'Terminated',
             'pending'    => 'Pending',
         ],
+        'not_found' => 'Server not found.',
     ],
     'users' => [
         'roles' => [
@@ -155,6 +157,8 @@ return [
         'attach_database_not_started_msg' => 'The selected database must be in the Started state to attach to a server.',
         'association' => 'Association',
         'title' => 'RDS Database',
+        'not_found' => 'RDS database not found.',
+        'attachment_not_found' => 'Database attachment not found.',
     ],
     'notifications' => [
         'new_user' => [

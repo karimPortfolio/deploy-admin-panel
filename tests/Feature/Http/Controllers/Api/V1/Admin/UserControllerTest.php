@@ -171,7 +171,7 @@ class UserControllerTest extends TestCase
         $this->assertDatabaseHas('users', ['id' => $user->id, 'is_active' => true]);
 
         \Notification::assertSentTo(
-            [$user],
+            $user,
             \App\Notifications\AccountActivationNotification::class
         );
     }

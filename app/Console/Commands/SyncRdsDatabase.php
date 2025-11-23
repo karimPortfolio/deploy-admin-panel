@@ -4,7 +4,7 @@ namespace App\Console\Commands;
 
 use App\Enums\DBStatus;
 use App\Models\RdsDatabase;
-use App\Services\RdsDatabaseService;
+use App\Services\AWS\RdsDatabaseService;
 use Illuminate\Console\Command;
 
 class SyncRdsDatabase extends Command
@@ -23,6 +23,13 @@ class SyncRdsDatabase extends Command
      */
     protected $description = 'Check status of creating RDS databases and update them if ready';
 
+    public function __construct(
+        private RdsDatabaseService $awsRdsDatabaseService
+    )
+    {
+        parent::__construct();
+    }
+
     /**
      * Execute the console command.
      */
@@ -33,7 +40,8 @@ class SyncRdsDatabase extends Command
 
         foreach ($pendingRdsDatabases as $rdsDatabase) {
             try {
-                $rdsDatabaseDetails = RdsDatabaseService::describeRdsDatabaseByInstanceId($rdsDatabase->db_instance_identifier);
+                $rdsDatabaseDetails =  $this->awsRdsDatabaseService
+                                            ->describeRdsDatabaseByInstanceId($rdsDatabase->db_instance_identifier);
 
                 if (!empty($rdsDatabaseDetails['DBInstanceStatus'])) {
                     $rdsDatabase->update([

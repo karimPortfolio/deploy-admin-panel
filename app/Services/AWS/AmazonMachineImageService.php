@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\AWS;
 
 use App\Enums\OsFamily;
 use Aws\Ssm\SsmClient;
@@ -8,17 +8,18 @@ use Aws\Ssm\SsmClient;
 
 class AmazonMachineImageService
 {
+    public function __construct(
+        private readonly SsmClient $ssmClient
+    ) {}
     /**
      * Get the list of available AMIs by operation system family.
      *
      * @return array
      */
-    public static function getAmiByOsFamily(OsFamily $osFamily)
+    public function getAmiByOsFamily(OsFamily $osFamily)
     {
-        $ssmClient = app(SsmClient::class);
-
         try {
-            $result = $ssmClient->getParameter([
+            $result = $this->ssmClient->getParameter([
                 'Name' => $osFamily->ssmParameter(),
                 'WithDecryption' => false,
             ]);
