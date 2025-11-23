@@ -13,14 +13,22 @@ class AwsServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(Ec2Client::class, function ($app) {
-            return new Ec2Client([
-                'region' => config("aws.region"),
+            $options = [
+                'region' => config('aws.region', 'us-east-1'),
                 'version' => 'latest',
-                'credentials' => [
-                    'key' => config('aws.key'),
-                    'secret' => config('aws.secret'),
-                ],
-            ]);
+            ];
+    
+            if ($key = config('aws.key')) {
+                $secret = config('aws.secret');
+                if ($secret) {
+                    $options['credentials'] = [
+                        'key' => $key,
+                        'secret' => $secret,
+                    ];
+                }
+            }
+    
+            return new Ec2Client($options);
         });
     }
 
