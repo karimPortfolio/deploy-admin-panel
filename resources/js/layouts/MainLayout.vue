@@ -116,6 +116,11 @@ const adminDrawerItems = computed(() => [
         route: { name: "admin.users" },
     },
     {
+        label: "roles.title",
+        icon: "sym_r_shield_locked",
+        route: { name: "admin.roles" },
+    },
+    {
         label: "servers.title",
         icon: "sym_r_host",
         route: { name: "admin.servers.index" },

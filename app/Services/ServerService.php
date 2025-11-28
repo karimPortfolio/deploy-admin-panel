@@ -91,7 +91,12 @@ class ServerService
             'rdsDatabases:id,db_instance_identifier,db_name,engine',
         ]);
 
-        $statistics = $this->awsEc2InstanceService->getInstanceUtilization($server->instance_id);
+        $statistics = [];
+        
+        if ($server->instance_id) {
+            $statistics = $this->awsEc2InstanceService->getInstanceUtilization($server->instance_id);
+        }
+        
 
         return [
             'server' => $server,

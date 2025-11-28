@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
-use App\Enums\UserRole;
+use App\Enums\ProfileType;
 use App\Http\Requests\UserRequest;
+use App\Http\Resources\RoleResource;
 use App\Models\User;
 use App\Notifications\AccountActivationNotification;
 use App\Notifications\AccountDeactivationNotification;
@@ -12,6 +13,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use Spatie\Permission\Models\Permission;
 use Spatie\QueryBuilder\QueryBuilder;
 
 class UserService
@@ -45,7 +47,7 @@ class UserService
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'company_name' => $request->input('company_name', null),
-                'role' => $request->input('role', UserRole::USER),
+                'role' => $request->input('role', ProfileType::USER),
                 'password' => Hash::make($generatedPassword),
                 'is_active' => $request->input('is_active', true),
             ]);
@@ -101,6 +103,20 @@ class UserService
         return $user;
     }
 
+    public function assignPermissions(User $user, array $permissions): User
+    {
+        $user->syncPermissions($permissions);
+
+        return $user;
+    }
+
+    public function assignRoles(User $user, array $roles): User
+    {
+        $user->syncRoles($roles);
+
+        return $user;
+    }
+
 
     public function delete(User $user): void
     {
@@ -114,12 +130,86 @@ class UserService
         $user->delete();
     }
 
-     public function getRoles(): array
+     public function getProfileTypes(): array
     {
-        $roles = UserRole::cases();
-        $roles = array_map(fn($role) => $role->toArray(), $roles);
+        $profileTypes = ProfileType::cases();
+        $profileTypes = array_map(fn($role) => $role->toArray(), $profileTypes);
+
+        return $profileTypes;
+    }
+
+    public function getRoles(User $user)
+    {
+        $roles = \Spatie\Permission\Models\Role::all();
+        $roles = $this->getAssociatedRoles($user, $roles->toArray());
 
         return $roles;
     }
+
+    public function getPermissions(User $user): array
+    {
+         $groups = [
+            'Servers' => Permission::where('name', 'like', 'servers.%')->get(),
+            'Security Groups' => Permission::where('name', 'like', 'security-groups.%')->get(),
+            'SSH Keys' => Permission::where('name', 'like', 'ssh-keys.%')->get(),
+            'RDS Databases' => Permission::where('name', 'like', 'rds-databases.%')->get(),
+            'RDS Database Snapshots' => Permission::where('name', 'like', 'rds-database-snapshots.%')->get(),
+        ];
+
+        $labelMap = [
+            'index' => 'view',
+            'show' => 'view details',
+            'create' => 'create',
+            'delete' => 'delete',
+            'start' => 'start',
+            'stop' => 'stop',
+            'attach-to-server' => 'attach to server',
+            'update-primary' => 'update primary',
+            'detach-from-server' => 'detach from server',
+            'manage-backups' => 'manage backups',
+            '*' => 'all',
+        ];
+
+        $response = $this->getAssociatedPermissions($groups, $user, $labelMap);
+
+        return $response;
+    }
+
+    private function getAssociatedPermissions(array $groups, User $user, array $labelMap): array
+    {
+        $response = [];
+
+        foreach ($groups as $groupName => $perms) {
+            $response[$groupName] = $perms->map(function (Permission $p) use ($groupName, $user, $labelMap) {
+                $parts = explode('.', $p->name, 2);
+                $action = $parts[1] ?? $p->name;
+
+                $actionLabel = $labelMap[$action] ?? str_replace('-', ' ', $action);
+                $label = sprintf('%s %s', $actionLabel, strtolower($groupName));
+
+                return [
+                    'id' => $p->id,
+                    'name' => $label,
+                    'key' => $p->name,
+                    'assigned' => $user->hasPermissionTo($p->name),
+                ];
+            })->values()->all();
+        }
+
+        return $response;
+    }
+
+    private function getAssociatedRoles(User $user, array $permissions): array
+    {
+        $assignedRoles = $user->roles->pluck('name')->toArray();
+
+        $permissions = array_map(function ($role) use ($assignedRoles) {
+            $role['assigned'] = in_array($role['name'], $assignedRoles);
+            return $role;
+        }, $permissions);
+
+        return $permissions;
+    }
+
 }
 

@@ -10,6 +10,12 @@
             @created="handleCreated"
         />
 
+        <assign-permission-form
+            v-model:open="openAssignPermissionsModal"
+            :id="itemToAssignPermissions?.id"
+            @updated="handleCreated"
+        />
+
         <confirmation-modal
             v-model:open="openDeleteConfirmationModal"
             title="users.delete"
@@ -106,6 +112,7 @@
                             @delete="handleDeleteConfirmation"
                             @show-details="handleShowDetails"
                             @status-change="statusChangeConfirmation"
+                            @assign-permissions="handlePermissionsAssignment"
                         />
                     </q-td>
                 </template>
@@ -124,6 +131,7 @@ import SearchBar from "@/components/SearchBar.vue";
 import ActionsColumn from "./table-columns/ActionsColumn.vue";
 import ConfirmationModal from "@/components/modals/ConfirmationModal.vue";
 import ShowDetailsView from "./ShowDetailsView.vue";
+import AssignPermissionForm from "./AssignPermissionForm.vue";
 import CreateView from "./CreateView.vue";
 import { useI18n } from "vue-i18n";
 
@@ -202,9 +210,13 @@ const search = ref("");
 const openDeleteConfirmationModal = ref(false);
 const openCreationModal = ref(false);
 const openShowDetailsModal = ref(false);
+const openAssignPermissionsModal = ref(false);
+
 const itemToDelete = ref(null);
 const itemToShow = ref(null);
 const itemToChangeStatus = ref(null);
+const itemToAssignPermissions = ref(null);
+
 const openStatusChangeConfirmationModal = ref(false);
 const newUserAccountStatus = ref(false);
 
@@ -256,6 +268,12 @@ const searchChange = () => {
     onRequest({
         filter: search.value,
     });
+};
+
+const handlePermissionsAssignment = (row) => {
+    itemToAssignPermissions.value = row;
+
+    openAssignPermissionsModal.value = true;
 };
 
 const handleCreated = () => {

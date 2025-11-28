@@ -53,7 +53,7 @@ class RdsDatabaseSnapshotService
             'DBSnapshotIdentifier' => $dbSnapshotIdentifier,
             'rds_database_id' => $request->input('rds_database_id'),
             'created_by' => $request->user()->id ?? null,
-        ], $this->awsRdsDatabaseSnapshotsService);
+        ]);
     }
 
     public function getRdsDatabaseSnapshot(RdsDatabaseSnapshot $rdsDatabaseSnapshot)

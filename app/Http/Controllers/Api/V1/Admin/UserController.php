@@ -51,6 +51,30 @@ class UserController extends Controller
         return response()->noContent();
     }
 
+    public function assignPermissions(Request $request, User $user)
+    {
+        $request->validate([
+            'permissions' => 'array',
+            'permissions.*' => 'string|exists:permissions,name',
+        ]);
+
+        $this->userService->assignPermissions($user, $request->input('permissions', []));
+
+        return response()->noContent();
+    }
+
+    public function assignRoles(Request $request, User $user)
+    {
+        $request->validate([
+            'roles' => 'array',
+            'roles.*' => 'string|exists:roles,name',
+        ]);
+
+        $this->userService->assignRoles($user, $request->input('roles', []));
+
+        return response()->noContent();
+    }
+
     public function destroy(User $user)
     {
         $this->userService->delete($user);
@@ -58,10 +82,24 @@ class UserController extends Controller
         return response()->noContent();
     }
 
-    public function getRoles()
+    public function getProfileTypes()
     {
         return response()->json([
-            'data' => $this->userService->getRoles(),
+            'data' => $this->userService->getProfileTypes(),
+        ]);
+    }
+
+    public function getRoles(User $user)
+    {
+        return response()->json([
+            'data' => $this->userService->getRoles($user),
+        ]);
+    }
+
+    public function getPermissions(User $user)
+    {
+        return response()->json([
+            'data' => $this->userService->getPermissions($user),
         ]);
     }
 

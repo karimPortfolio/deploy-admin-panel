@@ -18,6 +18,11 @@ export default {
             component: () => import("../views/admin/users/IndexView.vue"),
         },
         {
+            path: "roles",
+            name: "admin.roles",
+            component: () => import("../views/admin/roles/IndexView.vue"),
+        },
+        {
             path: "servers",
             component: RouterView,
             children: [

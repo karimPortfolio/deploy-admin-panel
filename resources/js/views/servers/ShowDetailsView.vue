@@ -5,7 +5,7 @@
                 <q-icon name="sym_r_bar_chart" color="primary" size="sm" />
                 <h4 class="font-meduim text-lg">{{ $t("servers.server_monitoring") }}</h4>
             </q-card-section>
-            <q-card-section v-if="statistics.cpu_utilization" class="p-0 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <q-card-section class="p-0 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <server-cpu-usage-chart
                     :cpu-usage-data="statistics?.cpu_utilization ?? []"
                 />
@@ -40,7 +40,7 @@
                 <div class="q-gutter-xs pb-3 text-sm">
                     <div>{{ $t("servers.instance_id") }}</div>
                     <div class="text-gray-600 dark:text-gray-400">
-                        {{ server?.instance_id }}
+                        {{ server?.instance_id ?? 'N/A' }}
                     </div>
                 </div>
                 <div class="q-gutter-xs pb-3 text-sm">
@@ -52,13 +52,9 @@
                 <div class="q-gutter-xs pb-3 text-sm">
                     <div>VPC</div>
                     <div
-                        v-if="server?.vpc_id"
                         class="text-gray-600 dark:text-gray-400"
                     >
-                        {{ server?.vpc_id }}
-                    </div>
-                    <div v-else class="text-gray-600 dark:text-gray-400">
-                        N/A
+                        {{ server?.vpc_id ?? 'N/A' }}
                     </div>
                 </div>
                 <div class="q-gutter-xs pb-3 text-sm">
@@ -76,13 +72,13 @@
                 <div class="q-gutter-xs pb-3 text-sm">
                     <div>{{ $t("servers.image_id") }}</div>
                     <div class="text-gray-600 dark:text-gray-400">
-                        {{ server?.image_id }}
+                        {{ server?.image_id ?? 'N/A' }}
                     </div>
                 </div>
                 <div class="q-gutter-xs pb-3 text-sm">
                     <div>{{ $t("servers.public_ip_address") }}</div>
                     <div class="text-gray-600 dark:text-gray-400">
-                        {{ server?.public_ip_address }}
+                        {{ server?.public_ip_address ?? 'N/A' }}
                     </div>
                 </div>
                 <div class="q-gutter-xs pb-3 text-sm">
@@ -98,13 +94,9 @@
                 <div class="q-gutter-xs pb-3 text-sm">
                     <div>{{ $t("servers.ssh_key") }}</div>
                     <div
-                        v-if="server?.ssh_key?.name"
                         class="text-gray-600 dark:text-gray-400"
                     >
-                        {{ server?.ssh_key?.name }}
-                    </div>
-                    <div v-else class="text-gray-600 dark:text-gray-400">
-                        N/A
+                        {{ server?.ssh_key?.name ?? 'N/A' }}
                     </div>
                 </div>
             </q-card-section>

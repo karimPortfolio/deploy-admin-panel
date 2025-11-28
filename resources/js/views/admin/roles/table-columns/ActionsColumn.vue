@@ -29,45 +29,18 @@
                 </q-item>
 
                 <!-- ============================ -->
-                <!-- ============= STOP SERVER ========= -->
+                <!-- =========== UPDATE ========= -->
                 <!-- ============================ -->
                 <q-item
-                    v-if="row.is_active"
-                    @click="statusChange(row, 'deactivate')"
+                    @click="handleUpdate(row)"
                     clickable
                     v-close-popup
-                    class="text-red-600 dark:text-red-400 rounded-md"
+                    class="text-gray-600 dark:text-gray-200 rounded-md"
                 >
                     <q-item-section>
                         <q-item-label class="flex-nowrap">
-                            <q-icon
-                                name="sym_r_cancel"
-                                size="xs"
-                                class="me-1"
-                            />
-                            {{ $t("deactivate") }}
-                        </q-item-label>
-                    </q-item-section>
-                </q-item>
-
-                <!-- ============================ -->
-                <!-- ============= START SERVER ========= -->
-                <!-- ============================ -->
-                <q-item
-                    v-else
-                    @click="statusChange(row, 'activate')"
-                    clickable
-                    v-close-popup
-                    class="text-green-600 dark:text-green-400 rounded-md"
-                >
-                    <q-item-section>
-                        <q-item-label class="flex-nowrap">
-                            <q-icon
-                                name="sym_r_play_circle"
-                                size="xs"
-                                class="me-1"
-                            />
-                            {{ $t("activate") }}
+                            <q-icon name="sym_r_edit" size="xs" class="me-1" />
+                            {{ $t("update") }}
                         </q-item-label>
                     </q-item-section>
                 </q-item>
@@ -88,7 +61,7 @@
                         </q-item-label>
                     </q-item-section>
                 </q-item>
-              
+
                 <q-separator class="q-my-xs" />
 
                 <!-- ============================ -->
@@ -123,18 +96,22 @@ const props = defineProps({
     },
 });
 
-const emit = defineEmits(["delete","show-details", "status-change", "assign-permissions"]);
+const emit = defineEmits([
+    "delete",
+    "show-details",
+    "update",
+    "assign-permissions",
+]);
 
 const handleDelete = (row) => {
     emit("delete", row);
 };
-
-const statusChange = (row, status) => {
-    emit("status-change", row, status);
-}
-
 const handleShow = (row) => {
     emit("show-details", row);
+};
+
+const handleUpdate = (row) => {
+    emit("update", row);
 };
 
 const handlePermissionsAssignment = (row) => {

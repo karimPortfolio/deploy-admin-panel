@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Enums\UserRole;
+use App\Enums\ProfileType;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -26,7 +26,7 @@ class UserRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'role' => ['nullable', 'string',Rule::enum(UserRole::class)],
+            'role' => ['nullable', 'string',Rule::enum(ProfileType::class)],
             'company_name' => ['nullable', 'string', 'max:255'],
             'is_active' => ['nullable', 'boolean'],   
         ];

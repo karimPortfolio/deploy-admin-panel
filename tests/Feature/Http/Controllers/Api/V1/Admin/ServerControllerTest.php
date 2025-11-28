@@ -26,12 +26,12 @@ class ServerControllerTest extends TestCase
     }
     public function test_can_list_servers_with_pagination()
     {
-        $server = Server::factory()->create();
+        $server = Server::factory(5)->create();
 
         $response = $this->getJson(route('api.v1.admin.servers.index'));
 
         $response->assertOk()
-            ->assertJsonCount(1, 'data')
+            ->assertJsonCount(5, 'data')
             ->assertJson(fn (AssertableJson $json) =>
             $json->has('data')
                  ->has('meta')

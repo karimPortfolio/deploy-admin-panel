@@ -21,7 +21,7 @@ abstract class TestCase extends BaseTestCase
     public function actingAsAdmin()
     {
         $user = \App\Models\User::factory()->create([
-            'role' => \App\Enums\UserRole::ADMIN->value,
+            'role' => \App\Enums\ProfileType::ADMIN->value,
         ]);
         $this->actingAs($user);
     }

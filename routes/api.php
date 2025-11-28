@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V1\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Api\V1\Admin\RoleController;
 use App\Http\Controllers\Api\V1\Admin\SecurityGroupController as AdminSecurityGroupController;
 use App\Http\Controllers\Api\V1\Admin\ServerController as AdminServerController;
 use App\Http\Controllers\Api\V1\Admin\SshKeyController as AdminSshKeyController;
@@ -101,7 +102,11 @@ Route::middleware(['auth:sanctum', 'setUserLocale', 'isActive'])
                 // =============== USERS ROUTES
                 Route::put('users/{user}/deactivate', [UserController::class, 'deactivateUserAccount'])->name('users.deactivate');
                 Route::put('users/{user}/activate', [UserController::class, 'activateUserAccount'])->name(name: 'users.activate');
-                Route::get('users/roles', [UserController::class, 'getRoles'])->name('users.roles');
+                Route::get('users/profile-types', [UserController::class, 'getProfileTypes'])->name('users.profile-types');
+                Route::get('users/{user}/roles', [UserController::class, 'getRoles'])->name('users.roles');
+                Route::get('users/{user}/permissions', [UserController::class, 'getPermissions'])->name('users.permissions');
+                Route::post('users/{user}/assign-permissions', [UserController::class, 'assignPermissions'])->name(name: 'users.assign-permissions');
+                Route::post('users/{user}/assign-roles', [UserController::class, 'assignRoles'])->name('users.assign-roles');
                 Route::apiResource('users', UserController::class)->only(['index', 'store', 'show', 'destroy']);
                 // =============== SERVERS ROUTES
                 Route::prefix('servers')
@@ -147,6 +152,15 @@ Route::middleware(['auth:sanctum', 'setUserLocale', 'isActive'])
                     Route::get('servers', [AdminRdsDatabaseController::class, 'getServers'])->name('servers');
                 });
                 Route::apiResource('rds-databases', AdminRdsDatabaseController::class)->except(['update', 'store']);
+
+                // ================ Roles
+                Route::prefix('roles')
+                ->name('roles.')
+                ->group(function () {
+                    Route::post('{role}/assign-permissions', [RoleController::class, 'assignPermissions'])->name('assign-permissions');
+                    Route::get('{role}/permissions', [RoleController::class, 'getPermissions'])->name('get-permissions');
+                });
+                Route::resource('roles', RoleController::class);
             });
     });
 

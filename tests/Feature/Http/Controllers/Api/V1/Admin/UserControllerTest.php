@@ -5,8 +5,10 @@ namespace Tests\Feature\Http\Controllers\Api\V1\Admin;
 use App\Enums\InstanceType;
 use App\Enums\OsFamily;
 use App\Models\User;
+use Artisan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
@@ -99,8 +101,8 @@ class UserControllerTest extends TestCase
             'name' => 'Test User',
             'email' => 'user@gmail.com',
             'role' => [
-                'value' => \App\Enums\UserRole::USER->value,
-                'label' => \App\Enums\UserRole::USER->label()
+                'value' => \App\Enums\ProfileType::USER->value,
+                'label' => \App\Enums\ProfileType::USER->label()
             ],
             'is_active' => true,
         ];
@@ -211,6 +213,18 @@ class UserControllerTest extends TestCase
         $response->assertStatus(403);
     }
 
+    public function test_can_get_profile_types()
+    {
+        $response = $this->getJson(route('api.v1.admin.users.profile-types'));
+
+        $response->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    ['value', 'label']
+                ]
+            ]);
+    }
+
     public function test_destroy_deletes_user_and_related_data()
     {
         $user = User::factory()->create();
@@ -237,6 +251,187 @@ class UserControllerTest extends TestCase
 
         $response = $this->deleteJson(route('api.v1.admin.users.destroy', $user->id));
         $response->assertStatus(403);
+    }
+
+    public function test_destroy_return_404_if_user_not_found()
+    {
+        $response = $this->deleteJson(route('api.v1.admin.users.destroy', 999));
+        $response->assertStatus(404);
+    }
+
+    public function test_validates_assign_permissions_request()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->postJson(route('api.v1.admin.users.assign-permissions', $user->id), [
+            'permissions' => 'not-an-array',
+        ]);
+
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors(['permissions']);
+    }
+
+    public function test_can_assign_permissions_to_user()
+    {
+        $user = User::factory()->create();
+        //run create permissions command
+        Artisan::call('app:create-permissions');
+
+        $permissions = ['servers.*', 'security-groups.*'];
+
+        $response = $this->postJson(route('api.v1.admin.users.assign-permissions', $user->id), [
+            'permissions' => $permissions,
+        ]);
+
+        $response->assertNoContent();
+        foreach ($permissions as $permission) {
+            $this->assertTrue($user->fresh()->hasPermissionTo($permission));
+        }
+    }
+
+    public function test_assign_permissions_return_403_if_not_admin()
+    {
+        $this->actingAsUser();
+        $user = User::factory()->create();
+
+        $response = $this->postJson(route('api.v1.admin.users.assign-permissions', $user->id), [
+            'permissions' => ['servers.*'],
+        ]);
+
+        $response->assertStatus(403);
+    }
+
+    public function test_assign_permissions_return_404_if_user_not_found()
+    {
+        $response = $this->postJson(route('api.v1.admin.users.assign-permissions', 999), [
+            'permissions' => ['servers.*'],
+        ]);
+
+        $response->assertStatus(404);
+    }
+
+    public function test_validates_assign_roles_request()
+    {
+        $user = User::factory()->create();
+
+        $response = $this->postJson(route('api.v1.admin.users.assign-roles', $user->id), [
+            'roles' => 'not-an-array',
+        ]);
+
+        $response->assertStatus(422)
+                 ->assertJsonValidationErrors(['roles']);
+    }
+
+    public function test_can_get_roles()
+    {
+        $user = User::factory()->create();
+        Role::create(['name' => 'manager']);
+        Role::create(['name' => 'editor']);
+        Role::create(['name' => 'admin']);
+        $response = $this->getJson(route('api.v1.admin.users.roles', $user->id));
+
+        $response->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    ['id', 'name', 'assigned']
+                ]
+            ]);
+    }
+
+    public function test_can_get_roles_assigned_to_user()
+    {
+        $user = User::factory()->create();
+        $role1 = Role::create(['name' => 'manager']);
+        $role2 = Role::create(['name' => 'editor']);
+        $role3 = Role::create(['name' => 'admin']);
+
+        $user->assignRole('editor');
+
+        $response = $this->getJson(route('api.v1.admin.users.roles', $user->id));
+
+        $response->assertOk()
+           ->assertJson(fn (AssertableJson $json) =>
+           $json->has('data', 3)
+             ->where('data.0.id', $role1->id)
+             ->where('data.0.name', 'manager')
+             ->where('data.0.assigned', false)
+             ->where('data.1.id', $role2->id)
+             ->where('data.1.name', 'editor')
+             ->where('data.1.assigned', true)
+             ->where('data.2.id', $role3->id)
+             ->where('data.2.name', 'admin')
+             ->where('data.2.assigned', false)
+          );
+    }
+
+    public function test_get_roles_return_403_if_not_admin()
+    {
+        $user = User::factory()->create();
+        $this->actingAsUser();
+
+        $response = $this->getJson(route('api.v1.admin.users.roles', $user->id));
+        $response->assertStatus(403);
+    }
+
+    public function test_get_roles_return_404_if_user_not_found()
+    {
+        $response = $this->getJson(route('api.v1.admin.users.roles', 999));
+        $response->assertStatus(404);
+    }
+
+    public function test_can_get_permissions()
+    {
+        $user = User::factory()->create();
+
+        Artisan::call('app:create-permissions');
+
+        $response = $this->getJson(route('api.v1.admin.users.permissions', $user->id));
+
+        $response->assertOk()
+            ->assertJson(fn (AssertableJson $json) =>
+           $json->has('data')
+             ->has('data.Servers.0.id')
+             ->has('data.Servers.0.name')
+             ->has('data.Servers.0.assigned')
+             ->has('data.Security Groups.0.id')
+             ->has('data.Security Groups.0.name')
+          );
+    }
+
+    public function test_can_get_permissions_assigned_to_user()
+    {
+        $user = User::factory()->create();
+
+        Artisan::call('app:create-permissions');
+
+        $user->givePermissionTo('servers.show');
+        $user->givePermissionTo('security-groups.create');
+
+        $response = $this->getJson(route('api.v1.admin.users.permissions', $user->id));
+
+        $response->assertOk()
+           ->assertJson(fn (AssertableJson $json) =>
+           $json->has('data')
+             ->where('data.Servers.3.key', 'servers.show')
+             ->where('data.Servers.3.assigned', true)
+             ->where('data.Security Groups.2.key', 'security-groups.create')
+             ->where('data.Security Groups.2.assigned', true)
+          );
+    }
+
+    public function test_get_permissions_return_403_if_not_admin()
+    {
+        $user = User::factory()->create();
+        $this->actingAsUser();
+
+        $response = $this->getJson(route('api.v1.admin.users.permissions', $user->id));
+        $response->assertStatus(403);
+    }
+
+    public function test_get_permissions_return_404_if_user_not_found()
+    {
+        $response = $this->getJson(route('api.v1.admin.users.permissions', 999));
+        $response->assertStatus(404);
     }
 
 }
